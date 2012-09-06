@@ -1,0 +1,54 @@
+
+
+<!doctype html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>functionBar</title>    
+
+
+    <!-- CSS lib -->    
+    <link rel="stylesheet"  href="/css/lib/reset.css" />     
+    <link rel="stylesheet"  href="/css/lib/font-awesome.css" />     
+
+    <!-- JS lib -->       
+    <script type="text/javascript" src="/js/lib/jquery-1.7.2.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet"  href="/css/edit.css" />
+
+    <!-- JS -->      
+    <script type="text/javascript" src="/js/edit.js"></script>
+
+
+    </head>
+
+    <body>
+
+
+    <div id="edit">    
+        <a id="submitButton" href="javascript:submit('<%= data._id %>');">
+            <% if(data == undefined){%>
+            <%= "新增" %>
+            <%} else {%>    
+            <%= "修改" %>
+            <% } %>        
+        </a> 
+        <div>
+            <form id="editForm">            
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="author" placeholder="Band/Artist" value="<%= data.author%>"/>                     
+            <label for="title">Song Title:</label>
+            <input type="text" id="title" name="title" placeholder="Song Name" value="<%= data.title %>"/>
+                    
+            <label for="lyric">Content</label>
+            <textarea id="lyric" name="lyric"><%= data.lyric%></textarea>                
+            </form>
+        </div>
+    </div>
+
+    </body>
+</html>
+
+  
+
+

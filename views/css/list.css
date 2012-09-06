@@ -1,0 +1,22 @@
+
+
+
+
+#songList{
+	width: 960px;
+	margin: 0px auto;
+	padding: 20px;
+}
+
+#songList li{
+	margin: 5px 0px;
+	padding: 0px 20px;
+}
+
+#songList li:hover{
+	background: #666;	
+}
+
+#songList li:hover a{
+	color: #fff;	
+}

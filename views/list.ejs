@@ -1,0 +1,48 @@
+
+
+<!doctype html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>functionBar</title>    
+
+
+    <!-- CSS lib -->    
+    <link rel="stylesheet"  href="/css/lib/reset.css" />         
+
+    <!-- JS lib -->       
+    <script type="text/javascript" src="/js/lib/jquery-1.7.2.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet"  href="/css/list.css" />  
+
+    <!-- JS -->      
+    <!--<script type="text/javascript" src="/js/list.js"></script>-->
+
+
+    </head>
+
+    <body>
+
+    <div id="songList">
+        <h1>清單畫面<h1>    
+        <% if (data.length) { %>
+            <ul id="">
+            <% data.forEach(function(item){ %>
+                <li>
+                    <a href="/edit/<%= item._id%>">                    
+                    <div>歌名: <%= item.title %></div>
+                    <span>作者: <%= item.author %></span>
+                    <span>建立時間:<%= new Date(item.createTime).toString().substring(0 , 24) %></span>
+                    <span>內容:<%= item.lyric %></span>
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
+        <% } %>    
+
+    </body>
+</html>
+
+  
+
+
