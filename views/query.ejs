@@ -1,0 +1,46 @@
+
+
+<!doctype html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>functionBar</title>    
+
+
+    <!-- CSS lib -->    
+    <link rel="stylesheet"  href="/css/lib/reset.css" />     
+    <link rel="stylesheet"  href="/css/lib/font-awesome.css" />     
+
+    <!-- JS lib -->       
+    <script type="text/javascript" src="/js/lib/jquery-1.7.2.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet"  href="/css/query.css" />
+
+    <!-- JS -->          
+
+
+    </head>
+
+    <body>
+    
+    <div id="query">            
+        <a id="backButton" href="..\list">回清單</a>        
+        <div class="content">
+        <div class="author">            
+            Author:　<%= data.author || '' %>
+        </div>
+        <div class="title">
+            Song Name: <%= data.title || '' %>
+        </div>
+        <div class="content">
+            Lyric : <%= data.lyric || '' %>
+        </div>            
+    </div>
+    </div>
+
+    </body>
+</html>
+
+  
+
+

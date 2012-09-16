@@ -2,43 +2,73 @@
 
 <!doctype html>
     <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>functionBar</title>    
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>functionBar</title>    
 
 
-    <!-- CSS lib -->    
-    <link rel="stylesheet"  href="/css/lib/reset.css" />         
+        <!-- CSS lib -->    
+        <link rel="stylesheet"  href="/css/lib/reset.css" />         
 
-    <!-- JS lib -->       
-    <script type="text/javascript" src="/js/lib/jquery-1.7.2.min.js"></script>
+        <!-- JS lib -->       
+        <script type="text/javascript" src="/js/lib/jquery-1.7.2.min.js"></script>
 
-    <!-- CSS -->
-    <link rel="stylesheet"  href="/css/list.css" />  
+        <!-- CSS -->
+        <link rel="stylesheet"  href="/css/list.css" />  
 
-    <!-- JS -->      
-    <!--<script type="text/javascript" src="/js/list.js"></script>-->
-
-
+        <!-- JS -->      
+        <script type="text/javascript" src="/js/list.js"></script>
     </head>
 
     <body>
 
-    <div id="songList">
-        <h1>清單畫面<h1>    
-        <% if (data.length) { %>
-            <ul id="">
-            <% data.forEach(function(item){ %>
+    <div id="bodyWrap">
+        <a id="FBloginButton" href="javascript:FB_API.login();">Login By FB</a>
+        <a id="newLyricButton" href="edit">新增歌詞</a>
+        <div id="songList">
+            <h1>清單畫面</h1>    
+            <% if (data.length) { %>
+                <ul id="">
+                <% data.forEach(function(item){ %>
                 <li>
-                    <a href="/edit/<%= item._id%>">                    
-                    <div>歌名: <%= item.title %></div>
-                    <span>作者: <%= item.author %></span>
-                    <span>建立時間:<%= new Date(item.createTime).toString().substring(0 , 24) %></span>
-                    <span>內容:<%= item.lyric %></span>
-                    </a>
+                    <a class="editButton" href="/edit/<%= item._id%>">編輯</a>
+                    <a href="/query/<%= item._id%>">                    
+                    <span class="label">歌名:</span><div><%= item.title %></div>
+                    <span class="label">作者:</span><div><%= item.author %></div>
+                    <span class="label">建立時間:</span><div><%= new Date(item.createTime).toString().substring(0 , 24) %></div>
+                    <span class="label">內容:</span><div class="summary"><%= item.summary %></div>
+                    </a>                    
                 </li>
-            <% }) %>
-        </ul>
-        <% } %>    
+                <% }) %>
+            </ul>
+            <% } %>    
+        </div>
+    </div>
+
+
+
+    <div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '241904819264726', // App ID
+          channelUrl : 'channel.html', // Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+
+        // Additional initialization code here
+      };
+
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+    </script>
 
     </body>
 </html>

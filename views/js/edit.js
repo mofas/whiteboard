@@ -3,11 +3,11 @@
 
 
 
+var editOperation = {};
 
 
 
-
-function submit(id){
+editOperation.submit = function(id){
 
 	var params = $("#editForm").serialize();
 
@@ -25,11 +25,29 @@ function submit(id){
 		$.post("/add", params , function(data){
 			if(data.errCode == 0 ){
 				alert("新增成功");
-				window.reload();
+				console.log(data);
+				window.location.href = 'edit/' + data.obj._id ; 	
 			}
 			else{
 				alert(data.msg);
 			}
 		});
 	}
+}
+
+
+
+editOperation.delete = function(id){
+	if(id !== undefined && id !== null){
+		$.post("/delete/" + id , function(data){
+			console.log(data);
+			if(data.errCode == 0 ){
+				alert("刪除成功");
+				window.location.href = "/list";
+			}
+			else{
+				alert(data.msg);
+			}
+		});
+	}	
 }

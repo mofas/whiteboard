@@ -2,15 +2,32 @@
 
 
 
-#songList{
+#bodyWrap{
 	width: 960px;
 	margin: 0px auto;
 	padding: 20px;
 }
 
+#songList{
+	margin: 20px auto;
+}
+
+#songList h1{
+	text-align: center;
+	font-weight: bold;
+}
+
 #songList li{
 	margin: 5px 0px;
-	padding: 0px 20px;
+	padding: 0;
+}
+
+#songList li:nth-child(2n+1){
+	background : #D3F3D3;
+}
+
+#songList li:nth-child(2n){
+	background : #E8F8E5;	
 }
 
 #songList li:hover{
@@ -19,4 +36,39 @@
 
 #songList li:hover a{
 	color: #fff;	
+}
+
+#songList .label{
+	float:left;
+	margin: 0px 10px 0px 0px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#songList .label + div{	
+	height: 24px;
+}
+
+#songList .summary{
+	margin: 5px 0px;
+	padding: 5px 10px;
+	display:block;	
+	line-height: 180%;
+	max-height: 48px;
+	overflow: hidden;
+}
+
+#newLyricButton , #FBloginButton{
+	margin: 5px 20px;
+	padding: 5px;
+	background: #aaa;
+	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
+}
+
+.editButton{
+	border: 1px solid #333;
+	background : #e3e322;
+	padding: 5px;
+	margin: 40px 10px;
+	float: left;
 }

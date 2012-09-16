@@ -24,24 +24,23 @@
 
     <body>
 
-
-    <div id="edit">    
-        <a id="submitButton" href="javascript:submit('<%= data._id %>');">
-            <% if(data == undefined){%>
-            <%= "新增" %>
-            <%} else {%>    
-            <%= "修改" %>
-            <% } %>        
-        </a> 
+    
+    <div id="edit">            
+            <a id="backButton" href="..\list">回清單</a>
+        <% if(data._id == undefined ){ %>
+            <a id="submitButton" href="javascript:editOperation.submit();">新增</a>
+        <%} else {%>    
+            <a id="submitButton" href="javascript:editOperation.submit('<%= data._id %>');">儲存</a> 
+            <a id="deleteButton" href="javascript:editOperation.delete('<%= data._id %>');">刪除</a> 
+        <% } %>        
         <div>
             <form id="editForm">            
             <label for="author">Author:</label>
-            <input type="text" id="author" name="author" placeholder="Band/Artist" value="<%= data.author%>"/>                     
+            <input type="text" id="author" name="author" placeholder="Band/Artist" value="<%= data.author || '' %>"/>
             <label for="title">Song Title:</label>
-            <input type="text" id="title" name="title" placeholder="Song Name" value="<%= data.title %>"/>
-                    
+            <input type="text" id="title" name="title" placeholder="Song Name" value="<%= data.title || '' %>"/> 
             <label for="lyric">Content</label>
-            <textarea id="lyric" name="lyric"><%= data.lyric%></textarea>                
+            <textarea id="lyric" name="lyric"><%= data.lyric || '' %></textarea>                
             </form>
         </div>
     </div>

@@ -40,27 +40,24 @@ db.open(function(err, db) {
 var pathParse  = function(){
 
 
-  app.get('/edit/:id?', function(req, res){                                          
-        var id = req.params.id;
-        console.log("id:" + id);
-        if(id !== undefined && id.length > 0){          
-          db.collection('board', function(err, collection) { 
-            var BSON = mongodb.BSONPure;
-            var o_id = new BSON.ObjectID(id);
-            collection.find({"_id" : o_id}).toArray(function(err, items) {              
-              res.render('edit', {                
-                data : items[0]
-              });                                       
-            });                        
-          }); 
-        }        
-        else{
-          res.render('edit', {
-              id : id
-          });  
-        }            
-        
-  });  
+  app.get('/edit/:id?', function(req, res){
+    var id = req.params.id;     
+    getSongDataByID(id , function(data){
+      res.render('edit', {      
+        data : data
+      });       
+    });
+    
+  });
+
+  app.get('/query/:id?', function(req, res){
+    var id = req.params.id; 
+    getSongDataByID(id , function(data){
+      res.render('query', {      
+        data : data
+      });       
+    });    
+  });
 
   app.get('*', function(req, res){                              
       var requestPath = req.params[0].substring(1);
@@ -90,24 +87,33 @@ var pathParse  = function(){
   app.post('/add', function(req, res){                                 
         var author  = req.body.author,
             title   = req.body.title,
-            lyric   = req.body.lyric,
-            createTime = new Date().getTime();
+            lyric   = req.body.lyric,            
+            createTime = new Date().getTime(),
+            limit = 40,
+            summary;
+
+        if(lyric.length <= 40){
+          limit = lyric.length;
+        }
+        var summary = lyric.substring(0 , limit);
 
         if(title === undefined || title.length < 1){
           res.send({ "errCode" : "1" , "msg" : "請輸入歌曲名稱" });
+          return;
         }
 
         db.collection('board', function(err, collection) {              
             collection.insert({
                 author : author,                
                 title : title , 
+                summary : summary, 
                 lyric : lyric,
                 createTime : createTime,
             }, function(err, data) {
                 if(err){
                   res.send({ "errCode" : "2" , "msg" : "資料庫存取失敗" });
                 }
-                  res.send({ "errCode" : "0" , "msg" : "OK" });
+                  res.send({ "errCode" : "0" , "msg" : "OK" , "obj" : data[0]});
             });
         });        
 
@@ -118,15 +124,20 @@ var pathParse  = function(){
             author  = req.body.author,
             title   = req.body.title,
             lyric   = req.body.lyric,
-            modifyTime = new Date().getTime();
+            modifyTime = new Date().getTime(),
+            limit = 40,
+            summary;
 
+        if(lyric.length <= 40){
+          limit = lyric.length;
+        }
+        var summary = lyric.substring(0 , limit);        
 
         if(title === undefined || title.length < 1){
           res.send({ "errCode" : "1" , "msg" : "請輸入歌曲名稱" });
+          return;
         }
-        else{
-          console.log(JSON.stringify(req.body));
-          console.log(id);
+        else{          
           var BSON = mongodb.BSONPure;
           var o_id = new BSON.ObjectID(id);
 
@@ -140,12 +151,12 @@ var pathParse  = function(){
                     author : author,                
                     title : title , 
                     lyric : lyric,
+                    summary: summary,
                     modifyTime : modifyTime,
                   }
               }, 
               {safe:true},
-              function(err, result) {                  
-                  console.log(result);
+              function(err, result) {                                    
                   if(err){
                     res.send({ "errCode" : "2" , "msg" : "資料庫存取失敗" });
                   }
@@ -157,14 +168,63 @@ var pathParse  = function(){
         
   });
 
-  app.post('/delete', function(req, res){          
-    res.send("this is delete");
+  app.post('/delete/:id', function(req, res){          
+     db.collection('board', function(err, collection) {      
+        var id      = req.params.id, BSNO , o_id;
+        if(id.length < 1){
+          res.send({"errCode" : "1" , "msg" : "id is NULL"});
+          return;
+        }
+
+        BSON = mongodb.BSONPure;
+        o_id = new BSON.ObjectID(id);        
+
+        collection.remove(
+          {
+            "_id" : o_id
+          }, 
+          {
+            safe:true
+          }, 
+          function(err, result) {            
+            res.send({ "errCode" : "0" , "msg" : "OK" , "obj" : result});
+        });
+    });      
   }); 
 
   app.post('/dropTable', function(req, res){          
     res.send("this is dropTable");
   });                 
   
+}
+
+var getSongDataByID= function(id , callback){
+  if(id !== undefined && id.length > 0){          
+    db.collection('board', function(err, collection) { 
+      var BSON = mongodb.BSONPure;
+      var o_id = new BSON.ObjectID(id);
+      collection.find({"_id" : o_id}).toArray(function(err, items) {                      
+        return callBackHandler(items[0] , callback);
+      });
+    }); 
+  }        
+  else{
+    return callBackHandler({} , callback);
+  }       
+}
+
+
+
+/*******************************************************
+**  Utility
+********************************************************/
+var callBackHandler = function(returnValue , callback){
+  if (callback && typeof(callback) === "function") {  
+      return callback(returnValue);  
+  }
+  else{
+    return returnValue;
+  } 
 }
 
 
@@ -177,6 +237,7 @@ var app = express();
 
 app.configure(function(){
   app.use(express.bodyParser());
+  app.use
   app.use(express.static('views/'));
   app.set("view engine", "ejs");
 });
