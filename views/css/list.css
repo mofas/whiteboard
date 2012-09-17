@@ -12,6 +12,17 @@
 	margin: 20px auto;
 }
 
+.searchWrap{
+	margin: 0px 20px;
+	display: inline-block;
+}
+
+#searchButton{
+	padding: 5px;
+	margin: 0px 5px ;	
+	background: #aaa;
+}
+
 #songList h1{
 	text-align: center;
 	font-weight: bold;

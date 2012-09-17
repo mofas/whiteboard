@@ -59,30 +59,32 @@ var pathParse  = function(){
     });    
   });
 
+
+  app.get('/search' , function(req, res){
+      var type = req.query.type,
+          keyword = req.query.keyword;      
+      res.send("searchType:" + searchType + "<br/>keyword:" + keyword + "<br/>");      
+  });
+
+  app.get('/list' , function(req, res){ 
+    var type = req.query.type,
+     keyword = req.query.keyword;       
+     console.log(type + keyword);
+
+    db.collection('board', function(err, collection) {              
+        collection.find().sort({time:-1}).toArray(function(err, items) {
+          res.render('list', {
+            data : items
+          });              
+        });            
+    });   
+  });
+
   app.get('*', function(req, res){                              
       var requestPath = req.params[0].substring(1);
           extensionName = requestPath.substring(requestPath.lastIndexOf(".")+1 , requestPath.length);      
-
       console.log('request: ' + requestPath);      
-
-      if(requestPath == "list"){
-        var message = "";
-        message += "this is a list : <br/>";        
-        db.collection('board', function(err, collection) {              
-            collection.find().sort({time:-1}).toArray(function(err, items) {
-              res.render('list', {
-                data : items
-              });              
-            });            
-        });        
-      }      
-      else{
-        var message = "";
-        message += "Can`t find the file : " + requestPath +"  ";          
-        res.send(message);              
-      }
   });
-
 
   app.post('/add', function(req, res){                                 
         var author  = req.body.author,
@@ -235,9 +237,8 @@ var callBackHandler = function(returnValue , callback){
 var port = 3000;
 var app = express();
 
-app.configure(function(){
-  app.use(express.bodyParser());
-  app.use
+app.configure(function(){  
+  app.use(express.bodyParser());  
   app.use(express.static('views/'));
   app.set("view engine", "ejs");
 });

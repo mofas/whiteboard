@@ -10,9 +10,14 @@
 
 .content{
 	margin: 20px auto;
-
 }
 
+.lyric{
+	margin: 10px auto;
+	padding: 10px;
+	border: 1px solid #aaa;
+
+}
 #backButton {
 	background: #eee;
 	margin: 0px 20px;

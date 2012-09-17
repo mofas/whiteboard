@@ -27,4 +27,15 @@ var FB_API = (function(o){
 
 
 
+var listOperation = (function(o){
+
+	o.search = function(){
+		
+	}
+
+
+	return o;
+})(listOperation || {});
+
+
 
