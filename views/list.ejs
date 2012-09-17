@@ -25,12 +25,17 @@
         <a id="FBloginButton" href="javascript:FB_API.login();">Login By FB</a>
         <a id="newLyricButton" href="edit">新增歌詞</a>
         <div class="searchWrap">          
-          <input  id="searchInput" type="text" placeholder="輸入歌名或是作者">
+          <input  id="searchInput" type="text" placeholder="輸入歌名或是作者" value="<%= keyword || '' %>">
           <select id="searchType">
-              <option value="byAuth">歌名</option>
-              <option value="byTitle">作者</option>
+              <% if (type == 'byTitle'){ %>              
+                <option value="byTitle" selected>歌名</option>
+                <option value="byAuth">作者</option>
+              <% } else { %>              
+                <option value="byTitle">歌名</option>
+                <option value="byAuth" selected>作者</option>
+              <% } %>
           </select>
-          <a id="searchButton" href="javascript:listOperation.searchSong();">搜尋</a>
+          <a id="searchButton" href="javascript:listOperation.search();">搜尋</a>
         </div>
 
         <div id="songList">

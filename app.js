@@ -59,25 +59,41 @@ var pathParse  = function(){
     });    
   });
 
-
-  app.get('/search' , function(req, res){
-      var type = req.query.type,
-          keyword = req.query.keyword;      
-      res.send("searchType:" + searchType + "<br/>keyword:" + keyword + "<br/>");      
-  });
-
   app.get('/list' , function(req, res){ 
-    var type = req.query.type,
-     keyword = req.query.keyword;       
-     console.log(type + keyword);
+    var   type = req.query.type,
+       keyword = req.query.keyword,
+        queryRex = new RegExp(keyword , "g"),
+         query;
 
-    db.collection('board', function(err, collection) {              
-        collection.find().sort({time:-1}).toArray(function(err, items) {
-          res.render('list', {
-            data : items
-          });              
-        });            
-    });   
+    if(keyword !== undefined){
+      if(type == 'byAuth')        
+        query = { author : queryRex };
+      else
+        query = { title : queryRex };
+
+      console.log(query);
+
+      db.collection('board', function(err, collection) {              
+          collection.find(query).sort({time:-1}).toArray(function(err, items) {
+            res.render('list', {
+              data : items,
+              keyword : keyword,
+              type : type,
+            });              
+          });            
+      });
+    }
+    else{
+      db.collection('board', function(err, collection) {              
+          collection.find().sort({time:-1}).toArray(function(err, items) {
+            res.render('list', {
+              data : items,
+              keyword : null,
+              type : null,
+            });              
+          });            
+      });
+    }   
   });
 
   app.get('*', function(req, res){                              

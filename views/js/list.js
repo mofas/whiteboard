@@ -29,10 +29,11 @@ var FB_API = (function(o){
 
 var listOperation = (function(o){
 
-	o.search = function(){
-		
+	o.search = function(){		
+		var type = $("#searchType").val();
+			keyword = $("#searchInput").val();
+		window.location.href = "/list?keyword=" + keyword + "&type=" + type;
 	}
-
 
 	return o;
 })(listOperation || {});
