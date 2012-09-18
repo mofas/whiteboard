@@ -9,7 +9,7 @@
     "socket.io": "*",
     "mongodb" : "*",
     "express": "3.0.0rc2",
-    "jade": "*"
+    "ejs": "*"
   },
   "engines" : {
     "node": "0.8.x",
