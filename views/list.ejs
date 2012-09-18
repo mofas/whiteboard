@@ -40,7 +40,7 @@
 
         <div id="songList">
             <h1>清單畫面</h1>    
-            <% if (data.length) { %>
+            <% if (data !== null && data.length) { %>
                 <ul id="">
                 <% data.forEach(function(item){ %>
                 <li>

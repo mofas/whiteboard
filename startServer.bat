@@ -1,0 +1,3 @@
+@echo off
+echo ±Ò°Ênode.js...
+node app.js

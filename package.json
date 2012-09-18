@@ -9,5 +9,9 @@
     "mongodb"
     "express": "3.0.0rc2",
     "jade": "*"
+  },
+  "engines" : {
+    "node": "0.8.x",
+    "npm": "1.1.x"
   }
 }

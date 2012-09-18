@@ -14,12 +14,13 @@ var express = require('express')
 /**********************************************
 *  mongoDB
 ***********************************************/
+
+
 var Server = mongodb.Server,
     Db = mongodb.Db;
-
+/**
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 var db = new Db('exampleDb', server);
-
 db.open(function(err, db) {
   if(!err) {
     console.log("We are connected to MongoDB");
@@ -29,8 +30,35 @@ db.open(function(err, db) {
     console.log(err);
   }  
 });
+**/
 
 
+var server = new Server('alex.mongohq.com', 10064, {auto_reconnect: true});
+var db = new Db('app7698594', server);
+var dbclient = null;
+db.open(function(err, db_client) {
+  if(err) throw err;
+  console.log("We are connected to MongoDB");    
+  dbclient = db_client;    
+  dbclient.authenticate('mofas223', 'qqww1122', function(err, p_client) {    
+      if (err) throw err;      
+      db.createCollection('board', function(err, collection) {
+        dbReady();      
+      });          
+  });  
+});
+
+/**
+var MONGOHQ_URL="mongodb://mofas223:qqww1122@alex.mongohq.com:10064/app7698594";
+var url = require('url');
+var connectionUri = url.parse(MONGOHQ_URL);
+var dbName = connectionUri.pathname.replace(/^\//, '');
+Db.connect(MONGOHQ_URL, function(error, client) {
+  if (error) throw error;  
+  else
+    console.log("We are connected to MongoDB");
+});
+**/
 
 /********************************************************
 **  router PathParse
@@ -70,8 +98,6 @@ var pathParse  = function(){
         query = { author : queryRex };
       else
         query = { title : queryRex };
-
-      console.log(query);
 
       db.collection('board', function(err, collection) {              
           collection.find(query).sort({time:-1}).toArray(function(err, items) {
@@ -218,7 +244,7 @@ var pathParse  = function(){
 
 var getSongDataByID= function(id , callback){
   if(id !== undefined && id.length > 0){          
-    db.collection('board', function(err, collection) { 
+    db.collection('board', function(err, collection) {       
       var BSON = mongodb.BSONPure;
       var o_id = new BSON.ObjectID(id);
       collection.find({"_id" : o_id}).toArray(function(err, items) {                      
@@ -259,10 +285,14 @@ app.configure(function(){
   app.set("view engine", "ejs");
 });
 
-
 pathParse();
 
-app.listen(port);
+var dbReady = function(){
+  console.log("server start");
+  app.listen(port);
+}
+
+
 
 
 
