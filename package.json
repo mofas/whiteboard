@@ -6,7 +6,8 @@
     "start": "node app"
   },
   "dependencies": {
-    "mongodb"
+    "socket.io": "*",
+    "mongodb" : "*",
     "express": "3.0.0rc2",
     "jade": "*"
   },
