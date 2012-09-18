@@ -276,7 +276,7 @@ var callBackHandler = function(returnValue , callback){
 *   start server
 ***********************************************************/
 
-var port = 3000;
+var port = process.env.PORT || 3000;;
 var app = express();
 
 app.configure(function(){  
