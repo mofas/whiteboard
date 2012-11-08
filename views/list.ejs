@@ -7,12 +7,13 @@
 
 
         <!-- CSS lib -->    
-        <link rel="stylesheet"  href="/css/lib/reset.css" />         
+        <link rel="stylesheet"  href="/css/lib/bootstrap.min.css" />         
 
         <!-- JS lib -->       
-        <script type="text/javascript" src="/js/lib/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="/js/lib/jquery-1.8.2.min.js"></script>
 
         <!-- CSS -->
+        <link rel="stylesheet"  href="/css/header.css" />  
         <link rel="stylesheet"  href="/css/list.css" />  
 
         <!-- JS -->      
@@ -20,69 +21,98 @@
     </head>
 
     <body>
-
-    <div id="bodyWrap">
-        <a id="FBloginButton" href="javascript:FB_API.login();">Login By FB</a>
-        <a id="newLyricButton" href="edit">新增歌詞</a>
-        <div class="searchWrap">          
-          <input  id="searchInput" type="text" placeholder="輸入歌名或是作者" value="<%= keyword || '' %>">
-          <select id="searchType">
-              <% if (type == 'byTitle'){ %>              
-                <option value="byTitle" selected>歌名</option>
-                <option value="byAuth">作者</option>
-              <% } else { %>              
-                <option value="byTitle">歌名</option>
-                <option value="byAuth" selected>作者</option>
-              <% } %>
-          </select>
-          <a id="searchButton" href="javascript:listOperation.search();">搜尋</a>
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="brand" href="/list">吉他好朋友</a>
+            <a id="FBloginButton" class="btn btn-primary"  href="javascript:FB_API.login();">FB登入</a>
+            <a id="newLyricButton" class="btn btn-primary"  href="edit">新增歌詞</a>
+            <div class="searchWrap">            
+              <input  id="searchInput" type="text" placeholder="輸入歌名或是作者" value="<%= keyword || '' %>">
+              <select id="searchType" class="input-small">
+                  <% if (type == 'byTitle'){ %>              
+                    <option value="byTitle" selected>歌名</option>
+                    <option value="byAuth">作者</option>
+                  <% } else { %>              
+                    <option value="byTitle">歌名</option>
+                    <option value="byAuth" selected>作者</option>
+                  <% } %>
+              </select>
+              <a id="searchButton" class="btn" href="javascript:listOperation.search();">搜尋</a>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div id="songList">
-            <h1>清單畫面</h1>    
-            <% if (data !== null && data.length) { %>
-                <ul id="">
+      <div id="songList">
+        <div class="container">
+          <div class="page-header">          
+            <h1>清單畫面</h1>   
+          </div> 
+            <div class="well well-large">
+              <% if (data !== null && data.length) { %>
+                <div class="row">
                 <% data.forEach(function(item){ %>
-                <li>
-                    <a class="editButton" href="/edit/<%= item._id%>">編輯</a>
-                    <a href="/query/<%= item._id%>">                    
-                    <span class="label">歌名:</span><div><%= item.title %></div>
-                    <span class="label">作者:</span><div><%= item.author %></div>
-                    <span class="label">建立時間:</span><div><%= new Date(item.createTime).toString().substring(0 , 24) %></div>
-                    <span class="label">內容:</span><div class="summary"><%= item.summary %></div>
-                    </a>                    
-                </li>
-                <% }) %>
-            </ul>
-            <% } %>    
+                <div class="span12 ">
+                  <div class="span10 ">
+                    <div class="row mainTitle">
+                      <div class="span2 songName">
+                        <a href="/query/<%= item._id%>"><%= item.title %></a>
+                      </div>
+                      <div class="span2">
+                        <a href="/list?keyword=<%= item.author %>&type=byAuth"><%= item.author %></a>
+                      </div>
+                      <div class="span3 offset2 createTime">
+                        <%= new Date(item.createTime).toString().substring(0 , 24) %>
+                      </div>
+                    </div>                    
+                    <div class="span8 offset1 summary"><%= item.summary %></div>
+                  </div>
+                  <div class="span1">
+                    <a class="editButton btn btn-danger" href="/edit/<%= item._id%>">編輯</a>
+                  </div>                    
+                </div>
+              <% }) %>
+            </div>
+            <% } %>
+          </div>
         </div>
-    </div>
+      </div>
 
+      <footer class="footer">
+        <div class="container">
+          <div class="span8">
+            Author: Mofas Lee
+          </div>
+          <div class="span3 bootstrap">
+            Made with Bootstrap.
+          </div>
+        </div>
+      </footer>
 
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '241904819264726', // App ID
+            channelUrl : 'channel.html', // Channel File
+            status     : true, // check login status
+            cookie     : true, // enable cookies to allow the server to access the session
+            xfbml      : true  // parse XFBML
+          });
 
-    <div id="fb-root"></div>
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '241904819264726', // App ID
-          channelUrl : 'channel.html', // Channel File
-          status     : true, // check login status
-          cookie     : true, // enable cookies to allow the server to access the session
-          xfbml      : true  // parse XFBML
-        });
+          // Additional initialization code here
+        };
 
-        // Additional initialization code here
-      };
-
-      // Load the SDK Asynchronously
-      (function(d){
-         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement('script'); js.id = id; js.async = true;
-         js.src = "//connect.facebook.net/en_US/all.js";
-         ref.parentNode.insertBefore(js, ref);
-       }(document));
-    </script>
+        // Load the SDK Asynchronously
+        (function(d){
+           var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement('script'); js.id = id; js.async = true;
+           js.src = "//connect.facebook.net/en_US/all.js";
+           ref.parentNode.insertBefore(js, ref);
+         }(document));
+      </script>
 
     </body>
 </html>

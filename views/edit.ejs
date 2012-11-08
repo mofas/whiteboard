@@ -7,11 +7,11 @@
 
 
     <!-- CSS lib -->    
-    <link rel="stylesheet"  href="/css/lib/reset.css" />     
+    <link rel="stylesheet"  href="/css/lib/bootstrap.min.css" />     
     <link rel="stylesheet"  href="/css/lib/font-awesome.css" />     
 
     <!-- JS lib -->       
-    <script type="text/javascript" src="/js/lib/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/js/lib/jquery-1.8.2.min.js"></script>
 
     <!-- CSS -->
     <link rel="stylesheet"  href="/css/edit.css" />
@@ -23,25 +23,41 @@
     </head>
 
     <body>
-
     
-    <div id="edit">            
-            <a id="backButton" href="..\list">回清單</a>
-        <% if(data._id == undefined ){ %>
-            <a id="submitButton" href="javascript:editOperation.submit();">新增</a>
-        <%} else {%>    
-            <a id="submitButton" href="javascript:editOperation.submit('<%= data._id %>');">儲存</a> 
-            <a id="deleteButton" href="javascript:editOperation.delete('<%= data._id %>');">刪除</a> 
-        <% } %>        
-        <div>
-            <form id="editForm">            
-            <label for="author">Author:</label>
-            <input type="text" id="author" name="author" placeholder="Band/Artist" value="<%= data.author || '' %>"/>
-            <label for="title">Song Title:</label>
-            <input type="text" id="title" name="title" placeholder="Song Name" value="<%= data.title || '' %>"/> 
-            <label for="lyric">Content</label>
-            <textarea id="lyric" name="lyric"><%= data.lyric || '' %></textarea>                
-            </form>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="/list">吉他好朋友</a>                
+                <a class="btn btn-primary" href="..\list">回清單</a>                            
+            </div>
+        </div>
+    </div>
+
+    <div id="edit">
+        <div class="container well well-large">            
+            <% if(data._id == undefined ){ %>
+                <a id="submitButton" class="btn btn-success" href="javascript:editOperation.submit();">新增</a>
+            <%} else {%>    
+                <a id="submitButton" class="btn btn-success" href="javascript:editOperation.submit('<%= data._id %>');">儲存</a> 
+                <a id="deleteButton" class="btn btn-danger" href="javascript:editOperation.delete('<%= data._id %>');">刪除</a> 
+            <% } %>        
+            <div>
+                <form id="editForm">
+                    <div class="input-prepend">
+                        <span class="add-on">作者</span>                        
+                        <input type="text" class="span4" id="author" name="author" placeholder="Band/Artist" value="<%= data.author || '' %>"/>
+                    </div>                
+                
+                    <div class="input-prepend">
+                        <span class="add-on">歌名</span>                                        
+                        <input type="text" class="span4" id="title" name="title" placeholder="Song Name" value="<%= data.title || '' %>"/> 
+                    </div>
+
+                    <h4>歌詞</h4>
+                    <textarea id="lyric" row="2" name="lyric"><%= data.lyric || '' %></textarea>                
+
+                </form>
+            </div>
         </div>
     </div>
 

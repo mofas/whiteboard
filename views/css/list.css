@@ -1,7 +1,4 @@
 
-
-
-
 #bodyWrap{
 	width: 960px;
 	margin: 0px auto;
@@ -12,74 +9,109 @@
 	margin: 20px auto;
 }
 
-.searchWrap{
-	margin: 0px 20px;
+.searchWrap{	
 	display: inline-block;
+	float:right;
+}
+
+#newLyricButton , #FBloginButton{	
+	margin-right: 30px;	
+}
+
+#searchInput , #searchType{
+	margin-top: 10px;
 }
 
 #searchButton{
-	padding: 5px;
-	margin: 0px 5px ;	
-	background: #aaa;
+	margin-top: 2px;
 }
 
-#songList h1{
-	text-align: center;
-	font-weight: bold;
+#songList .page-header{
+	margin-top: 100px;
+	text-align: center;	
 }
 
-#songList li{
+#songList{
 	margin: 5px 0px;
-	padding: 0;
+	padding: 0;	
 }
 
-#songList li:nth-child(2n+1){
-	background : #D3F3D3;
+
+#songList .songList-ul{
+	margin: 0;
+	list-style: none;
 }
 
-#songList li:nth-child(2n){
-	background : #E8F8E5;	
+
+#songList .row a:hover{
+	text-decoration: none;
 }
 
-#songList li:hover{
-	background: #666;	
+#songList .row .span12{
+	padding: 10px 0;		
+	margin: 10px 0;
 }
 
-#songList li:hover a{
-	color: #fff;	
+#songList .mainTitle{
+	margin: 10px 20px;
+	padding: 5px 0px;
+	border-bottom: 1px solid #ccc;
+}
+#songList .subTitle{
+	margin: 10px 20px;
+	padding: 5px 0px;
 }
 
 #songList .label{
 	float:left;
-	margin: 0px 10px 0px 0px;
-	font-weight: bold;
-	font-size: 14px;
+	margin: 5px 10px 0px 0px;
+	padding: 5px 10px;
+	letter-spacing: 1px;
+	text-align: right;
 }
 
 #songList .label + div{	
-	height: 24px;
+	height: 30px;	
+	line-height: 30px;	
+}
+
+#songList .songName a{	
+	font-weight: bold;
+	font-size: 24px;
+	letter-spacing: 2px;
+	color: #666;	
+	padding: 2px 0;
+}
+#songList .songName a:hover{
+	color: #ddd;	
+}
+
+#songList .songWritter{
+	
+}
+
+#songList .createTime{
+	color: #aaa;
+	text-align: right;
 }
 
 #songList .summary{
-	margin: 5px 0px;
-	padding: 5px 10px;
-	display:block;	
-	line-height: 180%;
-	max-height: 48px;
+	color: #aaa;	
 	overflow: hidden;
 }
 
-#newLyricButton , #FBloginButton{
-	margin: 5px 20px;
-	padding: 5px;
-	background: #aaa;
-	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
+
+.editButton{	
+	margin: 40px 0;
 }
 
-.editButton{
-	border: 1px solid #333;
-	background : #e3e322;
-	padding: 5px;
-	margin: 40px 10px;
-	float: left;
+.footer{
+	background-color: #252525;
+	padding: 45px 0px;
+	min-width: 1100px;
+	color: #fff;
+}
+
+.footer .bootstrap{
+	text-align: right;
 }
