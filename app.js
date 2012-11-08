@@ -22,9 +22,8 @@ global.db = require('./db');
 *   start server
 ***********************************************************/
 
-<<<<<<< HEAD
+
 var port = process.env.PORT || 3000;
->>>>>>> module_separation
 var app = express();
 
 app.configure(function(){  
@@ -36,9 +35,7 @@ app.configure(function(){
 
 //設定route
 routes = require('./routes');
-<<<<<<< HEAD
 app.get( '/index.html', routes.list );
->>>>>>> module_separation
 app.get( '/list', routes.list );
 app.get( '/edit/:id?', routes.edit );
 app.get( '/query/:id?', routes.query );
