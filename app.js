@@ -34,8 +34,8 @@ app.configure(function(){
 
 //設定route
 routes = require('./routes');
-
-app.get( '*', routes.index );
+app.get( '*', routes.list );
+app.get( '/index.html', routes.list );
 app.get( '/list', routes.list );
 app.get( '/edit/:id?', routes.edit );
 app.get( '/query/:id?', routes.query );
