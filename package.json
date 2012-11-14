@@ -9,7 +9,9 @@
     "socket.io": "*",
     "mongodb" : "*",
     "express": "3.0.0rc2",
-    "ejs": "*"
+    "ejs": "*",
+    "passport": "*",
+    "passport-facebook" : "*"
   },
   "engines" : {
     "node": "0.8.x",

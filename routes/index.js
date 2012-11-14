@@ -24,7 +24,8 @@ exports.edit = function(req, res){
 exports.query = function(req, res){
 	var id = req.params.id; 
 	utility.getSongDataByID(id , function(data){
-	  res.render('query', {      
+	  res.render('query', {
+      user : req.user,     
 	    data : data
 	  });       
 	});    
@@ -47,6 +48,7 @@ exports.list = function(req, res){
 		db.collection('board', function(err, collection) {              
 	      	collection.find(query).sort({time:-1}).toArray(function(err, items) {
 	        	res.render('list', {
+              user : req.user,
 	          	data : items,
 	          	keyword : keyword,
 	          	type : type,
@@ -58,6 +60,7 @@ exports.list = function(req, res){
   		db.collection('board', function(err, collection) {              
 	      	collection.find().sort({time:-1}).toArray(function(err, items) {
 		        res.render('list', {
+              user : req.user,
 		          data : items,
 		          keyword : null,
 		          type : null,

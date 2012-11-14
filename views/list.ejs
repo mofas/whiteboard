@@ -25,7 +25,7 @@
         <div class="navbar-inner">
           <div class="container">
             <a class="brand" href="/list">吉他好朋友</a>
-            <a id="FBloginButton" class="btn btn-primary"  href="javascript:FB_API.login();">FB登入</a>
+            <a id="FBloginButton" class="btn btn-primary"  href="/auth/facebook">FB登入</a>
             <a id="newLyricButton" class="btn btn-primary"  href="edit">新增歌詞</a>
             <div class="searchWrap">            
               <input  id="searchInput" type="text" placeholder="輸入歌名或是作者" value="<%= keyword || '' %>">
@@ -48,7 +48,7 @@
         <div class="container">
           <div class="page-header">          
             <h1>清單畫面</h1>   
-          </div> 
+          </div>            
             <div class="well well-large">
               <% if (data !== null && data.length) { %>
                 <div class="row">
@@ -89,31 +89,6 @@
           </div>
         </div>
       </footer>
-
-      <div id="fb-root"></div>
-      <script>
-        window.fbAsyncInit = function() {
-          FB.init({
-            appId      : '241904819264726', // App ID
-            channelUrl : 'channel.html', // Channel File
-            status     : true, // check login status
-            cookie     : true, // enable cookies to allow the server to access the session
-            xfbml      : true  // parse XFBML
-          });
-
-          // Additional initialization code here
-        };
-
-        // Load the SDK Asynchronously
-        (function(d){
-           var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-           if (d.getElementById(id)) {return;}
-           js = d.createElement('script'); js.id = id; js.async = true;
-           js.src = "//connect.facebook.net/en_US/all.js";
-           ref.parentNode.insertBefore(js, ref);
-         }(document));
-      </script>
-
     </body>
 </html>
 
