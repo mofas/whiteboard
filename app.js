@@ -48,13 +48,11 @@ passport.use(new FacebookStrategy({
 ));
 
 
-passport.serializeUser(function(user, done) {
-  console.log("serial", user);
+passport.serializeUser(function(user, done) {  
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  console.log("deserial", id);
+passport.deserializeUser(function(id, done) {  
   done(null ,id);
   /**
   User.findById(id, function(err, user) {
@@ -97,10 +95,12 @@ app.get( '/query/:id?', routes.query );
 app.get('/auth/facebook', passport.authenticate('facebook'));
 app.get('/auth/facebook/callback', 
   passport.authenticate('facebook', { successRedirect: '/list',
-                                      failureRedirect: '/list' }));
+                                      failureRedirect: '/loginFail.html' }));
 
-
-
+app.get('/logout', function(req, res){
+  	req.logout();
+  	res.redirect('/list');
+});
 
 app.post( '/add', routes.add );
 app.post( '/update/:id', routes.update );

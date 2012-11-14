@@ -3,6 +3,24 @@ var db = global.db;
 var utility = require('../dbHelper'),
 	mongodb = require('mongodb');
 
+
+var isOwner = function(id , user , success , failure){  
+
+  if(user == undefined){    
+    failure();
+    return;
+  }
+
+  utility.getSongDataByID(id , function(data){
+    var editor = data.editor;        
+    if(editor == user){      
+      success();
+    }else{      
+      failure();
+    }
+  });
+}
+
 exports.index = function(req, res , next){                              
   	var requestPath = req.params[0].substring(1);
     extensionName = requestPath.substring(requestPath.lastIndexOf(".")+1 , requestPath.length);      
@@ -10,15 +28,20 @@ exports.index = function(req, res , next){
   	next();     
 }
 
-
-
 exports.edit = function(req, res){	
-	var id = req.params.id;     
-	utility.getSongDataByID(id , function(data){
-	  res.render('edit', {      
-	    data : data
-	  });       
-	});
+	var id = req.params.id;
+
+  isOwner(id , req.user , 
+    function(){
+      utility.getSongDataByID(id , function(data){
+        res.render('edit', {      
+          data : data
+        });       
+      });
+    },
+    function(){
+      res.send({ "errCode" : "1" , "msg" : "沒有存取權限" });  
+    });   	
 }
 
 exports.query = function(req, res){
@@ -41,9 +64,7 @@ exports.list = function(req, res){
 	  	if(type == 'byAuth')        
 		    query = { author : queryRex };
 		else
-		    query = { title : queryRex };
-
-		console.log(query);
+		    query = { title : queryRex };		
 
 		db.collection('board', function(err, collection) {              
 	      	collection.find(query).sort({time:-1}).toArray(function(err, items) {
@@ -90,6 +111,7 @@ exports.add = function(req, res){
 
     db.collection('board', function(err, collection) {              
         collection.insert({
+            editor : req.user,
             author : author,                
             title : title , 
             summary : summary, 
@@ -113,68 +135,84 @@ exports.update = function(req, res){
         limit = 40,
         summary;
 
-    if(lyric.length <= 40){
-      limit = lyric.length;
-    }
-    var summary = lyric.substring(0 , limit);        
 
-    if(title === undefined || title.length < 1){
-      res.send({ "errCode" : "1" , "msg" : "請輸入歌曲名稱" });
-      return;
-    }
-    else{          
-      var BSON = mongodb.BSONPure;
-      var o_id = new BSON.ObjectID(id);
+    var updateFunction = function(){      
+        if(lyric.length <= 40){
+          limit = lyric.length;
+        }
+        var summary = lyric.substring(0 , limit);        
 
-      db.collection('board', function(err, collection) {              
-          collection.update( 
-          {
-            "_id" : o_id
-          },
-          {
-              $set:{
-                author : author,                
-                title : title , 
-                lyric : lyric,
-                summary: summary,
-                modifyTime : modifyTime,
-              }
-          }, 
-          {safe:true},
-          function(err, result) {                                    
-              if(err){
-                res.send({ "errCode" : "2" , "msg" : "資料庫存取失敗" });
-              }
-              else
-                res.send({ "errCode" : "0" , "msg" : "OK" });
-          });
-      }); 
-    }
-    
+        if(title === undefined || title.length < 1){
+          res.send({ "errCode" : "1" , "msg" : "請輸入歌曲名稱" });
+          return;
+        }
+        else{          
+          var BSON = mongodb.BSONPure;
+          var o_id = new BSON.ObjectID(id);
+
+          db.collection('board', function(err, collection) {              
+              collection.update( 
+              {
+                "_id" : o_id
+              },
+              {
+                  $set:{
+                    editor : req.user,
+                    author : author,                
+                    title : title , 
+                    lyric : lyric,
+                    summary: summary,
+                    modifyTime : modifyTime,
+                  }
+              }, 
+              {safe:true},
+              function(err, result) {                                    
+                  if(err){
+                    res.send({ "errCode" : "2" , "msg" : "資料庫存取失敗" });
+                  }
+                  else
+                    res.send({ "errCode" : "0" , "msg" : "OK" });
+              });
+          }); 
+        }    
+    };
+
+    isOwner(id , req.user , updateFunction , function(){
+        res.send({ "errCode" : "1" , "msg" : "沒有存取權限" });
+    });
 }
 
-exports.delete = function(req, res){          
- 	db.collection('board', function(err, collection) {      
-    var id      = req.params.id, BSNO , o_id;
-    if(id.length < 1){
-      res.send({"errCode" : "1" , "msg" : "id is NULL"});
-      return;
-    }
+exports.delete = function(req, res){
 
-    BSON = mongodb.BSONPure;
-    o_id = new BSON.ObjectID(id);        
+  var id      = req.params.id, BSNO , o_id;
+  
+  
+  var deleteFunction = function(){
+   	db.collection('board', function(err, collection) {          
+      if(id.length < 1){
+        res.send({"errCode" : "1" , "msg" : "id is NULL"});
+        return;
+      }
 
-    collection.remove(
-    	{
-        	"_id" : o_id
-      	}, 
+      BSON = mongodb.BSONPure;
+      o_id = new BSON.ObjectID(id);        
+
+      collection.remove(
       	{
-	        safe:true
-    	}, 
-      	function(err, result) {            
-        	res.send({ "errCode" : "0" , "msg" : "OK" , "obj" : result});
-    	});
-	});      
+          	"_id" : o_id
+        	}, 
+        	{
+  	        safe:true
+      	}, 
+        	function(err, result) {            
+          	res.send({ "errCode" : "0" , "msg" : "OK" , "obj" : result});
+      	});
+  	});
+   };
+
+  isOwner(id , req.user , deleteFunction , function(){
+      res.send({ "errCode" : "1" , "msg" : "沒有存取權限" });
+  });
 }
 
 

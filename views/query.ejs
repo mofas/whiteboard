@@ -29,7 +29,10 @@
         <div class="navbar-inner">
             <div class="container">
                 <a class="brand" href="/list">吉他好朋友</a>                
-                <a class="btn btn-primary" href="..\list">回清單</a>                            
+                <a class="btn btn-primary" href="..\list">回清單</a>
+                <%if(user !== undefined && data.editor == user) { %>
+                  <a class="editButton btn btn-danger" href="/edit/<%= data._id%>">編輯</a>
+                <% } %>
             </div>
         </div>
     </div>

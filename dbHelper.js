@@ -5,8 +5,7 @@ var utility = require('./utility');
 
 module.exports = {
 
-  getSongDataByID :  function(id , callback){
-    console.log(this);
+  getSongDataByID :  function(id , callback){    
     if(id !== undefined && id.length > 0){          
       db.collection('board', function(err, collection) { 
         var BSON = mongodb.BSONPure;

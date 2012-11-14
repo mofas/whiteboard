@@ -86,8 +86,11 @@
 	color: #ddd;	
 }
 
-#songList .songWritter{
-	
+#songList .author:before{
+	content: '作者';
+}
+#songList .editor:before{
+	content: '編輯者';
 }
 
 #songList .createTime{
