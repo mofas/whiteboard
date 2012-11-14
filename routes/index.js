@@ -31,6 +31,13 @@ exports.index = function(req, res , next){
 exports.edit = function(req, res){	
 	var id = req.params.id;
 
+  if(id === undefined && req.user !== undefined){
+    res.render('edit', {      
+          data : {}
+    });
+    return;
+  }  
+
   isOwner(id , req.user , 
     function(){
       utility.getSongDataByID(id , function(data){
