@@ -1,9 +1,12 @@
 
 var db = global.db;
-var utility = require('../dbHelper'),
-	mongodb = require('mongodb');
+
+var dbHelper = require('../dbHelper'),
+    utility = require('../utility'),
+	  mongodb = require('mongodb');
 
 
+//Check Owner
 var isOwner = function(id , user , success , failure){  
 
   if(user == undefined){    
@@ -11,7 +14,7 @@ var isOwner = function(id , user , success , failure){
     return;
   }
 
-  utility.getSongDataByID(id , function(data){
+  dbHelper.getSongDataByID(id , function(data){
     var editor = data.editor;        
     if(editor == user){      
       success();
@@ -21,10 +24,46 @@ var isOwner = function(id , user , success , failure){
   });
 }
 
+
+var songListGetEditorName = function(data , callback){  
+  //Cache editorName 
+  var editorMap = {};  
+  var loopFunction = function(i , data){
+    if(i < 0){      
+      return utility.callBackHandler(data , callback);
+    }
+    if(editorMap[data[i].editor] == null){
+      getEditorName(data[i].editor , function(editorName){
+        data[i].editorName = editorName;
+        editorMap[data[i].editor] = editorName;
+        loopFunction(--i , data);
+      });
+    }
+    else{
+      data[i].editorName = editorMap[data[i].editor];
+      loopFunction(--i , data);
+    }    
+  }
+  loopFunction(data.length-1 , data);
+  
+}
+
+//Get Editor`s name
+var getEditorName = function(id , callback){  
+  dbHelper.getUserDataByFBID(id , function(profile){
+    if(profile != undefined){        
+        if(profile.isAnonymous)
+          return utility.callBackHandler("匿名" , callback);
+        else               
+          return utility.callBackHandler( profile.displayName , callback);
+    }
+      return utility.callBackHandler("匿名" , callback);
+  });    
+}
+
 exports.index = function(req, res , next){                              
   	var requestPath = req.params[0].substring(1);
-    extensionName = requestPath.substring(requestPath.lastIndexOf(".")+1 , requestPath.length);      
-  	console.log('request: ' + requestPath); 
+    extensionName = requestPath.substring(requestPath.lastIndexOf(".")+1 , requestPath.length);        	
   	next();     
 }
 
@@ -37,10 +76,9 @@ exports.edit = function(req, res){
     });
     return;
   }  
-
   isOwner(id , req.user , 
     function(){
-      utility.getSongDataByID(id , function(data){
+      dbHelper.getSongDataByID(id , function(data){
         res.render('edit', {      
           data : data
         });       
@@ -53,11 +91,14 @@ exports.edit = function(req, res){
 
 exports.query = function(req, res){
 	var id = req.params.id; 
-	utility.getSongDataByID(id , function(data){
-	  res.render('query', {
-      user : req.user,     
-	    data : data
-	  });       
+	dbHelper.getSongDataByID(id , function(data){
+    getEditorName(data.editor , function(editorName){
+      data.editorName = editorName;
+      res.render('query', {
+        user : req.user,     
+        data : data
+      });       
+    });	  
 	});    
 }
 
@@ -75,24 +116,28 @@ exports.list = function(req, res){
 
 		db.collection('board', function(err, collection) {              
 	      	collection.find(query).sort({time:-1}).toArray(function(err, items) {
-	        	res.render('list', {
+            songListGetEditorName(items ,function(modifiedtItems){
+              res.render('list', {
               user : req.user,
-	          	data : items,
-	          	keyword : keyword,
-	          	type : type,
-	        	});              
+              data : modifiedtItems,
+              keyword : keyword,
+              type : type,
+              });
+            });	        	
 	      	});            
 		});
 	}
 	else{
   		db.collection('board', function(err, collection) {              
 	      	collection.find().sort({time:-1}).toArray(function(err, items) {
-		        res.render('list', {
-              user : req.user,
-		          data : items,
-		          keyword : null,
-		          type : null,
-		        });              
+            songListGetEditorName(items ,function(modifiedtItems){
+  		        res.render('list', {
+                user : req.user,
+  		          data : modifiedtItems,
+  		          keyword : null,
+  		          type : null,
+  		        });
+            });            
 	      	});            
   		});
 	}   
@@ -124,7 +169,9 @@ exports.add = function(req, res){
             summary : summary, 
             lyric : lyric,
             createTime : createTime,
-        }, function(err, data) {
+        }, 
+        {safe : true},
+        function(err, data) {
             if(err){
               res.send({ "errCode" : "2" , "msg" : "資料庫存取失敗" });
             }
@@ -206,13 +253,11 @@ exports.delete = function(req, res){
 
       collection.remove(
       	{
-          	"_id" : o_id
-        	}, 
-        	{
-  	        safe:true
+        	"_id" : o_id
       	}, 
-        	function(err, result) {            
-          	res.send({ "errCode" : "0" , "msg" : "OK" , "obj" : result});
+      	{safe:true}, 
+      	function(err, result) {            
+        	res.send({ "errCode" : "0" , "msg" : "OK" , "obj" : result});
       	});
   	});
    };

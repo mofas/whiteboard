@@ -15,7 +15,7 @@ var express = require('express')
 /**********************************************************
 *   Utility && setting
 ***********************************************************/
-require('./utility');
+var dbHelper = require('./dbHelper');
 var setting = require('./setting');
 
 /**********************************************************
@@ -35,15 +35,8 @@ passport.use(new FacebookStrategy({
     clientSecret: setting.FB.SECRET,
     callbackURL: "/auth/facebook/callback"
   },
-  function(accessToken, refreshToken, profile, done) {  	  	
-
-  	done(null, {id: profile.id , username : profile.username , displayName : profile.displayName});	
-  	/**
-    User.findOrCreate(..., function(err, user) {
-      if (err) { return done(err); }
-      done(null, user);
-    });
-	**/
+  function(accessToken, refreshToken, profile, done) {
+    dbHelper.userLoginUpsert(profile , done);  	
   }
 ));
 
@@ -53,12 +46,9 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {  
-  done(null ,id);
-  /**
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-  **/
+  var profile = dbHelper.getUserDataByFBID(id , function(profile){
+    done(null , profile);
+  });  
 });
 
 

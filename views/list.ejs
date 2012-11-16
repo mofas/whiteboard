@@ -20,7 +20,7 @@
         <script type="text/javascript" src="/js/list.js"></script>
     </head>
 
-    <body>
+    <body>      
       <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
           <div class="container">
@@ -47,11 +47,10 @@
           </div>
         </div>
       </div>
-
       <div id="songList">
         <div class="container">
           <div class="page-header">          
-            <h1>清單畫面</h1>   
+            <h1>清單畫面</h1>               
           </div>            
             <div class="well well-large">
               <% if (data !== null && data.length) { %>
@@ -67,7 +66,7 @@
                         <a href="/list?keyword=<%= item.author %>&type=byAuth"><%= item.author %></a>
                       </div>
                       <div class="span3 editor">
-                        <a href=""><%= item.editor || "" %></a>
+                        <a href="javascript: void(0);"><%= item.editorName || "" %></a>
                       </div>
                       <div class="span2 createTime">
                         <%= new Date(item.createTime).toString().substring(0 , 24) %>

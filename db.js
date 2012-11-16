@@ -19,9 +19,9 @@ db.connect = function(callBack){
 	  dbclient = db_client;    
 	  dbclient.authenticate(setting.DB.USERNAME , setting.DB.PASSWORD , function(err, p_client) {    
 	      if (err) throw err;      
-	      db.createCollection('board', function(err, collection) {
-	        callBack();      
-	      });          
+	      db.createCollection('board', function(err, collection) {});
+	      db.createCollection('board', function(err, collection) {});
+	      callBack();
 	  });  
 	});
 }
