@@ -75,12 +75,15 @@ app.configure(function(){
 *   Route
 ***********************************************************/
 
+var routes = {};
+routes.board = require('./routes/board');
+routes.user = require('./routes/user');
 
-routes = require('./routes');
-app.get( '/index.html', routes.list );
-app.get( '/list', routes.list );
-app.get( '/edit/:id?', routes.edit );
-app.get( '/query/:id?', routes.query );
+app.get( '/index.html', routes.board.list );
+app.get( '/list', routes.board.list );
+app.get( '/edit/:id?', routes.board.edit );
+app.get( '/query/:id?', routes.board.query );
+app.get( '/user/query', routes.user.query );
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
 app.get('/auth/facebook/callback', 
@@ -92,10 +95,14 @@ app.get('/logout', function(req, res){
   	res.redirect('/list');
 });
 
-app.post( '/add', routes.add );
-app.post( '/update/:id', routes.update );
-app.post( '/delete/:id', routes.delete );
-app.post( '/dropTable', routes.dropTable );
+app.post( '/add', routes.board.add );
+app.post( '/update/:id', routes.board.update );
+app.post( '/delete/:id', routes.board.delete );
+app.post( '/user/update', routes.user.update );
+
+
+
+
 
 /**********************************************************
 *   start server

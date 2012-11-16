@@ -3,7 +3,7 @@
 <!doctype html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>functionBar</title>    
+        <title>吉他好朋友</title>    
 
 
         <!-- CSS lib -->    
@@ -14,10 +14,12 @@
 
         <!-- CSS -->
         <link rel="stylesheet"  href="/css/header.css" />  
-        <link rel="stylesheet"  href="/css/list.css" />  
+        <link rel="stylesheet"  href="/css/list.css" />
+        <link rel="stylesheet"  href="/css/userSetting.css" />
 
         <!-- JS -->      
         <script type="text/javascript" src="/js/list.js"></script>
+        <script type="text/javascript" src="/js/userSetting.js"></script>
     </head>
 
     <body>      
@@ -29,6 +31,7 @@
               <a id="FBloginButton" class="btn btn-primary"  href="/auth/facebook">FB登入</a>
             <%} else {%>
               <a id="newLyricButton" class="btn btn-primary"  href="edit">新增歌詞</a>
+              <a class="btn btn-info" href="javascript: listOperation.openUserSetting();">設定</a>
               <a class="btn btn-danger"  href="logout">登出</a>
             <% } %>
             <div class="searchWrap">            

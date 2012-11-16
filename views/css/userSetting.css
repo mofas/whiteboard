@@ -1,0 +1,29 @@
+
+
+#userSetting{
+	width: 320px; 
+	margin: 10px auto;
+	position: fixed;
+	top: 50px;
+	left: 0;	
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.4);
+	color: #fff;
+
+	border-radius: 10px;
+	background: rgb(107,107,107);
+	background: -moz-linear-gradient(top,  rgba(107,107,107,1) 0%, rgba(40,40,40,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(107,107,107,1)), color-stop(100%,rgba(40,40,40,1)));
+	background: -webkit-linear-gradient(top,  rgba(107,107,107,1) 0%,rgba(40,40,40,1) 100%);
+	background: -o-linear-gradient(top,  rgba(107,107,107,1) 0%,rgba(40,40,40,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(107,107,107,1) 0%,rgba(40,40,40,1) 100%);
+	background: linear-gradient(to bottom,  rgba(107,107,107,1) 0%,rgba(40,40,40,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6b6b6b', endColorstr='#282828',GradientType=0 );
+}
+
+#userSetting .control-label{
+	width: 60px;
+}
+
+#userSetting .controls{
+	margin-left: 80px;
+}

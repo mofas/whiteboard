@@ -1,0 +1,36 @@
+
+<div id ="userSetting" class="well">    
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="inputUserName">姓名</label>
+        <div class="controls">
+            <input type="text" id="inputUserName" value="<%= user.username %>" disabled >
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputDisplayName">暱稱</label>
+        <div class="controls">
+            <input type="text" id="inputDisplayName" value="<%= user.displayName %>" >
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input id="isAnonymous" type="checkbox" <% if(user.isAnonymous == true){%><%= "checked" %><%}%>>匿名模式
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">              
+            <a herf="#" class="submitButton btn">更新</a>
+            <a herf="#" class="closeButton btn btn-danger">關閉</a>
+        </div>
+    </div>
+</form>
+</div>
+
+
+  
+
+

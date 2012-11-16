@@ -268,6 +268,3 @@ exports.delete = function(req, res){
 }
 
 
-exports.dropTable = function(req, res){          
-	res.send("this is dropTable");
-}
