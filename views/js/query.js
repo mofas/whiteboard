@@ -17,20 +17,9 @@ var query = (function(o){
 	}
 
 
-	var convertReturnLine = function(){
-		var text = $textarea.val();
-		var htmlOutputArray = new Array();
-		var textArray = text.split("\n");		
-		for(var i = 0 ; i < textArray.length ; i++){
-			if(textArray[i].length < 1){
-				htmlOutputArray.push('<div class="line">&nbsp;</div>');
-			}
-			else{
-				htmlOutputArray.push('<div class="line">' + textArray[i] + '</div>');
-			}			
-		}
-
-		$htmlarea.html(htmlOutputArray.join(""));
+	var convertReturnLine = function(){		
+		var sourceCode = $textarea.val();
+		$htmlarea.addClass("songFormat").html(window.songFormatCompiler(sourceCode));
 	}
 
 	return o;

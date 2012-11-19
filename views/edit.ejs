@@ -14,9 +14,12 @@
 
     <!-- CSS -->
     <link rel="stylesheet"  href="/css/edit.css" />
+    <link rel="stylesheet"  href="/css/songFormat.css" />
 
-    <!-- JS -->      
+    <!-- JS -->          
+    <script type="text/javascript" src="/js/songFormat.js"></script>
     <script type="text/javascript" src="/js/edit.js"></script>
+
 
 
     </head>
@@ -37,8 +40,8 @@
             <% if(data._id == undefined ){ %>
                 <a id="submitButton" class="btn btn-success" href="javascript:editOperation.submit();">新增</a>
             <%} else {%>    
-                <a id="submitButton" class="btn btn-success" href="javascript:editOperation.submit('<%= data._id %>');">儲存</a> 
-                <a id="deleteButton" class="btn btn-danger" href="javascript:editOperation.delete('<%= data._id %>');">刪除</a> 
+                <a id="submitButton" class="btn btn-success" data-id="<%= data._id %>" href="javascript:void(0);">儲存</a> 
+                <a id="deleteButton" class="btn btn-danger" data-id="<%= data._id %>" href="javascript:void(0);">刪除</a> 
             <% } %>        
             <div>
                 <form id="editForm">
@@ -51,10 +54,29 @@
                         <span class="add-on">歌名</span>                                        
                         <input type="text" class="span4" id="title" name="title" placeholder="Song Name" value="<%= data.title || '' %>"/> 
                     </div>
-
-                    <h4>歌詞</h4>
-                    <textarea id="lyric" row="2" name="lyric"><%= data.lyric || '' %></textarea>                
-
+                    <div class="tabbable">
+                      <ul class="nav nav-tabs">
+                        <li class="active"><a href="#editorView" data-toggle="tab">編輯器</a></li>
+                        <li class=""><a href="#sourceCodeView" data-toggle="tab">原始碼</a></li>
+                        <li class=""><a href="#previewView" data-toggle="tab">預覽</a></li>
+                      </ul>
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="editorView">
+                            <h4>歌詞</h4>
+                            <textarea id="lyric" row="2" name="lyric"><%= data.lyric || '' %></textarea>
+                        </div>
+                        <div class="tab-pane" id="sourceCodeView">
+                            <h4>原始碼</h4>
+                            <textarea id="sourceCode" row="2" name="sourceCode"><%= data.lyric || '' %></textarea>
+                        </div>
+                        <div class="tab-pane" id="previewView">
+                            <h4>預覽</h4>
+                            <div class="alert alert-block">
+                                <div id="preview"></div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
                 </form>
             </div>
         </div>

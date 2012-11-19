@@ -159,8 +159,7 @@ exports.add = function(req, res){
     if(title === undefined || title.length < 1){
       res.send({ "errCode" : "1" , "msg" : "請輸入歌曲名稱" });
       return;
-    }
-    console.log(req.user);
+    }    
     db.collection('board', function(err, collection) {              
         collection.insert({
             editor : req.user.FB_id,
@@ -210,8 +209,7 @@ exports.update = function(req, res){
                 "_id" : o_id
               },
               {
-                  $set:{
-                    editor : req.user.FB_id,
+                  $set:{                    
                     author : author,                
                     title : title , 
                     lyric : lyric,
@@ -231,7 +229,7 @@ exports.update = function(req, res){
         }    
     };
 
-    isOwner(id , req.user , updateFunction , function(){
+    isOwner(id , req.user.FB_id , updateFunction , function(){
         res.send({ "errCode" : "1" , "msg" : "沒有存取權限" });
     });
 }

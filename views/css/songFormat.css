@@ -1,0 +1,28 @@
+
+
+.songFormat{
+	padding: 10px 0;
+}
+
+.songFormat .line{
+	margin-top: 50px;
+	font-size: 16px;
+	letter-spacing: 1px;
+}
+
+.songFormat .line .bar{
+	position: relative;	
+}
+
+.songFormat .line .chord{
+	position: absolute;
+	top: -24px;
+	font-size: 20px;
+	font-weight: bold;
+	color: #333;
+}
+
+.songFormat .line .chordDuration{
+	margin: 0 5px;
+	font-size: 12px;
+}
