@@ -60,28 +60,28 @@
                 <div class="row">
                 <% data.forEach(function(item){ %>
                 <div class="span12 ">
-                  <div class="span10 ">
+                  <div class="span12 ">
                     <div class="row mainTitle">
-                      <div class="span2 songName">
+                      <div class="span5 songName">
                         <a href="/query/<%= item._id%>"><%= item.title %></a>
                       </div>
                       <div class="span2 author">
                         <a href="/list?keyword=<%= item.author %>&type=byAuth"><%= item.author %></a>
                       </div>
-                      <div class="span3 editor">
+                      <div class="span2 editor">
                         <a href="javascript: void(0);"><%= item.editorName || "" %></a>
                       </div>
                       <div class="span2 createTime">
                         <%= new Date(item.createTime).toString().substring(0 , 24) %>
                       </div>
                     </div>                    
-                    <div class="span8 offset1 summary"><%= item.summary %></div>
-                  </div>
-                  <div class="span1">
-                    <%if(user !== undefined && item.editor == user) { %>
-                      <a class="editButton btn btn-danger" href="/edit/<%= item._id%>">編輯</a>
-                    <% } %>
-                  </div>                    
+                    <div class="span10 offset1 summary">
+                      <%= item.summary %>
+                      <%if(user !== undefined && item.editor == user.FB_id ) { %>
+                        <a class="editButton btn btn-danger" href="/edit/<%= item._id%>">編輯</a>
+                      <% } %>
+                    </div>
+                  </div>                   
                 </div>
               <% }) %>
             </div>

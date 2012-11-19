@@ -76,7 +76,7 @@ exports.edit = function(req, res){
     });
     return;
   }  
-  isOwner(id , req.user , 
+  isOwner(id , req.user.FB_id , 
     function(){
       dbHelper.getSongDataByID(id , function(data){
         res.render('edit', {      
@@ -160,10 +160,10 @@ exports.add = function(req, res){
       res.send({ "errCode" : "1" , "msg" : "請輸入歌曲名稱" });
       return;
     }
-
+    console.log(req.user);
     db.collection('board', function(err, collection) {              
         collection.insert({
-            editor : req.user,
+            editor : req.user.FB_id,
             author : author,                
             title : title , 
             summary : summary, 
@@ -211,7 +211,7 @@ exports.update = function(req, res){
               },
               {
                   $set:{
-                    editor : req.user,
+                    editor : req.user.FB_id,
                     author : author,                
                     title : title , 
                     lyric : lyric,
@@ -240,7 +240,6 @@ exports.delete = function(req, res){
 
   var id      = req.params.id, BSNO , o_id;
   
-  
   var deleteFunction = function(){
    	db.collection('board', function(err, collection) {          
       if(id.length < 1){
@@ -262,7 +261,7 @@ exports.delete = function(req, res){
   	});
    };
 
-  isOwner(id , req.user , deleteFunction , function(){
+  isOwner(id , req.user.FB_id , deleteFunction , function(){
       res.send({ "errCode" : "1" , "msg" : "沒有存取權限" });
   });
 }

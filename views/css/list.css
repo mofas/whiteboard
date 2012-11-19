@@ -105,7 +105,8 @@
 
 
 .editButton{	
-	margin: 40px 0;
+	margin: 0px;
+	float:right;
 }
 
 .footer{
