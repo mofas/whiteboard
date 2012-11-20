@@ -19,7 +19,8 @@ var query = (function(o){
 
 	var convertReturnLine = function(){		
 		var sourceCode = $textarea.val();
-		$htmlarea.addClass("songFormat").html(window.songFormatCompiler(sourceCode));
+		songFormatCompiler.setObjBySourceCode(sourceCode);		
+		$htmlarea.addClass("songFormat").html(songFormatCompiler.getoutputFormat());		
 	}
 
 	return o;

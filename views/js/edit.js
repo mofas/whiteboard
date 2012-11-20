@@ -82,8 +82,9 @@ var editOperation = (function(o){
 	}
 
 	o.updatePreview = function(){
-		sourceCode = $sourceCodeText.val();		
-		$preview.addClass("songFormat").html(window.songFormatCompiler(sourceCode));
+		sourceCode = $sourceCodeText.val();
+		songFormatCompiler.setObjBySourceCode(sourceCode);		
+		$preview.addClass("songFormat").html(songFormatCompiler.getoutputFormat());
 	}
 
 	return o;
