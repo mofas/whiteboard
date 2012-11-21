@@ -21,4 +21,28 @@
 }
 
 
+#sourceCodeDialog{
+	display: none;
+	position: fixed;
+	top: 0; left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.4);
+}
 
+#sourceCodeDialog .sourceCodeDialogOverlay{
+	margin: 200px auto;
+	width: 720px;	
+	padding: 20px;
+	background: #fff;
+	border-radius: 10px;
+}
+
+#editorView h4, #sourceCodeDialog h4{
+	float:left;
+}
+
+#editorView .btnGroup , #sourceCodeDialog .btnGroup{
+	margin: 0 20px;
+	float:right;
+}

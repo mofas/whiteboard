@@ -7,7 +7,7 @@ $(document).ready(function() {
 
 var editOperation = (function(o){
 
-	var $editForm , $submitButton , $deleteButton , $tabbable , $sourceCodeText , $preview;
+	var $editForm , $lyric , $submitButton , $deleteButton , $tabbable , $sourceCodeDialog , $sourceCodeText , $preview;
 	var sourCode , isSourceCodeChange = false;
 
 
@@ -30,19 +30,29 @@ var editOperation = (function(o){
 		});
 	}
 
+	var initSongFormat = function(){
+		sourceCode = $sourceCodeText.val();
+		songFormatCompiler.setObjBySourceCode(sourceCode);
+		$lyric.val(songFormatCompiler.getPlainLyric());
+	}
+
 	o.init = function(){
 		$editForm = $("#editForm");
+		$lyric = $("#lyric");
 		$submitButton = $("#submitButton");
 		$deleteButton = $("#deleteButton");
 		$tabbable = $editForm.find(".tabbable");
+		$sourceCodeDialog = $("#sourceCodeDialog");
 		$sourceCodeText = $("#sourceCode");
 		$preview = $("#preview");
 		bindEvent();
+		initSongFormat();
 	}
 
 
 	o.submit = function(id){
-		var params = $editForm.serialize();
+		var params = $editForm.serialize();		
+		console.log(params);		
 		if(id !== undefined && id !== null){
 			$.post("/update/" + id, params , function(data){
 				if(data.errCode == 0 ){
@@ -62,8 +72,8 @@ var editOperation = (function(o){
 				else{
 					alert(data.msg);
 				}
-			});
-		}
+			});			
+		}		
 	}
 
 	o.delete = function(id){
@@ -81,10 +91,26 @@ var editOperation = (function(o){
 		}	
 	}
 
-	o.updatePreview = function(){
+	o.updatePreview = function(){						
+		$preview.addClass("songFormat").html(songFormatCompiler.getoutputFormat());		
+	}
+
+	o.openSourceCodeDialog = function(){		
+		var plainLyric = $lyric.val();		
+		songFormatCompiler.updateLyric(plainLyric);
+		$sourceCodeText.val(songFormatCompiler.getSourceCode());		
+		$sourceCodeDialog.show();
+	}
+
+	o.updateSourceCode = function(){
 		sourceCode = $sourceCodeText.val();
 		songFormatCompiler.setObjBySourceCode(sourceCode);		
-		$preview.addClass("songFormat").html(songFormatCompiler.getoutputFormat());
+		$lyric.val(songFormatCompiler.getPlainLyric());
+		$sourceCodeDialog.hide();
+	}
+
+	o.abortSourceCodeDialog = function(){
+		$sourceCodeDialog.hide();
 	}
 
 	return o;

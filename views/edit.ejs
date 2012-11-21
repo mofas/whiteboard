@@ -56,18 +56,16 @@
                     </div>
                     <div class="tabbable">
                       <ul class="nav nav-tabs">
-                        <li class="active"><a href="#editorView" data-toggle="tab">編輯器</a></li>
-                        <li class=""><a href="#sourceCodeView" data-toggle="tab">原始碼</a></li>
+                        <li class="active"><a href="#editorView" data-toggle="tab">編輯</a></li>
                         <li class=""><a href="#previewView" data-toggle="tab">預覽</a></li>
                       </ul>
                       <div class="tab-content">
                         <div class="tab-pane active" id="editorView">
-                            <h4>歌詞</h4>
-                            <textarea id="lyric" row="2" name="lyric"><%= data.lyric || '' %></textarea>
-                        </div>
-                        <div class="tab-pane" id="sourceCodeView">
-                            <h4>原始碼</h4>
-                            <textarea id="sourceCode" row="2" name="sourceCode"><%= data.lyric || '' %></textarea>
+                            <h4>歌詞</h4>   
+                            <span class="btnGroup">
+                                <a class="sourceButton btn btn-primary" href="javascript:editOperation.openSourceCodeDialog();">編輯原始碼</a>
+                            </span>
+                            <textarea id="lyric" row="2"></textarea>
                         </div>
                         <div class="tab-pane" id="previewView">
                             <h4>預覽</h4>
@@ -76,6 +74,18 @@
                             </div>
                         </div>
                       </div>
+                    </div>
+                    <div id="sourceCodeDialog">
+                        <div class="sourceCodeDialogOverlay">
+                            <div class="content">
+                                <h4>原始碼</h4>
+                                <span class="btnGroup">
+                                    <a id="saveSourceCodeButton" class="btn btn-info" href="javascript:editOperation.updateSourceCode();">保存</a>
+                                    <a id="abortSourceCodeButton" class="btn btn-danger" href="javascript:editOperation.abortSourceCodeDialog();">放棄</a>
+                                </span>
+                                <textarea id="sourceCode" row="2" name="lyric"><%= data.lyric || '' %></textarea>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
