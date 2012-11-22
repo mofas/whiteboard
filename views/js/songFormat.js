@@ -13,7 +13,6 @@ var songFormatCompiler = (function(o){
 
 	var modelIsChange = false;
 
-
 	var trimSongModel = function(){		
 		if(_songModel.length === 0)
 			return;
@@ -51,15 +50,14 @@ var songFormatCompiler = (function(o){
 			}
 			else{
 				lineText = textArray[i];
-				lineText = lineText.replace(/\]\s*\[/g , "] [");
-
-				lineOrigin = lineText.split(/\[(\S+)\]/gi);				
+				lineText = lineText.replace(/\]\s*\[/g , "] [");				
+				lineOrigin = lineText.split(/\[([a-zA-z0-9:]+?)\]/gi);				
 				lineArray = [];
 				if(lineOrigin.length > 1){
+					console.log(lineOrigin);
 					for(var j=1; j < lineOrigin.length ; j+=2){
 						chordString = lineOrigin[j];
-						lyricString = lineOrigin[j+1];
-
+						lyricString = lineOrigin[j+1];						
 						parseChord = chordString.split(":");
 						chordName = parseChord[0] || "";
 						chordDuration = parseChord[1] || "";
