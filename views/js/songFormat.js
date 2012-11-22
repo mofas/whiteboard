@@ -53,8 +53,7 @@ var songFormatCompiler = (function(o){
 				lineText = lineText.replace(/\]\s*\[/g , "] [");				
 				lineOrigin = lineText.split(/\[([a-zA-z0-9:]+?)\]/gi);				
 				lineArray = [];
-				if(lineOrigin.length > 1){
-					console.log(lineOrigin);
+				if(lineOrigin.length > 1){					
 					for(var j=1; j < lineOrigin.length ; j+=2){
 						chordString = lineOrigin[j];
 						lyricString = lineOrigin[j+1];						
