@@ -8,8 +8,8 @@ exports.query = function(req ,res){
 
 
 exports.update = function(req ,res){
-	var isAnonymous = req.body.isAnonymous;
-	var displayName = req.body.displayName;
+	var isAnonymous = req.body.isAnonymous,
+	    displayName = req.body.displayName;
 	
 	global.db.collection('user', function(err, collection) {
         collection.find({"FB_id" : req.user.FB_id}).toArray(function(err, items) {

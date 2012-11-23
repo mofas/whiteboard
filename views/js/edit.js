@@ -7,8 +7,8 @@ $(document).ready(function() {
 
 var editOperation = (function(o){
 
-	var $editForm , $lyric , $submitButton , $deleteButton , $tabbable , $sourceCodeDialog , $sourceCodeText , $preview;
-	var sourCode , isSourceCodeChange = false;
+	var $editForm , $lyric , $submitButton , $deleteButton , $tabbable , $sourceCodeDialog , $sourceCodeText , $chordWrap , $preview;
+	var sourCode , isSourceCodeChange = false , arrangeMode;
 
 
 	var bindEvent = function(){
@@ -42,6 +42,7 @@ var editOperation = (function(o){
 		$submitButton = $("#submitButton");
 		$deleteButton = $("#deleteButton");
 		$tabbable = $editForm.find(".tabbable");
+		$chordWrap = $editForm.find(".chordWrap");
 		$sourceCodeDialog = $("#sourceCodeDialog");
 		$sourceCodeText = $("#sourceCode");
 		$preview = $("#preview");
@@ -93,6 +94,22 @@ var editOperation = (function(o){
 
 	o.updatePreview = function(){						
 		$preview.addClass("songFormat").html(songFormatCompiler.getoutputFormat());		
+	}
+
+	o.arrange = function(){
+		if(arrangeMode){
+			
+			$lyric.css({"line-height" : " 26px"});			
+			$chordWrap.hide();	
+			arrangeMode = false;
+		}
+		else{
+			$lyric.css({"line-height" : " 50px"});
+			var chordHtml = songFormatCompiler.getChordFormat();
+			$chordWrap.html(chordHtml).show();
+			$chordWrap.find(".chord").draggable();
+			arrangeMode = true;
+		}		
 	}
 
 	o.openSourceCodeDialog = function(){		

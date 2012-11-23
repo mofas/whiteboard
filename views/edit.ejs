@@ -11,6 +11,7 @@
 
     <!-- JS lib -->       
     <script type="text/javascript" src="/js/lib/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/js/lib/jquery-ui-1.9.1.drag.min.js"></script>    
 
     <!-- CSS -->
     <link rel="stylesheet"  href="/css/edit.css" />
@@ -60,11 +61,16 @@
                         <li class=""><a href="#previewView" data-toggle="tab">預覽</a></li>
                       </ul>
                       <div class="tab-content">
-                        <div class="tab-pane active" id="editorView">
+                        <div class="tab-pane active" id="editorView">                            
                             <h4>歌詞</h4>   
                             <span class="btnGroup">
+                                <a class="sourceButton btn btn-info" href="javascript:editOperation.arrange();">譜和弦</a>
+                                ||
                                 <a class="sourceButton btn btn-primary" href="javascript:editOperation.openSourceCodeDialog();">編輯原始碼</a>
                             </span>
+                            <div class="chordWrap">
+                                <div class="chordCollection"></div>
+                            </div>
                             <textarea id="lyric" row="2"></textarea>
                         </div>
                         <div class="tab-pane" id="previewView">

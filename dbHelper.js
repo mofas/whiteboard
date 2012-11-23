@@ -1,6 +1,6 @@
 
-var mongodb = require('mongodb');
-var utility = require('./utility');
+var mongodb = require('mongodb'),
+    utility = require('./utility');
 
 
 module.exports = {

@@ -26,7 +26,7 @@ global.db = require('./db');
 
 
 /**********************************************************
-*   Faceboo kLogin
+*   Facebook Login
 ***********************************************************/
 var FacebookStrategy = require('passport-facebook').Strategy;
 

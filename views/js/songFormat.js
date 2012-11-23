@@ -14,16 +14,18 @@ var songFormatCompiler = (function(o){
 	var modelIsChange = false;
 
 	var trimSongModel = function(){		
+		var first ,
+			last;
 		if(_songModel.length === 0)
 			return;
 
-		var frist = _songModel[0];
-		while(frist === null && _songModel.length > 0){
+		first = _songModel[0];
+		while(first === null && _songModel.length > 0){
 			_songModel.splice(0,1);
-			frist = _songModel[0];
+			first = _songModel[0];
 		}
 
-		var last = _songModel[_songModel.length-1];		
+		last = _songModel[_songModel.length-1];		
 		while(last === null && _songModel.length > 0){
 			_songModel.splice(_songModel.length-1,1);
 			last = _songModel[_songModel.length-1];
@@ -37,12 +39,18 @@ var songFormatCompiler = (function(o){
 	o.setObjBySourceCode = function(sourceCode){
 		_sourceCode = sourceCode;
 
-		var songModel = new Array();
-		var textArray = sourceCode.split("\n");
-		var chordString , lyricString , parseChord , chordName , chordDuration;
-		var lineOrigin = [] , lineArray = [] , lineText;
-
-		var chordObj , bar;
+		var songModel = new Array() ,
+			textArray = sourceCode.split("\n") ,
+			chordString , 
+			lyricString , 
+			parseChord , 
+			chordName , 
+			chordDuration , 
+			chordObj , 
+			bar ,
+			lineOrigin = [] ,
+			lineArray = [] ,
+			lineText;	
 
 		for(var i = 0 ; i < textArray.length ; i++){
 			if(textArray[i].length < 1){
@@ -87,12 +95,18 @@ var songFormatCompiler = (function(o){
 
 
 	o.refreshSourceCodeByModel = function(){
-		var lineOutput , outputArray = [];
-		var songModel = _songModel;
-		var songLength = songModel.length;
-		var lineLength ;
-		var line , bar;
-		var chord , chordName , chordDuration , lyric;
+		var lineOutput , 
+			outputArray = [] ,
+			songModel = _songModel ,
+			songLength = songModel.length ,
+			lineLength , 
+			line , 
+			bar,
+			chord , 
+			chordName , 
+			chordDuration , 
+			lyric;
+
 		for(var i = 0; i < songLength ; i++){
 			if(songModel[i] === null ){
 				lineLength = 0;
@@ -126,22 +140,18 @@ var songFormatCompiler = (function(o){
 
 	o.getPlainLyric = function(){
 		var songModel = _songModel;
+
 		if(songModel.length === 0){
 			return "";
 		}
 
-		var songLength = songModel.length;		
-		var lineLength;
-		var line , bar , lineOutput;
-		var outputArray = [];
+		var	songLength = songModel.length ,
+			lineLength ,
+			line , bar , lineOutput ,
+			outputArray = [];
 
 		for(var i = 0; i < songLength ; i++){
-			if(songModel[i] === null ){
-				lineLength = 0;
-			}				
-			else{
-				lineLength = songModel[i].length;
-			}
+			lineLength = (songModel[i] === null ) ? 0 : songModel[i].length;
 				
 			line = songModel[i];
 			lineOutput = [];
@@ -162,13 +172,13 @@ var songFormatCompiler = (function(o){
 
 
 	o.updateLyric = function(plainLyric){				
-		var textArray = plainLyric.split("\n");
-		var textLine ;
+		var textArray = plainLyric.split("\n") ,
+			textLine ,
+			songLength = _songModel.length ,			
+			line , bar ,
+			lineLength , originLyric ,
+			isLastBar = false;
 
-		var songLength = _songModel.length;
-		var line , bar;
-		var lineLength , originLyric;
-		var isLastBar = false;
 		for(var i = 0 ; i < songLength ; i++){
 			if(i >= textArray.length)
 				textLine = "";
@@ -227,21 +237,61 @@ var songFormatCompiler = (function(o){
 		trimSongModel();
 	}
 
+	o.updateChord = function(){
+		
+	}
+
+
+	o.getChordFormat = function(){
+		var fragHtml = "",
+			songModel = _songModel,
+			songLength = songModel.length,
+			line,
+			bar,
+			chord,
+			chordName, 
+			chordDuration,
+			chordPositionY = 0,
+			chordPositionX = 0;
+
+		for(var i = 0; i < songLength ; i++){
+			lineLength = (songModel[i] === null ) ? 0 : songModel[i].length;
+			line = songModel[i];
+			lineOutput = [];
+			if(line !== null){
+				chordPositionY = i;
+				chordPositionX = 0;
+				for(var j = 0; j < lineLength ; j++){					
+					bar = line[j];					
+					chord = bar.chord;
+					lyric = bar.lyric;					
+					if(chord !== undefined && chord !== null && chord.chordName !== null){
+						fragHtml += "<span class='chord' style='left:"+ (4+chordPositionX*7) +"px; top:"+ (3+chordPositionY*50) + "px;' >" + chord.chordName + "x" + chord.chordDuration + "</span>";
+					}					
+					chordPositionX += bar.lyric.length;				
+				}				
+			}
+		}
+		return fragHtml;
+	}
+
 
 	o.getoutputFormat = function(){
-		var lineOutput , outputArray = [];
-		var songModel = _songModel;
-		var songLength = songModel.length;
-		var lineLength ;
-		var line , bar;
-		var chord , chordName , chordDuration , lyric;
+		var lineOutput , outputArray = [] ,
+			songModel = _songModel ,
+			songLength = songModel.length ,
+			lineLength ,
+			line ,
+			bar ,
+			chord ,
+			chordName ,
+			chordDuration ,
+			lyric;
+
+
 		for(var i = 0; i < songLength ; i++){
-			if(songModel[i] === null ){
-				lineLength = 0;
-			}				
-			else{
-				lineLength = songModel[i].length;
-			}			
+			lineLength = (songModel[i] === null ) ? 0 : songModel[i].length;
+
 			line = songModel[i];
 			lineOutput = [];
 			if(line === null){

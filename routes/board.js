@@ -103,8 +103,8 @@ exports.query = function(req, res){
 }
 
 exports.list = function(req, res){ 
-	var     type = req.query.type,
-   		 keyword = req.query.keyword,
+	var type = req.query.type,
+   		keyword = req.query.keyword,
     	queryRex = new RegExp(keyword , "g"),
      	query;
 
@@ -154,7 +154,8 @@ exports.add = function(req, res){
     if(lyric.length <= 40){
       limit = lyric.length;
     }
-    var summary = lyric.substring(0 , limit);
+
+    summary = lyric.substring(0 , limit);
 
     if(title === undefined || title.length < 1){
       res.send({ "errCode" : "1" , "msg" : "請輸入歌曲名稱" });
@@ -186,22 +187,25 @@ exports.update = function(req, res){
         lyric   = req.body.lyric,
         modifyTime = new Date().getTime(),
         limit = 40,
-        summary;
+        summary,
+        BSON,
+        o_id;
 
 
     var updateFunction = function(){      
         if(lyric.length <= 40){
           limit = lyric.length;
         }
-        var summary = lyric.substring(0 , limit);        
+
+        summary = lyric.substring(0 , limit);        
 
         if(title === undefined || title.length < 1){
           res.send({ "errCode" : "1" , "msg" : "請輸入歌曲名稱" });
           return;
         }
         else{          
-          var BSON = mongodb.BSONPure;
-          var o_id = new BSON.ObjectID(id);
+          BSON = mongodb.BSONPure;
+          o_id = new BSON.ObjectID(id);
 
           db.collection('board', function(err, collection) {              
               collection.update( 
@@ -236,7 +240,9 @@ exports.update = function(req, res){
 
 exports.delete = function(req, res){
 
-  var id      = req.params.id, BSNO , o_id;
+  var id = req.params.id, 
+      BSON , 
+      o_id;
   
   var deleteFunction = function(){
    	db.collection('board', function(err, collection) {          
