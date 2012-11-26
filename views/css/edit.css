@@ -75,17 +75,22 @@
 	display: none;
 	overflow: hidden;
 }
-#editorView .chordWrap .chordCollection{
+#editorView .chordWrap .chordCanvas{
 	position: relative;
+	top: 0;
+}
 
-	top: 0px;
+#editorView .chordWrap .chordCollection{	
 	width: 100%;
 	height: 100%;
 	z-index: 2;
 }
 
+
+
 #editorView .chordWrap .chordTool{
 	position: absolute;
+	float:right;
 	width: 160px;
 	padding: 5px 20px;
 	height: 480px;
@@ -97,13 +102,14 @@
 	border: 1px solid rgba(0,0,0,0.2);
 }
 
+
 #editorView .chordWrap .chordTool .btnGroup{	
 	margin: 10px 20px;
 	height: 30px;
 	float: none;
 }
 
-#editorView .chordTrash ,#editorView .chordGenegator ,#editorView .chordList{
+#editorView .chordTrash ,#editorView .chordGenegator {
 	border-top: 2px dotted rgba(0,0,0,0.4);
 	margin: 3px auto;
 	padding: 15px 0;
@@ -115,6 +121,10 @@
 	overflow-y: scroll;
 }
 
+#editorView .chordListContainer .chordItem{
+	cursor: move;	
+}
+
 #editorView .chordWrap .chord{
 	position: absolute;
 	padding: 2px 10px;
@@ -122,6 +132,7 @@
 	border: 1px solid #aaa;
 	border-radius: 5px;
 	cursor: move;
+	z-index: 99;
 }
 
 #editorView .chordWrap .chord input{

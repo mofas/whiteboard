@@ -15,6 +15,8 @@ var editOperation = (function(o){
 		$sourceCodeDialog,
 		$sourceCodeText,
 		$chordWrap,
+		$chordCanvas,
+		$chordTool,
 		$chordCollection,
 		$newChord_name,
 		$newChord_duration,
@@ -42,6 +44,42 @@ var editOperation = (function(o){
 				o.updatePreview();
 			}
 		});
+		
+		$chordListContainer.on("mousedown" , ".chordItem" , function(e){			
+			var text = $(this).text();
+			var parentOffset = $chordCollection.offset(); 
+			var cursorX = e.pageX - parentOffset.left - 20 , cursorY = e.pageY - parentOffset.top - 5;			
+			var chordObj = $('<div class="chord ui-draggable" style="left:' + cursorX + 'px;top:' + cursorY + 'px;">' + text + '</div>');
+			$chordCollection.append(chordObj);
+			chordObj.trigger("mousedown");
+		});
+				
+		$chordWrap.on("mouseover" , ".chord" , function(){
+			$(this).draggable({ 
+				containment: ".chordCollection", 
+				"zIndex" : 100,
+			});
+		});
+		$chordWrap.on("dblclick" , ".chord" , chordEditEvent);
+
+		$chordWrap.find( ".chordTrash" ).droppable({
+           	accept: ".chord",
+           	over: function(event , ui){	           		
+           		ui.draggable.css({
+           			"border" : "1px dotted #ddd" , 
+           			"background" : "#fff",	           			
+           		});
+           	},
+           	out: function(event , ui){	           	
+           		ui.draggable.css({
+           			"border" : "1px solid #aaa" ,
+           			"background" : "rgba(255, 255, 0, 0.4)",	           			
+           		});
+           	},
+        	drop: function(event , ui){
+        		ui.draggable.remove();
+           	}
+        });
 	}
 
 	var initSongFormat = function(){
@@ -59,6 +97,8 @@ var editOperation = (function(o){
 		$chordWrap = $editForm.find(".chordWrap");
 		$newChord_name = $chordWrap.find(".newChord_name");
 		$newChord_duration = $chordWrap.find(".newChord_duration");
+		$chordCanvas = $chordWrap.find(".chordCanvas");
+		$chordTool = $chordWrap.find(".chordTool");
 		$chordCollection = $chordWrap.find(".chordCollection");
 		$chordListContainer = $chordWrap.find(".chordListContainer");
 		$sourceCodeDialog = $("#sourceCodeDialog");
@@ -119,34 +159,16 @@ var editOperation = (function(o){
 			o.abortArrange();
 			$lyric.off("scroll");
 		}
-		else{
+		else{			
 			$lyric.css({"line-height" : " 50px"});
-			var chordHtml = songFormatCompiler.getChordFormat();
-			$chordWrap.show();						
-			$chordCollection.html(chordHtml).css({ "height" : $lyric[0].scrollHeight + "px" });
-			$chordWrap.find(".chord").draggable({ containment: ".chordCollection" }).on("dblclick", chordEditEvent);
-			$chordWrap.find( ".chordTrash" ).droppable({
-	           	accept: ".chord",
-	           	over: function(event , ui){	           		
-	           		ui.draggable.css({
-	           			"border" : "1px dotted #ddd" , 
-	           			"background" : "#fff",	           			
-	           		});
-	           	},
-	           	out: function(event , ui){	           	
-	           		ui.draggable.css({
-	           			"border" : "1px solid #aaa" ,
-	           			"background" : "rgba(255, 255, 0, 0.4)",	           			
-	           		});
-	           	},
-	        	drop: function(event , ui){
-	        		ui.draggable.remove();
-	           	}
-	        });
+			$chordWrap.show();
 
-			arrangeMode = true;
-			chordScrollSyn();
+			var chordHtml = songFormatCompiler.getChordFormat();
+			$chordCollection.html(chordHtml).css({ "height" : $lyric[0].scrollHeight + "px" });
 			$lyric.trigger("scroll");
+			chordScrollSyn();
+			
+			arrangeMode = true;
 		}		
 	}
 
@@ -181,14 +203,15 @@ var editOperation = (function(o){
 		$lyric.off("scroll");
 		$lyric.on("scroll" , function(e){			
 			chordScrollHeight = e.target.scrollTop;		
-			$chordCollection.css({ "top" : -chordScrollHeight });	
+			$chordCanvas.css({ "top" : -chordScrollHeight });
+			$chordTool.css({ "top" : chordScrollHeight+20 });
 		});
 	}
 
 	o.genegrateChord = function(){		
 		var name = $newChord_name.val();
 		var duration = $newChord_duration.val();
-		$chordListContainer.prepend("<div>" + name + "x" + duration + "</div>");
+		$chordListContainer.prepend("<div class='chordItem'>" + name + "x" + duration + "</div>");
 	}
 
 	o.abortArrange = function(){
