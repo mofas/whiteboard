@@ -107,9 +107,30 @@ var editOperation = (function(o){
 		else{
 			$lyric.css({"line-height" : " 50px"});
 			var chordHtml = songFormatCompiler.getChordFormat();
-			$chordWrap.show();
-			$chordCollection.html(chordHtml);
+			$chordWrap.show();			
+			console.log($lyric[0].scrollHeight);
+			$chordCollection.html(chordHtml).css({ "height" : $lyric[0].scrollHeight + "px" });
 			$chordWrap.find(".chord").draggable({ containment: ".chordCollection" });
+
+			$chordWrap.find( ".chordTrash" ).droppable({
+	           	accept: ".chord",
+	           	over: function(event , ui){	           		
+	           		ui.draggable.css({
+	           			"border" : "1px dotted #ddd" , 
+	           			"background" : "#fff",	           			
+	           		});
+	           	},
+	           	out: function(event , ui){	           	
+	           		ui.draggable.css({
+	           			"border" : "1px solid #aaa" ,
+	           			"background" : "rgba(255, 255, 0, 0.4)",	           			
+	           		});
+	           	},
+	        	drop: function(event , ui){
+	        		ui.draggable.remove();
+	           	}
+	        });
+
 			arrangeMode = true;
 			chordScrollSyn();
 			$lyric.trigger("scroll");
