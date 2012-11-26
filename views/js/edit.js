@@ -7,8 +7,10 @@ $(document).ready(function() {
 
 var editOperation = (function(o){
 
-	var $editForm , $lyric , $submitButton , $deleteButton , $tabbable , $sourceCodeDialog , $sourceCodeText , $chordWrap , $preview;
+	var $editForm , $lyric , $submitButton , $deleteButton , $tabbable , $sourceCodeDialog , $sourceCodeText , $chordWrap , $chordCollection , $preview;
 	var sourCode , isSourceCodeChange = false , arrangeMode;
+
+	var ChordSynTimer , chordScrollHeight = 0;
 
 
 	var bindEvent = function(){
@@ -43,6 +45,7 @@ var editOperation = (function(o){
 		$deleteButton = $("#deleteButton");
 		$tabbable = $editForm.find(".tabbable");
 		$chordWrap = $editForm.find(".chordWrap");
+		$chordCollection = $chordWrap.find(".chordCollection");
 		$sourceCodeDialog = $("#sourceCodeDialog");
 		$sourceCodeText = $("#sourceCode");
 		$preview = $("#preview");
@@ -98,18 +101,37 @@ var editOperation = (function(o){
 
 	o.arrange = function(){
 		if(arrangeMode){
-			
-			$lyric.css({"line-height" : " 26px"});			
-			$chordWrap.hide();	
-			arrangeMode = false;
+			o.abortArrange();
+			resetChordScrollSyn();
 		}
 		else{
 			$lyric.css({"line-height" : " 50px"});
 			var chordHtml = songFormatCompiler.getChordFormat();
-			$chordWrap.html(chordHtml).show();
-			$chordWrap.find(".chord").draggable();
+			$chordWrap.show();
+			$chordCollection.html(chordHtml);
+			$chordWrap.find(".chord").draggable({ containment: ".chordCollection" });
 			arrangeMode = true;
+			chordScrollSyn();
+			$lyric.trigger("scroll");
 		}		
+	}
+
+	var chordScrollSyn = function(){	
+		resetChordScrollSyn();			
+		$lyric.on("scroll" , function(e){			
+			chordScrollHeight = e.target.scrollTop;		
+			$chordCollection.css({ "top" : -chordScrollHeight });	
+		});
+	}
+
+	var resetChordScrollSyn = function(){		
+		$lyric.off("scroll");
+	}
+
+	o.abortArrange = function(){
+		$lyric.css({"line-height" : " 26px"});			
+		$chordWrap.hide();	
+		arrangeMode = false;
 	}
 
 	o.openSourceCodeDialog = function(){		

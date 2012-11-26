@@ -67,8 +67,37 @@
                                 <a class="sourceButton btn btn-info" href="javascript:editOperation.arrange();">譜和弦</a>
                                 ||
                                 <a class="sourceButton btn btn-primary" href="javascript:editOperation.openSourceCodeDialog();">編輯原始碼</a>
-                            </span>
+                            </span>                            
                             <div class="chordWrap">
+                                <div class="chordTool">
+                                    <div class="btnGroup">
+                                        <a class="btn btn-info" href="">更新</a>
+                                        <a class="btn btn-danger" href="javascript:editOperation.abortArrange();">放棄</a>
+                                        <span class="clearfix"></span>
+                                    </div>
+                                    <div class="chordGenegator">
+                                        <div>新和絃</div>
+                                        <input type="text" class="newChord_name input-mini" placeholder="和絃名">
+                                        <input type="text" class="newChord_duration input-mini" placeholder="小節數">
+                                        <a class="btn btn-success btn-block" href="">生成</a>
+                                    </div>                                    
+                                    <div class="chordTrash">
+                                        <div>刪除和絃</div>
+                                        <img src="/img/trashBin.png">
+                                    </div>
+                                    <div class="chordList">
+                                        <div>常用和絃</div>
+                                        <div class="chordListContainer">
+                                            <div>Am</div>
+                                            <div>Cm</div>
+                                            <div>Em</div>
+                                            <div>B</div>
+                                            <div>D</div>
+                                            <div>G</div>
+                                            <div>F</div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="chordCollection"></div>
                             </div>
                             <textarea id="lyric" row="2"></textarea>

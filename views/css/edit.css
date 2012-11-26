@@ -57,23 +57,59 @@
 }
 
 #lyric{
-	height: 400px;
+	min-height: 520px;	
 	width: 920px;
 	font-size: 16px;
+	overflow-y: scroll;
 }
 
 #editorView .chordWrap{
 	position: absolute;
 	width: 920px;
-	height: 420px;
+	min-height: 520px;
 	top: 40px;
 	background: rgba(150,150,255,0.2);
 	display: none;
+	overflow: hidden;
 }
 #editorView .chordWrap .chordCollection{
 	position: relative;
+
+	top: 0px;
 	width: 100%;
 	height: 100%;
+	z-index: 2;
+}
+
+#editorView .chordWrap .chordTool{
+	position: absolute;
+	width: 160px;
+	padding: 5px 20px;
+	height: 480px;
+	right: 5px;
+	top: 20px;
+	z-index: 3;
+	border-radius: 5px;
+	background: rgba(255,150,150,0.2);
+	border: 1px solid rgba(0,0,0,0.2);
+}
+
+#editorView .chordWrap .chordTool .btnGroup{	
+	margin: 10px 20px;
+	height: 30px;
+	float: none;
+}
+
+#editorView .chordTrash ,#editorView .chordGenegator ,#editorView .chordList{
+	border-top: 2px dotted rgba(0,0,0,0.4);
+	margin: 3px auto;
+	padding: 15px 0;
+	text-align:center;	
+}
+
+#editorView .chordListContainer{
+	height: 120px;
+	overflow-y: scroll;
 }
 
 #editorView .chordWrap .chord{
@@ -84,3 +120,4 @@
 	border-radius: 5px;
 	cursor: move;
 }
+
