@@ -48,16 +48,17 @@ var editOperation = (function(o){
 		$chordListContainer.on("mousedown" , ".chordItem" , function(e){			
 			var text = $(this).text();
 			var parentOffset = $chordCollection.offset(); 
-			var cursorX = e.pageX - parentOffset.left - 20 , cursorY = e.pageY - parentOffset.top - 5;			
-			var chordObj = $('<div class="chord ui-draggable" style="left:' + cursorX + 'px;top:' + cursorY + 'px;">' + text + '</div>');
-			$chordCollection.append(chordObj);
-			chordObj.trigger("mousedown");
+			var cursorX = e.pageX - parentOffset.left - 20 , cursorY = e.pageY - parentOffset.top - 10;			
+			var $chordObj = $('<div class="chord ui-draggable" style="left:' + cursorX + 'px;top:' + cursorY + 'px;">' + text + '</div>');
+			$chordCollection.append($chordObj);			
+			$chordObj.draggable({ 
+				containment: ".chordCollection"
+			}).trigger(e);			
 		});
 				
 		$chordWrap.on("mouseover" , ".chord" , function(){
 			$(this).draggable({ 
-				containment: ".chordCollection", 
-				"zIndex" : 100,
+				containment: ".chordCollection"				
 			});
 		});
 		$chordWrap.on("dblclick" , ".chord" , chordEditEvent);
