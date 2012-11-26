@@ -3,6 +3,7 @@
  */
 
 var express = require('express')
+  , gzippo = require('gzippo')
   , routes = {}
   , http = require('http')
   , path = require('path')
@@ -64,12 +65,14 @@ var app = express();
 app.configure(function(){  
   app.use(express.cookieParser());
   app.use(express.bodyParser());  
-  app.use(express.static('views/'));
+  //app.use(express.static('views/'));
+  app.use(gzippo.staticGzip('views/'));
   app.use(express.session({ secret: 'mofas' }));
   app.use(passport.initialize());
   app.use(passport.session());
-  app.set("view engine", "ejs");
+  app.set("view engine", "ejs");  
 });
+
 
 /**********************************************************
 *   Route

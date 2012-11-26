@@ -11,7 +11,8 @@
     "express": "3.0.0rc2",
     "ejs": "*",
     "passport": "*",
-    "passport-facebook" : "*"
+    "passport-facebook" : "*",
+    "gzippo" : "*"
   },
   "engines" : {
     "node": "0.8.x",
