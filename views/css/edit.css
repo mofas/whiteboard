@@ -124,3 +124,9 @@
 	cursor: move;
 }
 
+#editorView .chordWrap .chord input{
+	width: 40px;
+	height: 100%;
+	margin: 0;
+	padding : 0;
+}
