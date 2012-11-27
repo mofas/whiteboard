@@ -77,11 +77,16 @@ describe("Update chord with empty model", function() {
 		expect(songFormatCompiler.getSourceCode()).toBe('[Am:1]');
 	});
 
+
 	it("2 bar in 1 line", function() {
 		songFormatCompiler.setObjBySourceCode("");		
-		var mockObj = [[{chordName: "Am" , chordDuration: 2 , chordPosition : 0 } ,
-						{chordName: "G" , chordDuration: 2 , chordPosition : 0 }
-					  ]];
+		var mockObj = 
+		[
+			[
+				{chordName: "Am" , chordDuration: 2 , chordPosition : 0 } ,
+				{chordName: "G" , chordDuration: 2 , chordPosition : 0 }
+		  	]
+		];
 		songFormatCompiler.updateChord(mockObj);		
 		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2][G:2]');
 	});
@@ -109,7 +114,7 @@ describe("Update chord with empty model", function() {
 describe("Update chord with plain lyric", function() {
 
 	it("init" , function() {
-		songFormatCompiler.setObjByPlainLyric("This is the end");		
+		songFormatCompiler.setObjByPlainLyric("This is the end");
 		var mockObj = 
 		[
 			[
@@ -118,6 +123,19 @@ describe("Update chord with plain lyric", function() {
 		];		
 		songFormatCompiler.updateChord(mockObj);				
 		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2]This is the end');		
+	});
+
+
+	it("first chord not at the position 0", function() {
+		songFormatCompiler.setObjByPlainLyric("This is the end");
+		var mockObj = 
+		[
+			[
+				{chordName: "Am" , chordDuration: 2 , chordPosition : 4 }
+			]
+		];
+		songFormatCompiler.updateChord(mockObj);		
+		expect(songFormatCompiler.getSourceCode()).toBe('This[Am:2] is the end');
 	});
 
 	it("1 line lyric , 2 chord" , function() {
@@ -239,7 +257,7 @@ describe("Update chord with structured model", function() {
 		songFormatCompiler.updateChord(mockObj);		
 		expect(songFormatCompiler.getSourceCode()).toBe('This is the end');
 	});
-	
+
 
 	it("1 line lyric with 1 chord , change to 2 chord" , function() {
 		songFormatCompiler.setObjBySourceCode("[Cm:2]This is the end\n");
@@ -287,6 +305,17 @@ describe("Update chord with structured model", function() {
 	});
 
 
+	it("1 line lyric with 3 chord , change to 0 chord" , function() {
+		songFormatCompiler.setObjBySourceCode("[Cm:2]This [Dm:1]is th[G:1]e end\n");		
+		var mockObj = 
+		[
+			[
+				null
+			]			
+		];
+		songFormatCompiler.updateChord(mockObj);		
+		expect(songFormatCompiler.getSourceCode()).toBe('This is the end');
+	});
 
 	it("1 line lyric with 3 chord , change to 1 chord" , function() {
 		songFormatCompiler.setObjBySourceCode("[Cm:2]This [Dm:1]is th[G:1]e end\n");		
@@ -313,5 +342,32 @@ describe("Update chord with structured model", function() {
 		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2]This is [G:2]the end');
 	});
 
+
+	it("2 line lyric with 4 chord , line 1 change to 0 chord" , function() {
+		songFormatCompiler.setObjBySourceCode("[Am:2]This is [G:2]the end\n[D:1]Hold your br[Cm:2]eath and count to ten");		
+		var mockObj = 
+		[
+			[
+				null
+			]			
+		];
+		songFormatCompiler.updateChord(mockObj);		
+		expect(songFormatCompiler.getSourceCode()).toBe('This is the end\n[D:1]Hold your br[Cm:2]eath and count to ten');
+	});
+
+	it("2 line lyric with 4 chord , line 1 & 2 change to 0 chord" , function() {
+		songFormatCompiler.setObjBySourceCode("[Am:2]This is [G:2]the end\n[D:1]Hold your br[Cm:2]eath and count to ten");		
+		var mockObj = 
+		[
+			[
+				null
+			],
+			[
+				null
+			]
+		];
+		songFormatCompiler.updateChord(mockObj);		
+		expect(songFormatCompiler.getSourceCode()).toBe('This is the end\nHold your breath and count to ten');
+	});
 
 });

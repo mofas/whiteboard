@@ -280,6 +280,11 @@ var songFormatCompiler = (function(o){
 				songModelLineLyric = "";
 				for(var k = 0 ; k < songModelLineLength ; k++){
 					songModelLineLyric += songModelLine[k].lyric;
+				}
+				//if the frist bar is not at position 0 , insert a empty bar at first;
+				if(line[0] !== undefined && line[0] !== null && line[0].chordPosition > 0){
+					line.unshift(null);
+					lineLength++;
 				}				
 				
 				for(var j = 0 ; j < lineLength ; j++){
@@ -287,14 +292,19 @@ var songFormatCompiler = (function(o){
 					if( j === (lineLength-1))
 						isLastBar = true;
 
-					bar = line[j];
+					bar = line[j];				
 					if(bar !== undefined && bar !== null){
 						chordName = bar.chordName || "";
 						chordDuration = bar.chordDuration || "";
 					}										
 					//next position minus current position is the number of char this chord hold
-					if(!isLastBar)
-						continLyricCharNo =  line[j+1].chordPosition - line[j].chordPosition;					
+					
+					if(!isLastBar){
+						if(j === 0)
+							continLyricCharNo =  line[j+1].chordPosition - 0;
+						else
+							continLyricCharNo =  line[j+1].chordPosition - line[j].chordPosition;
+					}
 
 					if(songModelLineLength > j){
 						//update bar
