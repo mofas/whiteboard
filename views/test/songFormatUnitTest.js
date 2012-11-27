@@ -258,6 +258,17 @@ describe("Update chord with structured model", function() {
 		expect(songFormatCompiler.getSourceCode()).toBe('This is the end');
 	});
 
+	it("3 line lyric with 7 chord , change to 1 chord in frist and following is empty" , function() {
+		songFormatCompiler.setObjBySourceCode("[D:1]There's a [Em:2]fire starting in my heart,\n[G:1]Reaching a fever pi[Em:1]tch and it's brin[G:2]ging me out the dark\n[Am:2]Finally, I can [Em:2]see you crystal clear.\n");
+		var mockObj = 
+		[
+			[
+				{chordName: "Em" , chordDuration: 3 , chordPosition : 0 }
+			]			
+		];
+		songFormatCompiler.updateChord(mockObj);		
+		expect(songFormatCompiler.getSourceCode()).toBe("[Em:3]There's a fire starting in my heart,\nReaching a fever pitch and it's bringing me out the dark\nFinally, I can see you crystal clear.");
+	});
 
 	it("1 line lyric with 1 chord , change to 2 chord" , function() {
 		songFormatCompiler.setObjBySourceCode("[Cm:2]This is the end\n");
@@ -343,7 +354,7 @@ describe("Update chord with structured model", function() {
 	});
 
 
-	it("2 line lyric with 4 chord , line 1 change to 0 chord" , function() {
+	it("2 line lyric with 4 chord , change to 0 chord" , function() {
 		songFormatCompiler.setObjBySourceCode("[Am:2]This is [G:2]the end\n[D:1]Hold your br[Cm:2]eath and count to ten");		
 		var mockObj = 
 		[
@@ -352,7 +363,7 @@ describe("Update chord with structured model", function() {
 			]			
 		];
 		songFormatCompiler.updateChord(mockObj);		
-		expect(songFormatCompiler.getSourceCode()).toBe('This is the end\n[D:1]Hold your br[Cm:2]eath and count to ten');
+		expect(songFormatCompiler.getSourceCode()).toBe('This is the end\nHold your breath and count to ten');
 	});
 
 	it("2 line lyric with 4 chord , line 1 & 2 change to 0 chord" , function() {
@@ -371,3 +382,6 @@ describe("Update chord with structured model", function() {
 	});
 
 });
+
+
+

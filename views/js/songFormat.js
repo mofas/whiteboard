@@ -371,14 +371,32 @@ var songFormatCompiler = (function(o){
 					newLine.push(newBar);
 				}
 				_songModel.push(newLine);
-			}			
-						
+			}
+
+			//delete the unmention line Chord
+			var modelLength = _songModel.length;
+
+			if(updateChordObjLength < modelLength){
+				for(var l = updateChordObjLength ; l < modelLength ; l++){					
+					line = _songModel[l];
+					if(line === null)
+						lineLength = 0;
+					else	
+						lineLength = line.length
+					for(var m = 0; m < lineLength ; m++){
+						bar = line[m];
+						bar.chord = null;
+					}
+				}
+			}
+
+
 			modelIsChange = true;
 		}		
 		
 	}
 
-
+	//NEED TO REFACTOR
 	o.getChordFormat = function(){
 		var fragHtml = "",
 			songModel = _songModel,

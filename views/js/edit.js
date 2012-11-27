@@ -215,6 +215,62 @@ var editOperation = (function(o){
 		$chordListContainer.prepend("<div class='chordItem'>" + name + "x" + duration + "</div>");
 	}
 
+	o.updateArrange = function(){
+		var updateChordObj = [];		
+		var $chords = $chordCollection.find(".chord");
+
+		var chordObj , text , chordInfo , chordName , chordDuration , position , top , left , line , position;
+		var YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 4 , Xenominator = 7;
+		$chords.each(function(){
+			chordObj = {};			
+			position = $(this).position();
+			text = $(this).text();
+			chordInfo = text.split("x");
+
+			if(chordInfo.length < 1)
+				return false;
+
+			chordName = chordInfo[0];
+			chordDuration = chordInfo[1];			
+			top = position.top;
+			left = position.left;
+			line = Math.floor((top-YBasicOffset)/YDenominator);
+			line = (line < 0 ) ? 0 : line;
+			position = Math.floor((left-XBasicOffset)/Xenominator);
+			position = (position < 0 ) ? 0 : position;
+
+			chordObj.chordName = chordName;
+			chordObj.chordDuration = chordDuration;
+			chordObj.chordPosition = position;
+						
+			while(line+1 > updateChordObj.length){
+				updateChordObj.push([]);
+			}			
+			updateChordObj[line].push(chordObj);			
+		});		
+
+		//sort bar
+		function SortByPosition(a, b){
+		  var aPosition = a.chordPosition;
+		  var bPosition = b.chordPosition;
+		  return aPosition - bPosition;
+		}
+
+		var updateChordObjLength = updateChordObj.length,
+			lineLength;	
+		for(var i = 0; i < updateChordObjLength ; i++){
+			line = updateChordObj[i];
+			line.sort(SortByPosition);
+		}
+		
+		songFormatCompiler.updateChord(updateChordObj);
+
+		$lyric.css({"line-height" : " 26px"});			
+		$chordWrap.hide();	
+		arrangeMode = false;		
+
+	}
+
 	o.abortArrange = function(){
 		$lyric.css({"line-height" : " 26px"});			
 		$chordWrap.hide();	
