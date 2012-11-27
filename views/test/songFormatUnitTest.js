@@ -69,3 +69,74 @@ describe("Not empty sourceCode test", function() {
 
 
 
+describe("Update chord with empty model", function() {
+
+	it("Init", function() {
+		songFormatCompiler.setObjBySourceCode("");		
+		var mockObj = [[{chordName: "Am" , chordDuration: 1 , chordPosition : 0 }]];
+		songFormatCompiler.updateChord(mockObj);		
+		expect(songFormatCompiler.getSourceCode()).toBe('[Am:1]');
+	});
+
+	it("2 bar in 1 line", function() {
+		songFormatCompiler.setObjBySourceCode("");		
+		var mockObj = [[{chordName: "Am" , chordDuration: 2 , chordPosition : 0 } ,
+						{chordName: "G" , chordDuration: 2 , chordPosition : 0 }
+					  ]];
+		songFormatCompiler.updateChord(mockObj);		
+		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2][G:2]');
+	});
+
+	it("4 bar in 2 line", function() {
+		songFormatCompiler.setObjBySourceCode("");		
+		var mockObj = 
+		[
+			[
+				{chordName: "Am" , chordDuration: 2 , chordPosition : 0 },
+				{chordName: "G" , chordDuration: 2 , chordPosition : 1 }
+			],
+			[
+				{chordName: "Cm" , chordDuration: 1 , chordPosition : 2 },
+				{chordName: "B" , chordDuration: 3 , chordPosition : 3 }
+			]
+		];
+		songFormatCompiler.updateChord(mockObj);		
+		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2][G:2]\n[Cm:1][B:3]');
+	});
+
+});
+
+
+describe("Update chord with not empty model", function() {
+
+	it("init" , function() {
+		songFormatCompiler.setObjByPlainLyric("This is the end");		
+		var mockObj = 
+		[
+			[
+				{chordName: "Am" , chordDuration: 2 , chordPosition : 0 },				
+			],			
+		];		
+		songFormatCompiler.updateChord(mockObj);				
+		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2]This is the end');		
+	});
+
+	it("init" , function() {
+		songFormatCompiler.setObjByPlainLyric("This is the end");		
+		var mockObj = 
+		[
+			[
+				{chordName: "Am" , chordDuration: 2 , chordPosition : 0 },				
+			],			
+		];		
+		songFormatCompiler.updateChord(mockObj);				
+		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2]This is the end');		
+	});
+
+
+
+});
+
+
+
+
