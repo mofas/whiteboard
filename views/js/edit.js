@@ -55,12 +55,15 @@ var editOperation = (function(o){
 				containment: ".chordCollection"
 			}).trigger(e);			
 		});
-				
-		$chordWrap.on("mouseover" , ".chord" , function(){
+		
+		//touch event (testing)				
+		$chordWrap.on("mouseover touchstart" , ".chord" , function(){
 			$(this).draggable({ 
 				containment: ".chordCollection"				
 			});
 		});
+			
+
 		$chordWrap.on("dblclick" , ".chord" , chordEditEvent);
 
 		$chordWrap.find( ".chordTrash" ).droppable({
