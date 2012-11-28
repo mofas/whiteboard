@@ -274,7 +274,12 @@ var songFormatCompiler = (function(o){
 				
 				//update origin chord
 				songModelLine = _songModel[i];
+				if(songModelLine === null){
+					songModelLine = [];
+				}
+
 				songModelLineLength = songModelLine.length;				
+				
 				
 				//retrieve whole lyric in this line
 				songModelLineLyric = "";
@@ -460,8 +465,7 @@ var songFormatCompiler = (function(o){
 					if(chord === undefined || chord === null || chord.chordName === null){
 						lineOutput.push("<span class='bar'>" + lyric + "</span>");
 					}
-					else{
-						console.log(chord.chordDuration);
+					else{						
 						if(chord.chordDuration === '1'){
 							chordFragHtml = "<span class='chord'>"+ chord.chordName + "</span>";	
 						}

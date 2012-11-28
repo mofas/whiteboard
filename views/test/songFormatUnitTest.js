@@ -33,32 +33,32 @@ describe("Not empty sourceCode test", function() {
 
 	it("Init", function() {
 		songFormatCompiler.setObjBySourceCode("[Am:3]123[Bm:1]456\n[C:2]789[D:1]000");
-		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>123</span><span class=\'bar\'><span class=\'chord\'>Bm<span class=\'chordDuration\'>X1</span></span>456</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span>789</span><span class=\'bar\'><span class=\'chord\'>D<span class=\'chordDuration\'>X1</span></span>000</span></div>');
+		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>123</span><span class=\'bar\'><span class=\'chord\'>Bm</span>456</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span>789</span><span class=\'bar\'><span class=\'chord\'>D</span>000</span></div>');
 		expect(songFormatCompiler.getPlainLyric()).toBe("123456\n789000");
 	});
 
 	it("Update lyric with less char", function() {
 		songFormatCompiler.setObjBySourceCode("[Am:3]123[Bm:1]456\n[C:2]789[D:1]000");
 		songFormatCompiler.updateLyric("23456\n789000");
-		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>234</span><span class=\'bar\'><span class=\'chord\'>Bm<span class=\'chordDuration\'>X1</span></span>56</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span>789</span><span class=\'bar\'><span class=\'chord\'>D<span class=\'chordDuration\'>X1</span></span>000</span></div>');
+		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>234</span><span class=\'bar\'><span class=\'chord\'>Bm</span>56</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span>789</span><span class=\'bar\'><span class=\'chord\'>D</span>000</span></div>');
 	});
 
 	it("Update lyric with more char", function() {
 		songFormatCompiler.setObjBySourceCode("[Am:3]123[Bm:1]456\n[C:2]789[D:1]000");
 		songFormatCompiler.updateLyric("11123456\n789000");
-		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>111</span><span class=\'bar\'><span class=\'chord\'>Bm<span class=\'chordDuration\'>X1</span></span>23456</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span>789</span><span class=\'bar\'><span class=\'chord\'>D<span class=\'chordDuration\'>X1</span></span>000</span></div>');
+		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>111</span><span class=\'bar\'><span class=\'chord\'>Bm</span>23456</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span>789</span><span class=\'bar\'><span class=\'chord\'>D</span>000</span></div>');
 	});	
 
 	it("Update with more line", function() {
 		songFormatCompiler.setObjBySourceCode("[Am:3]123[Bm:1]456\n[C:2]789[D:1]000");
 		songFormatCompiler.updateLyric("123456\n789000\nabcdef");
-		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>123</span><span class=\'bar\'><span class=\'chord\'>Bm<span class=\'chordDuration\'>X1</span></span>456</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span>789</span><span class=\'bar\'><span class=\'chord\'>D<span class=\'chordDuration\'>X1</span></span>000</span></div><div class="line"><span class=\'bar\'>abcdef</span></div>');
+		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>123</span><span class=\'bar\'><span class=\'chord\'>Bm</span>456</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span>789</span><span class=\'bar\'><span class=\'chord\'>D</span>000</span></div><div class="line"><span class=\'bar\'>abcdef</span></div>');
 	});
 
 	it("Update with less line", function() {
 		songFormatCompiler.setObjBySourceCode("[Am:3]123[Bm:1]456\n[C:2]789[D:1]000");
 		songFormatCompiler.updateLyric("123456");
-		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>123</span><span class=\'bar\'><span class=\'chord\'>Bm<span class=\'chordDuration\'>X1</span></span>456</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span></span><span class=\'bar\'><span class=\'chord\'>D<span class=\'chordDuration\'>X1</span></span></span></div>');
+		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>123</span><span class=\'bar\'><span class=\'chord\'>Bm</span>456</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span></span><span class=\'bar\'><span class=\'chord\'>D</span></span></div>');
 	});
 
 });
