@@ -390,15 +390,14 @@ var songFormatCompiler = (function(o){
 				}
 			}
 
-
 			modelIsChange = true;
 		}		
 		
 	}
-
-	//NEED TO REFACTOR
-	o.getChordFormat = function(){
-		var fragHtml = "",
+	
+	//out put format { chordName , chordDuration , chordPosition , chordLine }
+	o.getChordObjArray = function(){
+		var outputArray = [],
 			songModel = _songModel,
 			songLength = songModel.length,
 			line,
@@ -420,14 +419,14 @@ var songFormatCompiler = (function(o){
 					bar = line[j];					
 					chord = bar.chord;
 					lyric = bar.lyric;					
-					if(chord !== undefined && chord !== null && chord.chordName !== null){
-						fragHtml += "<span class='chord' style='left:"+ (4+chordPositionX*7) +"px; top:"+ (3+chordPositionY*50) + "px;' >" + chord.chordName + "x" + chord.chordDuration + "</span>";
+					if(chord !== undefined && chord !== null && chord.chordName !== null){						
+						outputArray.push({"chordName" : chord.chordName , "chordDuration" : chord.chordDuration , "chordLine" : chordPositionY , "chordPosition" : chordPositionX });
 					}					
-					chordPositionX += bar.lyric.length;				
+					chordPositionX += bar.lyric.length;
 				}				
 			}
-		}
-		return fragHtml;
+		}			
+		return outputArray;
 	}
 
 
@@ -441,7 +440,8 @@ var songFormatCompiler = (function(o){
 			chord ,
 			chordName ,
 			chordDuration ,
-			lyric;
+			lyric,
+			chordFragHtml;
 
 
 		for(var i = 0; i < songLength ; i++){
@@ -461,12 +461,19 @@ var songFormatCompiler = (function(o){
 						lineOutput.push("<span class='bar'>" + lyric + "</span>");
 					}
 					else{
-						lineOutput.push("<span class='bar'><span class='chord'>"+ chord.chordName + "<span class='chordDuration'>X" + chord.chordDuration + "</span></span>" + lyric + "</span>");	
+						console.log(chord.chordDuration);
+						if(chord.chordDuration === '1'){
+							chordFragHtml = "<span class='chord'>"+ chord.chordName + "</span>";	
+						}
+						else{
+							chordFragHtml = "<span class='chord'>"+ chord.chordName + "<span class='chordDuration'>X" + chord.chordDuration + "</span></span>";	
+						}						
+						lineOutput.push("<span class='bar'>" + chordFragHtml + lyric + "</span>");	
 					}				
 				}
 				outputArray.push('<div class="line">' + lineOutput.join("") + "</div>");
 			}			
-		}
+		}		
 		return outputArray.join("");
 	}
 

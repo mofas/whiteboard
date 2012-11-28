@@ -22,10 +22,10 @@ var editOperation = (function(o){
 		$newChord_duration,
 		$chordListContainer,
 		$preview;
-	var sourCode , isSourceCodeChange = false , arrangeMode;
 
-	var ChordSynTimer , chordScrollHeight = 0;
-
+	var sourCode , isSourceCodeChange = false , arrangeMode,
+		ChordSynTimer , chordScrollHeight = 0,
+		YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 4 , Xenominator = 7;
 
 	var bindEvent = function(){		
 		$submitButton.on("click" , function(){			
@@ -164,13 +164,23 @@ var editOperation = (function(o){
 			$lyric.css({"line-height" : " 50px"});
 			$chordWrap.show();
 
-			var chordHtml = songFormatCompiler.getChordFormat();
+			var chordHtml = genegrateChordsHtml(songFormatCompiler.getChordObjArray());
 			$chordCollection.html(chordHtml).css({ "height" : $lyric[0].scrollHeight + "px" });
 			$lyric.trigger("scroll");
-			chordScrollSyn();
-			
+			chordScrollSyn();			
 			arrangeMode = true;
 		}		
+	}
+
+	var genegrateChordsHtml = function(chordObjArray){
+		var chordObjArrayLength = chordObjArray.length,
+			fragHtml = "",
+			chordObj;
+		for(var i = 0; i< chordObjArrayLength ;i++){
+			chordObj = chordObjArray[i];
+			fragHtml += "<span class='chord' style='left:"+ (XBasicOffset+chordObj.chordPosition*Xenominator) +"px; top:"+ (YBasicOffset+chordObj.chordLine*YDenominator) + "px;' >" + chordObj.chordName + "x" + chordObj.chordDuration + "</span>";
+		}		
+		return fragHtml;
 	}
 
 	var chordEditEvent = function(){
@@ -219,8 +229,7 @@ var editOperation = (function(o){
 		var updateChordObj = [];		
 		var $chords = $chordCollection.find(".chord");
 
-		var chordObj , text , chordInfo , chordName , chordDuration , position , top , left , line , position;
-		var YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 4 , Xenominator = 7;
+		var chordObj , text , chordInfo , chordName , chordDuration , position , top , left , line , position;		
 		$chords.each(function(){
 			chordObj = {};			
 			position = $(this).position();
