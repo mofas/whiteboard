@@ -20,6 +20,7 @@
             <a class="brand" href="/list">吉他好朋友</a>            
             <% if(user === undefined ){ %>
               <a id="FBloginButton" class="btn btn-primary"  href="/auth/facebook">FB登入</a>
+              <a id="demoLogin" class="btn btn-primary"  href="/demoLogin?username=1&password=0">測試帳號</a>
             <%} else {%>
               <a id="newLyricButton" class="btn btn-primary"  href="edit">新增歌詞</a>
               <a class="btn btn-info" href="javascript: listOperation.openUserSetting();">設定</a>

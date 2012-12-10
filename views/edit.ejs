@@ -27,7 +27,7 @@
         <div id="edit">
             <div class="container well well-large">            
                 <% if(data._id == undefined ){ %>
-                    <a id="submitButton" class="btn btn-success" href="javascript:editOperation.submit();">新增</a>
+                    <a id="submitButton" class="btn btn-success" href="javascript:void(0);">新增</a>
                 <%} else {%>    
                     <a id="submitButton" class="btn btn-success" data-id="<%= data._id %>" href="javascript:void(0);">儲存</a> 
                     <a id="deleteButton" class="btn btn-danger" data-id="<%= data._id %>" href="javascript:void(0);">刪除</a> 

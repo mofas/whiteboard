@@ -42,15 +42,28 @@ passport.use(new FacebookStrategy({
 ));
 
 
-passport.serializeUser(function(user, done) {  
+passport.serializeUser(function(user, done) {   
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {  
-  var profile = dbHelper.getUserDataByFBID(id , function(profile){
+passport.deserializeUser(function(id, done) {    
+  var profile = dbHelper.getUserDataByFBID(id , function(profile){    
     done(null , profile);
-  });  
+  });
 });
+
+
+/**********************************************************
+*   test Account Login
+***********************************************************/
+var LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    return done(null, {id: "12345" , FB_id : "12345" , username : "testAccount" , displayName : "測試帳號"});        
+  }
+));
+
 
 
 
@@ -92,6 +105,9 @@ app.get('/auth/facebook', passport.authenticate('facebook'));
 app.get('/auth/facebook/callback', 
   passport.authenticate('facebook', { successRedirect: '/list',
                                       failureRedirect: '/loginFail.html' }));
+
+app.get('/demoLogin', passport.authenticate('local', { successRedirect: '/list',
+                                                    failureRedirect: '/loginFail.html' }));
 
 app.get('/logout', function(req, res){
   	req.logout();

@@ -68,6 +68,7 @@ exports.index = function(req, res , next){
 }
 
 exports.edit = function(req, res){	
+
 	var id = req.params.id;
 
   if(id === undefined && req.user !== undefined){
@@ -75,7 +76,8 @@ exports.edit = function(req, res){
           data : {}
     });
     return;
-  }  
+  }
+
   isOwner(id , req.user.FB_id , 
     function(){
       dbHelper.getSongDataByID(id , function(data){
@@ -115,7 +117,7 @@ exports.list = function(req, res){
 		    query = { title : queryRex };		
 
 		db.collection('board', function(err, collection) {              
-	      	collection.find(query).sort({time:-1}).toArray(function(err, items) {
+	      	collection.find(query).sort({modifyTime:-1}).limit(10).toArray(function(err, items) {
             songListGetEditorName(items ,function(modifiedtItems){
               res.render('list', {
               user : req.user,
@@ -129,7 +131,7 @@ exports.list = function(req, res){
 	}
 	else{
   		db.collection('board', function(err, collection) {              
-	      	collection.find().sort({time:-1}).toArray(function(err, items) {
+	      	collection.find().sort({modifyTime:-1}).limit(10).toArray(function(err, items) {
             songListGetEditorName(items ,function(modifiedtItems){
   		        res.render('list', {
                 user : req.user,
@@ -149,10 +151,15 @@ exports.add = function(req, res){
         lyric   = req.body.lyric,            
         createTime = new Date().getTime(),
         limit = 40,
-        summary;
+        summary;          
 
     if(lyric.length <= 40){
       limit = lyric.length;
+    }
+    console.log("add" , req.user); 
+    if(req.user.FB_id === undefined || req.user.FB_id === null){
+      res.send({ "errCode" : "2" , "msg" : "你的帳號出現問題,請洽管理者" });
+      return;
     }
 
     summary = lyric.substring(0 , limit);
@@ -169,6 +176,7 @@ exports.add = function(req, res){
             summary : summary, 
             lyric : lyric,
             createTime : createTime,
+            modifyTime : createTime,
         }, 
         {safe : true},
         function(err, data) {

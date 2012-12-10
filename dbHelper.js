@@ -59,15 +59,15 @@ module.exports = {
     });
   },
 
-  getUserDataByFBID : function(id , callback){
-    if(id !== undefined && id.length > 0){          
-      global.db.collection('user', function(err, collection) {         
-        collection.find({"FB_id" : id}).toArray(function(err, items) {                      
+  getUserDataByFBID : function(id , callback){    
+    if(id !== undefined && id !== null && id.length > 0){
+      global.db.collection('user', function(err, collection) {
+        collection.find({"FB_id" : id}).toArray(function(err, items) {                                
           return utility.callBackHandler(items[0] , callback);
         });
       }); 
     }        
-    else{
+    else{      
       return utility.callBackHandler({} , callback);
     }
   }

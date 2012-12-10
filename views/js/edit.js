@@ -28,7 +28,7 @@ var editOperation = (function(o){
 		YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 4 , Xenominator = 7;
 
 	var bindEvent = function(){		
-		$submitButton.on("click" , function(){			
+		$submitButton.on("click" , function(){				
 			o.submit($(this).attr("data-id"));
 		});
 		$deleteButton.on("click" , function(){			
@@ -112,10 +112,10 @@ var editOperation = (function(o){
 		initSongFormat();
 	}
 
-
 	o.submit = function(id){
-		var params = $editForm.serialize();		
-		console.log(params);		
+		updatePlainLyric();
+		var params = $editForm.serialize();			
+		console.log(params);
 		if(id !== undefined && id !== null){
 			$.post("/update/" + id, params , function(data){
 				if(data.errCode == 0 ){
@@ -170,9 +170,16 @@ var editOperation = (function(o){
 			var chordHtml = genegrateChordsHtml(songFormatCompiler.getChordObjArray());
 			$chordCollection.html(chordHtml).css({ "height" : $lyric[0].scrollHeight + "px" });
 			$lyric.trigger("scroll");
-			chordScrollSyn();			
+			chordScrollSyn();
 			arrangeMode = true;
 		}		
+	}
+
+
+	var updatePlainLyric = function(){
+		var plainLyric = $lyric.val();
+		songFormatCompiler.updateLyric(plainLyric);
+		$sourceCodeText.val(songFormatCompiler.getSourceCode());
 	}
 
 	var genegrateChordsHtml = function(chordObjArray){
@@ -290,11 +297,10 @@ var editOperation = (function(o){
 	}
 
 	o.openSourceCodeDialog = function(){		
-		var plainLyric = $lyric.val();		
-		songFormatCompiler.updateLyric(plainLyric);
-		$sourceCodeText.val(songFormatCompiler.getSourceCode());		
+		updatePlainLyric();		
 		$sourceCodeDialog.show();
 	}
+
 
 	o.updateSourceCode = function(){
 		sourceCode = $sourceCodeText.val();

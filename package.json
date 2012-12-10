@@ -12,6 +12,7 @@
     "ejs": "*",
     "passport": "*",
     "passport-facebook" : "*",
+    "passport-local" : "*",
     "gzippo" : "*"
   },
   "engines" : {
