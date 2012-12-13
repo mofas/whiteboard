@@ -37,6 +37,7 @@ var songFormatCompiler = (function(o){
 	}
 
 	o.setObjBySourceCode = function(sourceCode){
+		//console.log(sourceCode);
 		_sourceCode = sourceCode;
 
 		var songModel = new Array() ,
@@ -52,7 +53,7 @@ var songFormatCompiler = (function(o){
 			lineArray = [] ,
 			lineText;	
 
-		for(var i = 0 ; i < textArray.length ; i++){
+		for(var i = 0 ; i < textArray.length ; i++){			
 			if(textArray[i].length < 1){
 				songModel.push(null);
 			}
@@ -60,15 +61,19 @@ var songFormatCompiler = (function(o){
 				lineText = textArray[i];
 				lineText = lineText.replace(/\]\s*\[/g , "] [");				
 				lineOrigin = lineText.split(/\[([a-zA-z0-9:]+?)\]/gi);				
-				lineArray = [];
-				if(lineOrigin.length > 1){					
+				lineArray = [];				
+				if(lineOrigin.length > 1){	
+					//if the first lineOrigin is lyric
+					if(lineOrigin[0].length > 0){
+						bar = { "chord" : null , "lyric" : lineOrigin[0] };
+						lineArray.push(bar);						
+					}
 					for(var j=1; j < lineOrigin.length ; j+=2){
 						chordString = lineOrigin[j];
 						lyricString = lineOrigin[j+1];						
 						parseChord = chordString.split(":");
 						chordName = parseChord[0] || "";
 						chordDuration = parseChord[1] || "";
-
 						chordObj = {"chordName" : chordName , "chordDuration" : chordDuration};
 						bar = { "chord" : chordObj , "lyric" : lyricString }
 						lineArray.push(bar);
@@ -117,7 +122,7 @@ var songFormatCompiler = (function(o){
 			line = songModel[i];
 			lineOutput = [];
 			if(line === null){
-				outputArray.push('\n');
+				outputArray.push('');
 			}
 			else{
 				for(var j = 0; j < lineLength ; j++){					
@@ -148,15 +153,14 @@ var songFormatCompiler = (function(o){
 		var	songLength = songModel.length ,
 			lineLength ,
 			line , bar , lineOutput ,
-			outputArray = [];
-
-		for(var i = 0; i < songLength ; i++){
+			outputArray = [];		
+		for(var i = 0; i < songLength ; i++){			
 			lineLength = (songModel[i] === null ) ? 0 : songModel[i].length;
 				
 			line = songModel[i];
 			lineOutput = [];
 			if(line === null){
-				outputArray.push('\n');
+				outputArray.push('');
 			}
 			else{
 				for(var j = 0; j < lineLength ; j++){
@@ -164,21 +168,23 @@ var songFormatCompiler = (function(o){
 					lyric = bar.lyric;					
 					lineOutput.push(lyric);					
 				}
-				outputArray.push(lineOutput.join(""));
+				if(lineOutput.length > 0){
+					outputArray.push(lineOutput.join(""));	
+				}								
 			}			
-		}
+		}		
 		return outputArray.join("\n");
 	}
 
 
-	o.updateLyric = function(plainLyric){				
+	o.updateLyric = function(plainLyric){		
 		var textArray = plainLyric.split("\n") ,
 			textLine ,
 			songLength = _songModel.length ,			
 			line , bar ,
 			lineLength , originLyric ,
 			isLastBar = false;
-
+		
 		for(var i = 0 ; i < songLength ; i++){
 			if(i >= textArray.length)
 				textLine = "";
@@ -196,7 +202,7 @@ var songFormatCompiler = (function(o){
 						isLastBar = true;						
 					}						
 					//last bar in line
-					if(isLastBar){												
+					if(isLastBar){									
 						bar.lyric = textLine;						
 					}
 					else{						
@@ -221,8 +227,7 @@ var songFormatCompiler = (function(o){
 				}					
 				else{
 					_songModel[i] = [{ "chord" : null , "lyric" : textLine }];
-				}
-					
+				}					
 			}
 		}
 		
@@ -412,6 +417,7 @@ var songFormatCompiler = (function(o){
 			chordDuration,
 			chordPositionY = 0,
 			chordPositionX = 0;
+		
 
 		for(var i = 0; i < songLength ; i++){
 			lineLength = (songModel[i] === null ) ? 0 : songModel[i].length;

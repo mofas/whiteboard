@@ -141,3 +141,14 @@
 	margin: 0;
 	padding : 0;
 }
+
+
+#loadingOverlay{
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,50,0.1) url(img/loader.gif)  no-repeat 50% 50%;
+}

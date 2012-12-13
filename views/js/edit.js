@@ -8,9 +8,7 @@ $(document).ready(function() {
 var editOperation = (function(o){
 
 	var $editForm, 
-		$lyric,
-		$submitButton,
-		$deleteButton,
+		$lyric,		
 		$tabbable,
 		$sourceCodeDialog,
 		$sourceCodeText,
@@ -21,28 +19,47 @@ var editOperation = (function(o){
 		$newChord_name,
 		$newChord_duration,
 		$chordListContainer,
-		$preview;
+		$preview,
+		$loadingOverlay;
 
 	var sourCode , isSourceCodeChange = false , arrangeMode,
 		ChordSynTimer , chordScrollHeight = 0,
 		YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 4 , Xenominator = 7;
 
-	var bindEvent = function(){		
-		$submitButton.on("click" , function(){				
+	var bindEvent = function(){				
+		$("#submitButton").on("click" , function(){			
 			o.submit($(this).attr("data-id"));
 		});
-		$deleteButton.on("click" , function(){			
+		$("#deleteButton").on("click" , function(){			
 			o.delete($(this).attr("data-id"));
 		});
+
+		$("#arrangeModeButton").on("click" , o.arrange);
+		$("#sourceCodeModeButton").on("click" , o.openSourceCodeDialog);
+		$("#updateArrangeButton").on("click" , o.updateArrange);
+		$("#abortArrangeButton").on("click" , o.abortArrange);
+		$("#genegrateChordButton").on("click" , o.genegrateChord);
+
+		$("#saveSourceCodeButton").on("click" , o.updateSourceCode);
+		$("#abortSourceCodeButton").on("click" , o.abortSourceCodeDialog);
+		
+
 		$tabbable.on("click" , "li" , function(){
 			var targetId = $(this).find("a").attr("href");
+			if(targetId === '#previewView'){
+				if(arrangeMode){
+					var answer = confirm("是否要更新和絃狀態?");
+					if(answer){
+						o.updateArrange();
+					}					
+				}
+				o.updatePreview();				
+			}
+
 			$tabbable.find("li").removeClass("active");
 			$(this).addClass("active");
 			$tabbable.find(".tab-pane").removeClass("active")
-			$tabbable.find(targetId).addClass("active");
-			if(targetId === '#previewView'){
-				o.updatePreview();
-			}
+			$tabbable.find(targetId).addClass("active");			
 		});
 		
 		$chordListContainer.on("mousedown" , ".chordItem" , function(e){			
@@ -95,8 +112,7 @@ var editOperation = (function(o){
 	o.init = function(){
 		$editForm = $("#editForm");
 		$lyric = $("#lyric");
-		$submitButton = $("#submitButton");
-		$deleteButton = $("#deleteButton");
+		
 		$tabbable = $editForm.find(".tabbable");
 		$chordWrap = $editForm.find(".chordWrap");
 		$newChord_name = $chordWrap.find(".newChord_name");
@@ -106,13 +122,15 @@ var editOperation = (function(o){
 		$chordCollection = $chordWrap.find(".chordCollection");
 		$chordListContainer = $chordWrap.find(".chordListContainer");
 		$sourceCodeDialog = $("#sourceCodeDialog");
-		$sourceCodeText = $("#sourceCode");
+		$sourceCodeText = $("#sourceCode");		
 		$preview = $("#preview");
+		$loadingOverlay = $("#loadingOverlay");
 		bindEvent();
 		initSongFormat();
 	}
 
 	o.submit = function(id){
+		$loadingOverlay.show();
 		updatePlainLyric();
 		var params = $editForm.serialize();			
 		console.log(params);
@@ -124,6 +142,7 @@ var editOperation = (function(o){
 				else{
 					alert(data.msg);
 				}
+				$loadingOverlay.hide();
 			});
 		}
 		else{
@@ -135,11 +154,12 @@ var editOperation = (function(o){
 				else{
 					alert(data.msg);
 				}
+				$loadingOverlay.hide();
 			});			
 		}		
 	}
 
-	o.delete = function(id){
+	o.delete = function(id){		
 		if(id !== undefined && id !== null){
 			$.post("/delete/" + id , function(data){
 				console.log(data);
@@ -154,7 +174,8 @@ var editOperation = (function(o){
 		}	
 	}
 
-	o.updatePreview = function(){						
+	o.updatePreview = function(){
+		updatePlainLyric();
 		$preview.addClass("songFormat").html(songFormatCompiler.getoutputFormat());		
 	}
 
@@ -182,7 +203,7 @@ var editOperation = (function(o){
 		$sourceCodeText.val(songFormatCompiler.getSourceCode());
 	}
 
-	var genegrateChordsHtml = function(chordObjArray){
+	var genegrateChordsHtml = function(chordObjArray){		
 		var chordObjArrayLength = chordObjArray.length,
 			fragHtml = "",
 			chordObj;
@@ -282,6 +303,7 @@ var editOperation = (function(o){
 			line.sort(SortByPosition);
 		}
 		
+		console.log(updateChordObj);
 		songFormatCompiler.updateChord(updateChordObj);
 
 		$lyric.css({"line-height" : " 26px"});			
@@ -305,7 +327,7 @@ var editOperation = (function(o){
 	o.updateSourceCode = function(){
 		sourceCode = $sourceCodeText.val();
 		songFormatCompiler.setObjBySourceCode(sourceCode);		
-		$lyric.val(songFormatCompiler.getPlainLyric());
+		$lyric.val(songFormatCompiler.getPlainLyric());	
 		$sourceCodeDialog.hide();
 	}
 

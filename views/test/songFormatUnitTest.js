@@ -384,4 +384,52 @@ describe("Update chord with structured model", function() {
 });
 
 
+describe("Real Case", function() {
+
+
+	it("self consistency -- update plain lyric" , function(){
+		songFormatCompiler.setObjBySourceCode("不管愛幾回 都流淚\n[F:1]不想要拒絕 讓我飛[Cm:1]\n\n\n[B:1]\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]\n就算我全身都化成了煙灰我不後悔\n");
+		songFormatCompiler.updateLyric(songFormatCompiler.getPlainLyric());
+		expect(songFormatCompiler.getPlainLyric()).toBe('不管愛幾回 都流淚\n不想要拒絕 讓我飛\n\n\n\n心變成了軟綿綿 可以壓碎\n就算我全身都化成了煙灰我不後悔');
+		expect(songFormatCompiler.getSourceCode()).toBe("不管愛幾回 都流淚\n[F:1]不想要拒絕 讓我飛[Cm:1]\n\n\n[B:1]\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]\n就算我全身都化成了煙灰我不後悔");
+	});
+
+	it("self consistency -- update chord object" , function(){
+		songFormatCompiler.setObjBySourceCode("不管愛幾回 都流淚\n[F:1]不想要拒絕 讓我飛[Cm:1]\n\n\n[B:1]\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]\n就算我全身都化成了煙灰我不後悔\n");		
+		var chordObj = songFormatCompiler.getChordObjArray();
+		var lineNo = songFormatCompiler.getSongModel().length + 1;		
+		var ChordObjlength = chordObj.length;
+		var updateChordObj = [];
+		var lineObj = [];	
+		for(var i = 0 ; i < lineNo ; i++){
+			lineObj = [];
+			for(var j =0 ; j < ChordObjlength ; j++){
+				var chordObjItem = chordObj[j];				
+				if(i === chordObjItem.chordLine){					
+					lineObj.push({chordDuration : chordObjItem.chordDuration , chordName : chordObjItem.chordName, chordPosition : chordObjItem.chordPosition});
+				}
+			}
+			updateChordObj.push(lineObj);
+		}		
+		songFormatCompiler.updateChord(updateChordObj);
+		expect(songFormatCompiler.getPlainLyric()).toBe('不管愛幾回 都流淚\n不想要拒絕 讓我飛\n\n\n\n心變成了軟綿綿 可以壓碎\n就算我全身都化成了煙灰我不後悔');
+		expect(songFormatCompiler.getSourceCode()).toBe("不管愛幾回 都流淚\n[F:1]不想要拒絕 讓我飛[Cm:1]\n\n\n[B:1]\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]\n就算我全身都化成了煙灰我不後悔\n");
+	})
+
+	it("case 1 , get plain text" , function() {
+		songFormatCompiler.setObjBySourceCode("不管愛幾回 都流淚\n[F:1]不想要拒絕 讓我飛[Cm:1]\n\n\n[B:1]\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]\n就算我全身都化成了煙灰我不後悔\n");
+		expect(songFormatCompiler.getPlainLyric()).toBe('不管愛幾回 都流淚\n不想要拒絕 讓我飛\n\n\n\n心變成了軟綿綿 可以壓碎\n就算我全身都化成了煙灰我不後悔');
+	});
+	/**
+	it("case 1 , get sourceCode" , function() {
+		songFormatCompiler.setObjBySourceCode("不管愛幾回 都流淚\n[F:1]不想要拒絕 讓我飛[Cm:1]\n\n\n[B:1]\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]\n就算我全身都化成了煙灰我不後悔\n");
+		expect(songFormatCompiler.getSourceCode()).toBe('This is the end');
+	});
+	**/
+
+});
+
+
+
+
 

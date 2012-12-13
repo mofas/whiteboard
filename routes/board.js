@@ -155,8 +155,7 @@ exports.add = function(req, res){
 
     if(lyric.length <= 40){
       limit = lyric.length;
-    }
-    console.log("add" , req.user); 
+    }    
     if(req.user.FB_id === undefined || req.user.FB_id === null){
       res.send({ "errCode" : "2" , "msg" : "你的帳號出現問題,請洽管理者" });
       return;
