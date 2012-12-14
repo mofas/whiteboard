@@ -36,8 +36,7 @@ var songFormatCompiler = (function(o){
 		o.setObjBySourceCode(plainLyric);
 	}
 
-	o.setObjBySourceCode = function(sourceCode){
-		//console.log(sourceCode);
+	o.setObjBySourceCode = function(sourceCode){		
 		_sourceCode = sourceCode;
 
 		var songModel = new Array() ,
@@ -247,10 +246,107 @@ var songFormatCompiler = (function(o){
 	//line = [bar , bar , bar ]
 	//bar = {chordName  , chordDuration , chordPosition }
 	//chordPosition represent the lyric length of this chord
-	o.updateChord = function(updateChordObj){		
+	o.updateChord = function(updateChordObj){	
 		if(updateChordObj === undefined || updateChordObj === null)
 			return;		
+
+		//get plain lyric and add chord.
+		var plainLyric = o.getPlainLyric();
+		var plainLyricLineArray = plainLyric.split("\n"),
+			plainLyricLineArrayLength = plainLyricLineArray.length;
+		var newSongModel = [];		
+
+		var updateChordObjLength = updateChordObj.length;
+		var chordObjLine,
+			chordObjLineLength,
+			chordObjbar;
+
+		var continLyricCharNo = 0,
+			isLastBar = false;
+
+		var playinLyricLine = "";
+		var tempSongModel = [] , line , bar , chord , lyric;
+		var isLastBar = false;
+		var chordName , chordDuration ,chordPosition;
+
+		for(var i = 0 ; i < updateChordObjLength ; i++){
+			
+			line = [];
+			chordObjLine = updateChordObj[i];
+			chordObjLineLength = chordObjLine.length;
+			playinLyricLine = plainLyricLineArray[i] || "";			
+			//if chordObjLine === null , insert a pure lyric line at first
+			console.log(i , chordObjLine); 
+			if(chordObjLine === undefined || chordObjLine === null || chordObjLine.length === 0){
+				console.log( "enter" , i , playinLyricLine);
+				bar = { "chord" : null , "lyric" : playinLyricLine };				
+				line.push(bar);				
+			}
+			else{
+				//if the frist bar is not at position 0 , insert a pure lyric bar at first			
+				if(chordObjLine[0] !== undefined && chordObjLine[0] !== null && chordObjLine[0].chordPosition > 0){
+					continLyricCharNo = chordObjLine[0].chordPosition;
+					lyric = playinLyricLine.substring(0, continLyricCharNo);
+					playinLyricLine = playinLyricLine.substring(continLyricCharNo);	
+					bar = { "chord" : null , "lyric" : lyric };
+					line.push(bar);
+				}
+				
+				for(var j = 0; j < chordObjLineLength ; j++){
+
+					chordObjbar = chordObjLine[j];						
+					
+					isLastBar = false;
+					if( j === (chordObjLineLength-1)){
+						isLastBar = true;
+					}
+
+					if(isLastBar){
+						lyric = playinLyricLine;						
+					}
+					else{					
+						continLyricCharNo = chordObjLine[j+1].chordPosition - chordObjLine[j].chordPosition;
+						if(playinLyricLine.length > continLyricCharNo){
+							lyric= playinLyricLine.substring(0, continLyricCharNo);
+							playinLyricLine = playinLyricLine.substring(continLyricCharNo);								
+						}
+						else{
+							lyric = playinLyricLine;
+							playinLyricLine = "";							
+						}					
+					}					
+					if(chordObjbar === undefined || chordObjbar === null || chordObjbar.chordName === undefined || chordObjbar.chordDuration === undefined){
+						bar = { "chord" : null , "lyric" : lyric };
+						line.push(bar);
+					}
+					else{
+						chord = {"chordName" : chordObjbar.chordName , "chordDuration" : chordObjbar.chordDuration };								
+										
+						bar = { "chord" : chord , "lyric" : lyric };
+						line.push(bar);
+					}
+				}
+			}
+
+			tempSongModel.push(line);
+		}
 		
+		if(updateChordObjLength < plainLyricLineArrayLength ){
+			for(var l = updateChordObjLength ; l < plainLyricLineArrayLength ; l++){
+				lyric = plainLyricLineArray[l];				
+				if(lyric !== null && lyric.length > 0){
+					tempSongModel.push([{ "chord" : null , "lyric" : lyric }]);
+				}
+				else{
+					tempSongModel.push([]);
+				}				
+			}
+		}
+		
+		_songModel = tempSongModel;
+		modelIsChange = true;
+
+		/**
 		var updateChordObjLength = updateChordObj.length,
 			lineLength;
 
@@ -273,8 +369,7 @@ var songFormatCompiler = (function(o){
 		for(var i = 0 ; i < updateChordObjLength ; i++){
 			
 			line = updateChordObj[i];
-			lineLength = line.length;						
-
+			lineLength = line.length;									
 			if(songMoelLength > i){				
 				
 				//update origin chord
@@ -291,7 +386,7 @@ var songFormatCompiler = (function(o){
 				for(var k = 0 ; k < songModelLineLength ; k++){
 					songModelLineLyric += songModelLine[k].lyric;
 				}
-				//if the frist bar is not at position 0 , insert a empty bar at first;
+				//if the frist bar is not at position 0 , insert a empty bar at first;								
 				if(line[0] !== undefined && line[0] !== null && line[0].chordPosition > 0){
 					line.unshift(null);
 					lineLength++;
@@ -302,7 +397,7 @@ var songFormatCompiler = (function(o){
 					if( j === (lineLength-1))
 						isLastBar = true;
 
-					bar = line[j];				
+					bar = line[j];									
 					if(bar !== undefined && bar !== null){
 						chordName = bar.chordName || "";
 						chordDuration = bar.chordDuration || "";
@@ -383,7 +478,7 @@ var songFormatCompiler = (function(o){
 				_songModel.push(newLine);
 			}
 
-			//delete the unmention line Chord
+			//delete the chords of unmentioned line 
 			var modelLength = _songModel.length;
 
 			if(updateChordObjLength < modelLength){
@@ -402,7 +497,7 @@ var songFormatCompiler = (function(o){
 
 			modelIsChange = true;
 		}		
-		
+		**/		
 	}
 	
 	//out put format { chordName , chordDuration , chordPosition , chordLine }
