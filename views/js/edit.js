@@ -1,4 +1,15 @@
-
+// Shim by Paul Irish
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+window.requestAnimFrame = (function() {
+    return  window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function(callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+})();
 
 
 $(document).ready(function() {
@@ -22,7 +33,7 @@ var editOperation = (function(o){
 		$preview,
 		$loadingOverlay;
 
-	var sourCode , isSourceCodeChange = false , arrangeMode,
+	var sourCode , isSourceCodeChange = false , arrangeMode = false,
 		ChordSynTimer , chordScrollHeight = 0,
 		YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 4 , Xenominator = 7;
 
@@ -34,7 +45,7 @@ var editOperation = (function(o){
 			o.delete($(this).attr("data-id"));
 		});
 
-		$("#arrangeModeButton").on("click" , o.arrange);
+		$("#arrangeModeButton").on("click" , o.openArrangeMode);
 		$("#sourceCodeModeButton").on("click" , o.openSourceCodeDialog);
 		$("#updateArrangeButton").on("click" , o.updateArrange);
 		$("#abortArrangeButton").on("click" , o.abortArrange);
@@ -179,7 +190,7 @@ var editOperation = (function(o){
 		$preview.addClass("songFormat").html(songFormatCompiler.getoutputFormat());		
 	}
 
-	o.arrange = function(){
+	o.openArrangeMode = function(){
 		if(arrangeMode){
 			o.abortArrange();
 			$lyric.off("scroll");
@@ -190,10 +201,10 @@ var editOperation = (function(o){
 			//update plain lyric
 			updatePlainLyric();
 			var chordHtml = genegrateChordsHtml(songFormatCompiler.getChordObjArray());			
-			$chordCollection.html(chordHtml).css({ "height" : $lyric[0].scrollHeight + "px" });
-			$lyric.trigger("scroll");
-			chordScrollSyn();
+			$chordCollection.html(chordHtml).css({ "height" : $lyric[0].scrollHeight + "px" });			
 			arrangeMode = true;
+			chordScrollSyn();
+			$lyric.trigger("scroll");
 		}		
 	}
 
@@ -242,14 +253,29 @@ var editOperation = (function(o){
 		}		
 	}
 
-	var chordScrollSyn = function(){	
-		$lyric.off("scroll");
+	var chordScrollSyn = function(){
+		$chordWrap.on("mousewheel" , function(e){
+			e.preventDefault();
+			var scrollP = $lyric.scrollTop();
+			var scrollLength = e.originalEvent.wheelDelta/120*50;			
+	        $lyric.scrollTop(scrollP-scrollLength);
+		});		
 		$lyric.on("scroll" , function(e){			
-			chordScrollHeight = e.target.scrollTop;		
-			$chordCanvas.css({ "top" : -chordScrollHeight });
-			$chordTool.css({ "top" : chordScrollHeight+20 });
+			chordScrollHeight = e.target.scrollTop;					
 		});
+
+		relocateChordCanvas();
 	}
+
+	var relocateChordCanvas = function(){		
+		if(!arrangeMode)
+			return;
+		
+		$chordCanvas.css({ "top" : -chordScrollHeight });
+		$chordTool.css({ "top" : chordScrollHeight+20 });
+		requestAnimFrame(relocateChordCanvas);
+	}
+
 
 	o.genegrateChord = function(){		
 		var name = $newChord_name.val();
@@ -302,20 +328,21 @@ var editOperation = (function(o){
 		for(var i = 0; i < updateChordObjLength ; i++){
 			line = updateChordObj[i];
 			line.sort(SortByPosition);
-		}
-		
+		}		
 		songFormatCompiler.updateChord(updateChordObj);
-
-		$lyric.css({"line-height" : " 26px"});			
-		$chordWrap.hide();	
-		arrangeMode = false;		
-
+		closeArrangeMode();
 	}
 
-	o.abortArrange = function(){
-		$lyric.css({"line-height" : " 26px"});			
-		$chordWrap.hide();	
-		arrangeMode = false;
+	o.abortArrange = function(){		
+		closeArrangeMode();		
+	}
+
+	var closeArrangeMode = function(){
+		$lyric.css({"line-height" : " 26px"});
+		$chordWrap.hide();
+		$lyric.off("scroll");
+		$chordWrap.off("mousewheel");
+		arrangeMode = false;	
 	}
 
 	o.openSourceCodeDialog = function(){		

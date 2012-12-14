@@ -254,8 +254,7 @@ var songFormatCompiler = (function(o){
 	//line = [bar , bar , bar ]
 	//bar = {chordName  , chordDuration , chordPosition }
 	//chordPosition represent the lyric length of this chord
-	o.updateChord = function(updateChordObj){		
-		console.log(updateChordObj );
+	o.updateChord = function(updateChordObj){
 		if(updateChordObj === undefined || updateChordObj === null)
 			return;		
 
@@ -301,8 +300,7 @@ var songFormatCompiler = (function(o){
 				}					
 			}			
 			lyric = playinLyricLine.substring(0, realCharNo);
-			playinLyricLine = playinLyricLine.substring(realCharNo);
-			console.log(continLyricCharNo , lyric ,playinLyricLine);
+			playinLyricLine = playinLyricLine.substring(realCharNo);			
 			return [lyric , playinLyricLine];
 		}
 
