@@ -151,6 +151,21 @@ describe("Update chord with plain lyric", function() {
 		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2]This is [G:2]the end');		
 	});
 
+	it("1 line lyric , 2 chord , out of boundary" , function() {
+		songFormatCompiler.setObjByPlainLyric("讓我將妳心兒摘下");		
+		var mockObj = 
+		[
+			[
+				{chordName: "Am" , chordDuration: 1 , chordPosition : 0 },
+				{chordName: "B" , chordDuration: 1 , chordPosition : 18 }
+			],			
+		];
+		songFormatCompiler.updateChord(mockObj);				
+		expect(songFormatCompiler.getSourceCode()).toBe('[Am:1]讓我將妳心兒摘下[B:1]');
+	});
+
+	
+
 
 	it("1 line lyric , 3 chord , out of origin lyric bound" , function() {
 		songFormatCompiler.setObjByPlainLyric("This is the end");		
@@ -387,7 +402,7 @@ describe("Update chord with structured model", function() {
 			[],
 			[
 				{chordName: "B" , chordDuration: 1 , chordPosition : 1 },
-				{chordName: "Em" , chordDuration: 1 , chordPosition : 12 }
+				{chordName: "Em" , chordDuration: 1 , chordPosition : 22 }
 			]
 		]		
 		songFormatCompiler.updateChord(mockObj);
@@ -425,8 +440,7 @@ describe("Real Case", function() {
 				}
 			}
 			updateChordObj.push(lineObj);
-		}
-
+		}		
 		songFormatCompiler.updateChord(updateChordObj);
 		expect(songFormatCompiler.getPlainLyric()).toBe('不管愛幾回 都流淚\n不想要拒絕 讓我飛\n\n\n\n心變成了軟綿綿 可以壓碎\n就算我全身都化成了煙灰我不後悔\n');
 		expect(songFormatCompiler.getSourceCode()).toBe("不管愛幾回 都流淚\n[F:1]不想要拒絕 讓我飛[Cm:1]\n\n\n[B:1]\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]\n就算我全身都化成了煙灰我不後悔\n");
@@ -436,6 +450,21 @@ describe("Real Case", function() {
 		songFormatCompiler.setObjBySourceCode("不管愛幾回 都流淚\n[F:1]不想要拒絕 讓我飛[Cm:1]\n\n\n[B:1]\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]\n就算我全身都化成了煙灰我不後悔\n");
 		expect(songFormatCompiler.getPlainLyric()).toBe('不管愛幾回 都流淚\n不想要拒絕 讓我飛\n\n\n\n心變成了軟綿綿 可以壓碎\n就算我全身都化成了煙灰我不後悔');
 	});
+	
+	it("case 2 , update chord object" , function() {
+		songFormatCompiler.setObjBySourceCode("讓我將妳心兒摘下讓我將妳心兒摘下讓我將妳心兒摘下");
+		var mockObj = [			
+			[
+				{chordName: "Am" , chordDuration: 1 , chordPosition : 0 },
+				{chordName: "Cm" , chordDuration: 1 , chordPosition : 18 },
+				{chordName: "Em" , chordDuration: 1 , chordPosition : 36 },
+				{chordName: "B" , chordDuration: 1 , chordPosition : 55 },
+			]
+		]		
+		songFormatCompiler.updateChord(mockObj);
+		expect(songFormatCompiler.getSourceCode()).toBe('[Am:1]讓我將妳心兒摘下讓[Cm:1]我將妳心兒摘下讓我[Em:1]將妳心兒摘下[B:1]');
+	});	
+
 
 });
 

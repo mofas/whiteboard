@@ -187,7 +187,8 @@ var editOperation = (function(o){
 		else{			
 			$lyric.css({"line-height" : " 50px"});
 			$chordWrap.show();
-
+			//update plain lyric
+			updatePlainLyric();
 			var chordHtml = genegrateChordsHtml(songFormatCompiler.getChordObjArray());			
 			$chordCollection.html(chordHtml).css({ "height" : $lyric[0].scrollHeight + "px" });
 			$lyric.trigger("scroll");
@@ -302,8 +303,7 @@ var editOperation = (function(o){
 			line = updateChordObj[i];
 			line.sort(SortByPosition);
 		}
-
-		console.log(updateChordObj);
+		
 		songFormatCompiler.updateChord(updateChordObj);
 
 		$lyric.css({"line-height" : " 26px"});			
