@@ -1,0 +1,28 @@
+
+
+
+
+#userList{
+	margin-top: 120px;
+}
+#userList .text-right{
+	text-align: right;
+}
+
+#userList .info{
+	float:right;
+}
+
+#userList .role{
+	margin: 20px auto;	
+}
+
+#userList .role h4{
+	line-height: 40px;
+	text-align: center;
+}
+
+#userList .role select{
+	margin-bottom: 0;
+	height: 40px;
+}

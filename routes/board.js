@@ -67,11 +67,13 @@ exports.index = function(req, res , next){
   	next();     
 }
 
+
+//check the user at middleWare
 exports.edit = function(req, res){	
 
-	var id = req.params.id;
+	var id = req.params.id;  
 
-  if(id === undefined && req.user !== undefined){
+  if(id == null){
     res.render('edit', {      
           data : {}
     });

@@ -75,15 +75,21 @@ passport.use(new LocalStrategy(
 var port = process.env.PORT || 3000;
 var app = express();
 
-app.configure(function(){  
+app.configure(function(){ 
+  app.use(express.compress());
   app.use(express.cookieParser());
   app.use(express.bodyParser());  
-  //app.use(express.static('views/'));
-  app.use(gzippo.staticGzip('views/'));
+  app.use(express.static('views/'));
+  /**
+  // replace by express.compress
+  app.use(gzippo.staticGzip('views/'));  
+  **/
   app.use(express.session({ secret: 'mofas' }));
   app.use(passport.initialize());
   app.use(passport.session());
-  app.set("view engine", "ejs");  
+  app.use(app.router);
+  app.set("view engine", "ejs"); 
+  
 });
 
 
@@ -94,30 +100,43 @@ app.configure(function(){
 var routes = {};
 routes.board = require('./routes/board');
 routes.user = require('./routes/user');
+routes.admin = require('./routes/admin');
+
+var accessCheck = require('./routes/accessCheck');
+var middleware = [accessCheck];
 
 app.get( '/index.html', routes.board.list );
 app.get( '/list', routes.board.list );
-app.get( '/edit/:id?', routes.board.edit );
-app.get( '/query/:id?', routes.board.query );
+app.get( '/edit/:id?', middleware , routes.board.edit );
+app.get( '/query/:id?',  middleware , routes.board.query );
 app.get( '/user/query', routes.user.query );
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get('/auth/facebook/callback', 
-  passport.authenticate('facebook', { successRedirect: '/list',
-                                      failureRedirect: '/loginFail.html' }));
-
-app.get('/demoLogin', passport.authenticate('local', { successRedirect: '/list',
-                                                    failureRedirect: '/loginFail.html' }));
-
+app.get('/auth/facebook/callback',  
+  passport.authenticate('facebook', { 
+    successRedirect: '/list',
+    failureRedirect: '/loginFail.html' 
+  })
+);
+app.get('/demoLogin', 
+  passport.authenticate('local', { successRedirect: '/list',
+    failureRedirect: '/loginFail.html' 
+  })
+);
 app.get('/logout', function(req, res){
   	req.logout();
   	res.redirect('/list');
 });
 
-app.post( '/add', routes.board.add );
-app.post( '/update/:id', routes.board.update );
-app.post( '/delete/:id', routes.board.delete );
+app.get('/admin/userList' , middleware , routes.admin.userList);
+
+app.post( '/add', middleware , routes.board.add );
+app.post( '/update/:id', middleware , routes.board.update );
+app.post( '/delete/:id', middleware , routes.board.delete );
 app.post( '/user/update', routes.user.update );
+
+app.post( '/admin/adjustUserRole', middleware , routes.admin.adjustUserRole );
+
 
 
 

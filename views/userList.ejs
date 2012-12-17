@@ -1,0 +1,71 @@
+
+
+<!doctype html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>吉他好朋友</title>    
+        <!-- CSS lib -->    
+        <link rel="stylesheet"  href="/css/lib/bootstrap.min.css" />         
+
+        <!-- CSS -->
+        <link rel="stylesheet"  href="/css/header.css" />    
+        <link rel="stylesheet"  href="/css/userList.css" />
+    </head>
+
+    <body>      
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="brand" href="/list">吉他好朋友</a>            
+          </div>
+        </div>
+      </div>
+
+      <div id="userList">
+        <div class="container hero-unit">          
+          <% data.forEach(function(item){ %>
+            <div class="well row">                      
+              <div class="span4 text-success">Facebook名稱:<span class="info"><%= item.username %></span></div>
+              <div class="offset2 span5 text-error">
+                建立時間:
+                <span class="info text-right"><%= new Date(item.createTime).toString().substring(0 , 24) %></span>
+              </div>
+
+              <div class="span4 text-info">暱稱:<span class="info"><%= item.displayName %></span></div>
+              <div class="offset2 span5 text-error">
+                最後登入時間:
+                <span class="info text-right"><%= new Date(item.lastLoginTime).toString().substring(0 , 24) %></span>
+              </div>
+
+              <% if(item.role < 5){ %>
+                <div class="role span11 alert alert-danger">
+                  <div class="span6"><h4>變更使用權限</h4></div>
+                  <div class="span3">
+                    <select id="<%= item.FB_id %>" class="span4">
+                      <option value="0"<% if(item.role == 0){%><%= "selected" %><%}%>  >0</option>
+                      <option value="1"<% if(item.role == 1){%><%= "selected" %><%}%>  >1</option>
+                      <option value="2"<% if(item.role == 2){%><%= "selected" %><%}%>  >2</option>
+                      <option value="3"<% if(item.role == 3){%><%= "selected" %><%}%>  >3</option>
+                      <option value="4"<% if(item.role == 4){%><%= "selected" %><%}%>  >4</option>            
+                    </select>
+                  </div>
+                </div>
+              <% }else{ %>
+                <div class="role span11 alert alert-danger"><h4>管理員</h4></div>
+              <% } %>
+            </div>         
+          <% }); %>          
+        </div>
+      </div>
+
+
+      
+      <!-- JS lib -->             
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+      <script>window.jQuery || document.write('<script src="js/lib/jquery-1.8.2.min.js"><\/script>')</script>
+
+      <!-- JS -->            
+    </body>
+</html>
+
+  
