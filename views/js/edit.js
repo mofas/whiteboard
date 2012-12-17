@@ -145,7 +145,7 @@ var editOperation = (function(o){
 		updatePlainLyric();
 		var params = $editForm.serialize();			
 		console.log(params);
-		if(id !== undefined && id !== null){
+		if(id != null){
 			$.post("/update/" + id, params , function(data){
 				if(data.errCode == 0 ){
 					alert("儲存成功");
@@ -171,7 +171,7 @@ var editOperation = (function(o){
 	}
 
 	o.delete = function(id){		
-		if(id !== undefined && id !== null){
+		if(id != null){
 			$.post("/delete/" + id , function(data){
 				console.log(data);
 				if(data.errCode == 0 ){
