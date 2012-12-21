@@ -22,7 +22,7 @@
             <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="/list">吉他好朋友</a>                
-                    <a class="btn btn-primary" href="..\list">回清單</a>
+                    <a class="btn btn-primary" href="javascript:window.history.back()">上一頁</a>      
                     <%if(user !== undefined && data.editor == user.FB_id ) { %>
                       <a class="editButton btn btn-danger" href="/edit/<%= data._id%>">編輯</a>
                     <% } %>
@@ -58,8 +58,8 @@
         </div>
 
         <!-- JS lib -->       
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/lib/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/lib/jquery-1.8.3.min.js"><\/script>')</script>
 
         <!-- JS -->                  
         <script src="/js/songFormat.js"></script>
