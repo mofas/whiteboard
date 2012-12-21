@@ -13,7 +13,8 @@
     "passport": "*",
     "passport-facebook" : "*",
     "passport-local" : "*",
-    "gzippo" : "*"
+    "gzippo" : "*",
+    "redis" : "*"
   },
   "engines" : {
     "node": "0.8.x",

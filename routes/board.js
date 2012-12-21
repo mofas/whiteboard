@@ -1,5 +1,6 @@
 
 var db = global.db;
+var redisClient = global.redisClient;
 
 var dbHelper = require('../dbHelper'),
     utility = require('../utility'),
@@ -16,7 +17,7 @@ var isOwner = function(id , user , success , failure){
 
   dbHelper.getSongDataByID(id , function(data){
     var editor = data.editor;        
-    if(editor == user){      
+    if(editor == user){
       success();
     }else{      
       failure();
@@ -49,17 +50,38 @@ var songListGetEditorName = function(data , callback){
 }
 
 //Get Editor`s name
-var getEditorName = function(id , callback){  
-  dbHelper.getUserDataByFBID(id , function(profile){
-    if(profile != undefined){        
-        if(profile.isAnonymous)
-          return utility.callBackHandler("匿名" , callback);
-        else               
-          return utility.callBackHandler( profile.displayName , callback);
+//improve performance by introducing redis
+var getEditorName = function(id , callback){
+
+  redisClient.get("/user/name/" + id ,  function (err, reply) {        
+    if(reply != null){
+      return utility.callBackHandler( reply.toString() , callback);
     }
-      return utility.callBackHandler("匿名" , callback);
-  });    
+    else{      
+      dbHelper.getUserDataByFBID(id , function(profile){
+        if(profile != undefined){        
+            if(profile.isAnonymous){
+              redisClient.set("/user/name/"+ id , "匿名");
+              redisClient.expire("/user/name/"+ id , 3600);
+              return utility.callBackHandler("匿名" , callback);
+            }
+            else{
+              redisClient.set("/user/name/"+ id , profile.displayName );
+              redisClient.expire("/user/name/"+ id , 3600);
+              return utility.callBackHandler( profile.displayName , callback);
+            }          
+        }
+        else{
+          redisClient.set("/user/name/"+ id , "匿名");
+          redisClient.expire("/user/name/"+ id , 3600);
+          return utility.callBackHandler("匿名" , callback);
+        }
+      });
+    }
+  });
 }
+
+
 
 exports.index = function(req, res , next){                              
   	var requestPath = req.params[0].substring(1);
