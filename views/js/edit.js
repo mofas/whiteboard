@@ -23,19 +23,24 @@ var editOperation = (function(o){
 		$tabbable,
 		$sourceCodeDialog,
 		$sourceCodeText,
+
 		$chordWrap,
 		$chordCanvas,
 		$chordTool,
 		$chordCollection,
-		$newChord_name,
-		$newChord_duration,
-		$chordListContainer,
+
+		$chordGenegator , 		
+		$chordCollectionList,
+
 		$preview,
 		$loadingOverlay;
 
 	var sourCode , isSourceCodeChange = false , arrangeMode = false,
 		ChordSynTimer , chordScrollHeight = 0,
 		YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 4 , Xenominator = 7;
+
+
+	var createChordObj_Root = "" , createChordObj_Chord = "";
 
 	var bindEvent = function(){				
 		$("#submitButton").on("click" , function(){			
@@ -73,15 +78,16 @@ var editOperation = (function(o){
 			$tabbable.find(targetId).addClass("active");			
 		});
 		
-		$chordListContainer.on("mousedown" , ".chordItem" , function(e){			
+		$chordCollectionList.on("mousedown" , ".chordItem" , function(e){							
 			var text = $(this).text();
 			var parentOffset = $chordCollection.offset(); 
 			var cursorX = e.pageX - parentOffset.left - 20 , cursorY = e.pageY - parentOffset.top - 10;			
+			console.log(cursorX , cursorY);
 			var $chordObj = $('<div class="chord ui-draggable" style="left:' + cursorX + 'px;top:' + cursorY + 'px;">' + text + '</div>');
 			$chordCollection.append($chordObj);			
 			$chordObj.draggable({ 
-				containment: ".chordCollection"
-			}).trigger(e);			
+				containment: ".chordCanvas"
+			}).trigger(e);						
 		});
 		
 		//touch event (testing)				
@@ -94,24 +100,42 @@ var editOperation = (function(o){
 
 		$chordWrap.on("dblclick" , ".chord" , chordEditEvent);
 
-		$chordWrap.find( ".chordTrash" ).droppable({
-           	accept: ".chord",
-           	over: function(event , ui){	           		
-           		ui.draggable.css({
-           			"border" : "1px dotted #ddd" , 
-           			"background" : "#fff",	           			
-           		});
-           	},
-           	out: function(event , ui){	           	
-           		ui.draggable.css({
-           			"border" : "1px solid #aaa" ,
-           			"background" : "rgba(255, 255, 0, 0.4)",	           			
-           		});
-           	},
-        	drop: function(event , ui){
-        		ui.draggable.remove();
-           	}
-        });
+		//remove chord
+		$chordCollectionList.on("click" , ".close" , function(){
+			$(this).parent().remove();
+		});
+
+
+		var checkChordGenegator = function(){
+			if(createChordObj_Root.length > 0 && createChordObj_Chord.length > 0){
+				o.genegrateChord(createChordObj_Root, createChordObj_Chord);
+				createChordObj_Root = "";
+				createChordObj_Chord = "";
+				$chordGenegator.find(".btn").removeClass("btn-inverse disabled");
+			}
+		}
+
+		//create new chord Event 
+		$chordGenegator.find(".rootNoteBtnGroup").on("click" , ".btn" , function(){
+			console.log("tg");
+			var $this = $(this);
+			$this.siblings().removeClass("btn-inverse");
+			$this.addClass("btn-inverse disabled");
+			createChordObj_Root = $this.text();
+			checkChordGenegator();
+			return false;
+		});
+		$chordGenegator.find(".chordTypeGroup").on("click" , ".btn" , function(){
+			console.log("tgs");
+			var $this = $(this);
+			$this.siblings().removeClass("btn-inverse");
+			$this.addClass("btn-inverse disabled");
+			createChordObj_Chord = $this.text();
+			checkChordGenegator();
+			return false;
+		});
+
+		
 	}
 
 	var initSongFormat = function(){
@@ -125,13 +149,12 @@ var editOperation = (function(o){
 		$lyric = $("#lyric");
 		
 		$tabbable = $editForm.find(".tabbable");
-		$chordWrap = $editForm.find(".chordWrap");
-		$newChord_name = $chordWrap.find(".newChord_name");
-		$newChord_duration = $chordWrap.find(".newChord_duration");
+		$chordWrap = $editForm.find(".chordWrap");		
 		$chordCanvas = $chordWrap.find(".chordCanvas");
 		$chordTool = $chordWrap.find(".chordTool");
+		$chordGenegator = $editForm.find("#chordGenegator");
 		$chordCollection = $chordWrap.find(".chordCollection");
-		$chordListContainer = $chordWrap.find(".chordListContainer");
+		$chordCollectionList = $editForm.find("#chordCollectionList");
 		$sourceCodeDialog = $("#sourceCodeDialog");
 		$sourceCodeText = $("#sourceCode");		
 		$preview = $("#preview");
@@ -198,6 +221,7 @@ var editOperation = (function(o){
 		else{			
 			$lyric.css({"line-height" : " 50px"});
 			$chordWrap.show();
+			$chordGenegator.show();			
 			//update plain lyric
 			updatePlainLyric();
 			var chordHtml = genegrateChordsHtml(songFormatCompiler.getChordObjArray());			
@@ -277,10 +301,8 @@ var editOperation = (function(o){
 	}
 
 
-	o.genegrateChord = function(){		
-		var name = $newChord_name.val();
-		var duration = $newChord_duration.val();
-		$chordListContainer.prepend("<div class='chordItem'>" + name + "x" + duration + "</div>");
+	o.genegrateChord = function(root, chord){				
+		$chordCollectionList.prepend("<div class='chordUnit'><i class='close'>&times;</i><div class='btn chordItem'>" + name + chord + "</div></div>");
 	}
 
 	o.updateArrange = function(){
@@ -340,6 +362,7 @@ var editOperation = (function(o){
 	var closeArrangeMode = function(){
 		$lyric.css({"line-height" : " 26px"});
 		$chordWrap.hide();
+		$chordGenegator.hide();
 		$lyric.off("scroll");
 		$chordWrap.off("mousewheel");
 		arrangeMode = false;	

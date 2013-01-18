@@ -45,18 +45,26 @@
 	border-radius: 10px;
 }
 
-#editorView h4, #sourceCodeDialog h4{
+#editorView .title, #previewView .title{
+	font-family: '微軟正黑體';
 	float:left;
+	height: 40px;
+	line-height: 40px;
+	font-size: 24px;
+	margin-top: 40px;
+}
+#editorView .btnGroup{
+	margin: 40px 20px 0;
+	float:right;
 }
 
-#editorView .btnGroup , #sourceCodeDialog .btnGroup{
+#sourceCodeDialog .btnGroup{
 	margin: 0 20px;
 	float:right;
 }
 
 #editorView{
-	position: relative;
-	overflow: hidden;
+	position: relative;	
 }
 
 #lyric{
@@ -71,7 +79,7 @@
 	position: absolute;
 	width: 920px;
 	min-height: 520px;
-	top: 40px;
+	top: 80px;
 	background: rgba(150,150,255,0.2);
 	display: none;
 	overflow: hidden;
@@ -90,16 +98,15 @@
 
 
 #editorView .chordWrap .chordTool{
-	position: absolute;
-	float:right;
+	position: absolute;	
 	width: 160px;
 	padding: 5px 20px;
-	height: 480px;
+	height: 50px;
 	right: 15px;
-	top: 20px;
+	top: 40px;
 	z-index: 3;
 	border-radius: 5px;
-	background: rgba(255,150,150,0.2);
+	background: rgba(0,0,0,0.6);
 	border: 1px solid rgba(0,0,0,0.2);
 }
 
@@ -110,6 +117,44 @@
 	float: none;
 }
 
+
+#chordGenegator{
+	position: absolute;
+	left: 60px;
+	top: -10px;
+	display: none;
+}
+
+
+#chordCollectionList{
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 520px;
+	padding: 10px 10px;
+	width: 100px;
+	background : rgba(0,0,0,0.6);	
+}
+
+#chordCollectionList .chordUnit{
+	margin: 5px 0;
+}
+#chordCollectionList .close{
+	float: left;
+	width: 20px;
+	height: 20px;
+	color: #fff;
+	opacity: 0.8;
+	font-size: 20px;
+	line-height: 30px;
+}
+#chordCollectionList .chordItem{	
+	display: block;
+	margin-left: 30px;
+	width: 40px;		
+}
+
+/**
 #editorView .chordTrash ,#editorView .chordGenegator {
 	border-top: 2px dotted rgba(0,0,0,0.4);
 	margin: 3px auto;
@@ -121,10 +166,7 @@
 	height: 120px;
 	overflow-y: scroll;
 }
-
-#editorView .chordListContainer .chordItem{
-	cursor: move;	
-}
+**/
 
 #editorView .chordWrap .chord{
 	position: absolute;
@@ -142,7 +184,6 @@
 	margin: 0;
 	padding : 0;
 }
-
 
 #loadingOverlay{
 	display: none;
