@@ -31,6 +31,7 @@ var editOperation = (function(o){
 
 		$chordGenegator , 		
 		$chordCollectionList,
+		$deleteArea,
 
 		$preview,
 		$loadingOverlay;
@@ -42,7 +43,7 @@ var editOperation = (function(o){
 
 	var createChordObj_Root = "" , createChordObj_Chord = "";
 
-	var bindEvent = function(){				
+	var bindEvent = function(){		
 		$("#submitButton").on("click" , function(){			
 			o.submit($(this).attr("data-id"));
 		});
@@ -96,6 +97,15 @@ var editOperation = (function(o){
 				containment: ".chordCollection"				
 			});
 		});
+
+		//delete chord obj		
+		$deleteArea.droppable({
+			accept: ".chord",
+			drop: function( event, ui ) {				
+				ui.draggable.remove();
+			}
+	    });
+		
 			
 
 		$chordWrap.on("dblclick" , ".chord" , chordEditEvent);
@@ -107,7 +117,7 @@ var editOperation = (function(o){
 
 
 		var checkChordGenegator = function(){
-			if(createChordObj_Root.length > 0 && createChordObj_Chord.length > 0){
+			if(createChordObj_Root.length > 0 && createChordObj_Chord.length > 0){				
 				o.genegrateChord(createChordObj_Root, createChordObj_Chord);
 				createChordObj_Root = "";
 				createChordObj_Chord = "";
@@ -116,17 +126,15 @@ var editOperation = (function(o){
 		}
 
 		//create new chord Event 
-		$chordGenegator.find(".rootNoteBtnGroup").on("click" , ".btn" , function(){
-			console.log("tg");
+		$chordGenegator.find(".rootNoteBtnGroup").on("click" , ".btn" , function(){			
 			var $this = $(this);
 			$this.siblings().removeClass("btn-inverse");
 			$this.addClass("btn-inverse disabled");
-			createChordObj_Root = $this.text();
+			createChordObj_Root = $this.text();			
 			checkChordGenegator();
 			return false;
 		});
-		$chordGenegator.find(".chordTypeGroup").on("click" , ".btn" , function(){
-			console.log("tgs");
+		$chordGenegator.find(".chordTypeGroup").on("click" , ".btn" , function(){			
 			var $this = $(this);
 			$this.siblings().removeClass("btn-inverse");
 			$this.addClass("btn-inverse disabled");
@@ -135,6 +143,11 @@ var editOperation = (function(o){
 			return false;
 		});
 
+
+		$("#changeRootDisplay").on("click" , function(){			
+			$chordGenegator.find(".rootNoteBtnGroup").find(".hidden").removeClass("hidden").siblings().addClass("hidden");
+			return false;
+		});
 		
 	}
 
@@ -152,9 +165,10 @@ var editOperation = (function(o){
 		$chordWrap = $editForm.find(".chordWrap");		
 		$chordCanvas = $chordWrap.find(".chordCanvas");
 		$chordTool = $chordWrap.find(".chordTool");
+		$deleteArea = $chordWrap.find("#deleteArea");
 		$chordGenegator = $editForm.find("#chordGenegator");
 		$chordCollection = $chordWrap.find(".chordCollection");
-		$chordCollectionList = $editForm.find("#chordCollectionList");
+		$chordCollectionList = $editForm.find("#chordCollectionList");		
 		$sourceCodeDialog = $("#sourceCodeDialog");
 		$sourceCodeText = $("#sourceCode");		
 		$preview = $("#preview");
@@ -166,8 +180,7 @@ var editOperation = (function(o){
 	o.submit = function(id){
 		$loadingOverlay.show();
 		updatePlainLyric();
-		var params = $editForm.serialize();			
-		console.log(params);
+		var params = $editForm.serialize();					
 		if(id != null){
 			$.post("/update/" + id, params , function(data){
 				if(data.errCode == 0 ){
@@ -195,8 +208,7 @@ var editOperation = (function(o){
 
 	o.delete = function(id){		
 		if(id != null){
-			$.post("/delete/" + id , function(data){
-				console.log(data);
+			$.post("/delete/" + id , function(data){				
 				if(data.errCode == 0 ){
 					alert("刪除成功");
 					window.location.href = "/list";
@@ -219,7 +231,11 @@ var editOperation = (function(o){
 			$lyric.off("scroll");
 		}
 		else{			
-			$lyric.css({"line-height" : " 50px"});
+			$lyric.css({
+				"line-height" : "50px",
+				"margin-left" : "120px",
+				"width" : "805px"
+			});
 			$chordWrap.show();
 			$chordGenegator.show();			
 			//update plain lyric
@@ -296,13 +312,14 @@ var editOperation = (function(o){
 			return;
 		
 		$chordCanvas.css({ "top" : -chordScrollHeight });
-		$chordTool.css({ "top" : chordScrollHeight+20 });
+		$chordTool.css({ "top" : chordScrollHeight+20 });		
+		$chordCollectionList.css({ "top" : chordScrollHeight });
 		requestAnimFrame(relocateChordCanvas);
 	}
 
 
 	o.genegrateChord = function(root, chord){				
-		$chordCollectionList.prepend("<div class='chordUnit'><i class='close'>&times;</i><div class='btn chordItem'>" + name + chord + "</div></div>");
+		$deleteArea.after("<div class='chordUnit'><i class='close'>&times;</i><div class='btn chordItem'>" + root + chord + "</div></div>");
 	}
 
 	o.updateArrange = function(){
@@ -360,7 +377,11 @@ var editOperation = (function(o){
 	}
 
 	var closeArrangeMode = function(){
-		$lyric.css({"line-height" : " 26px"});
+		$lyric.css({
+			"line-height" : " 26px" , 						
+			"margin-left" : "0",
+			"width" : "920px"			
+		});
 		$chordWrap.hide();
 		$chordGenegator.hide();
 		$lyric.off("scroll");

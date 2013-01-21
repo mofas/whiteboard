@@ -6,6 +6,9 @@
 }
 
 
+#edit .tab-content {
+	overflow: hidden;
+}
 
 #editForm{
 	margin: 30px 0px;
@@ -125,6 +128,17 @@
 	display: none;
 }
 
+#chordGenegator .hidden{
+	display:none;
+}
+
+#chordGenegator .btn-group{
+	margin-left: 0;
+}
+
+#chordGenegator .changeRootDisplay{
+	margin: 10px 10px 0 0;
+}
 
 #chordCollectionList{
 	position: absolute;
@@ -151,8 +165,22 @@
 #chordCollectionList .chordItem{	
 	display: block;
 	margin-left: 30px;
-	width: 40px;		
+	width: 40px;	
+	width: 60px;	
+	padding: 4px 4px;
 }
+
+#deleteArea{
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	border-bottom: 2px solid #fff;
+}
+
+#deleteArea img{
+	display: block;
+	margin: 0 auto;
+}
+
 
 /**
 #editorView .chordTrash ,#editorView .chordGenegator {
