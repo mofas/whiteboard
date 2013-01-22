@@ -48,7 +48,7 @@
 	border-radius: 10px;
 }
 
-#editorView .title, #previewView .title{
+#editorView .title{
 	font-family: '微軟正黑體';
 	float:left;
 	height: 40px;
@@ -56,6 +56,9 @@
 	font-size: 24px;
 	margin-top: 40px;
 }
+
+
+
 #editorView .btnGroup{
 	margin: 40px 20px 0;
 	float:right;

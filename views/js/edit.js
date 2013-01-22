@@ -38,7 +38,7 @@ var editOperation = (function(o){
 
 	var sourCode , isSourceCodeChange = false , arrangeMode = false,
 		ChordSynTimer , chordScrollHeight = 0,
-		YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 4 , Xenominator = 7;
+		YBasicOffset = 3 , YDenominator = 45 , XBasicOffset = 120 , Xenominator = 10;
 
 
 	var createChordObj_Root = "" , createChordObj_Chord = "";
@@ -82,8 +82,7 @@ var editOperation = (function(o){
 		$chordCollectionList.on("mousedown" , ".chordItem" , function(e){							
 			var text = $(this).text();
 			var parentOffset = $chordCollection.offset(); 
-			var cursorX = e.pageX - parentOffset.left - 20 , cursorY = e.pageY - parentOffset.top - 10;			
-			console.log(cursorX , cursorY);
+			var cursorX = e.pageX - parentOffset.left - 20 , cursorY = e.pageY - parentOffset.top - 10;						
 			var $chordObj = $('<div class="chord ui-draggable" style="left:' + cursorX + 'px;top:' + cursorY + 'px;">' + text + '</div>');
 			$chordCollection.append($chordObj);			
 			$chordObj.draggable({ 
@@ -261,7 +260,8 @@ var editOperation = (function(o){
 			chordObj;
 		for(var i = 0; i< chordObjArrayLength ;i++){
 			chordObj = chordObjArray[i];
-			fragHtml += "<span class='chord' style='left:"+ (XBasicOffset+chordObj.chordPosition*Xenominator) +"px; top:"+ (YBasicOffset+chordObj.chordLine*YDenominator) + "px;' >" + chordObj.chordName + "x" + chordObj.chordDuration + "</span>";
+			//fragHtml += "<span class='chord' style='left:"+ (XBasicOffset+chordObj.chordPosition*Xenominator) +"px; top:"+ (YBasicOffset+chordObj.chordLine*YDenominator) + "px;' >" + chordObj.chordName + "x" + chordObj.chordDuration + "</span>";
+			fragHtml += "<span class='chord' style='left:"+ (XBasicOffset+chordObj.chordPosition*Xenominator) +"px; top:"+ (YBasicOffset+chordObj.chordLine*YDenominator) + "px;' >" + chordObj.chordName + "</span>";
 		}		
 		return fragHtml;
 	}
@@ -324,26 +324,32 @@ var editOperation = (function(o){
 
 	o.updateArrange = function(){
 		var updateChordObj = [];		
-		var $chords = $chordCollection.find(".chord");
+		var $chords = $chordCollection.find(".chord");		
 
 		var chordObj , text , chordInfo , chordName , chordDuration , position , top , left , line , position;		
 		$chords.each(function(){
 			chordObj = {};			
 			position = $(this).position();
 			text = $(this).text();
+			/**
 			chordInfo = text.split("x");
 
 			if(chordInfo.length < 1)
 				return false;
 
 			chordName = chordInfo[0];
-			chordDuration = chordInfo[1];			
+			chordDuration = chordInfo[1];
+			**/
+			chordName = text;
+			chordDuration = 1;			
 			top = position.top;
-			left = position.left;
+			left = position.left;			
+			console.log(top , left);
 			line = Math.floor((top-YBasicOffset)/YDenominator);
 			line = (line < 0 ) ? 0 : line;
 			position = Math.floor((left-XBasicOffset)/Xenominator);
 			position = (position < 0 ) ? 0 : position;
+			console.log(line , position);
 
 			chordObj.chordName = chordName;
 			chordObj.chordDuration = chordDuration;
@@ -368,6 +374,8 @@ var editOperation = (function(o){
 			line = updateChordObj[i];
 			line.sort(SortByPosition);
 		}		
+
+		console.log(updateChordObj);
 		songFormatCompiler.updateChord(updateChordObj);
 		closeArrangeMode();
 	}
