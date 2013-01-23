@@ -40,6 +40,14 @@
 	z-index: 50;
 }
 
+#sourceCodeDialog .title{
+	float:left;
+	font-size: 22px;
+	font-weight: bold;
+	font-family: '微軟正黑體';
+	margin-top: 16px;
+}
+
 #sourceCodeDialog .sourceCodeDialogOverlay{
 	margin: 200px auto;
 	width: 720px;	
@@ -65,7 +73,7 @@
 }
 
 #sourceCodeDialog .btnGroup{
-	margin: 0 20px;
+	margin: 10px 20px;
 	float:right;
 }
 

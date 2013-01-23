@@ -36,11 +36,11 @@
                     <form id="editForm">
                         <div class="input-prepend">
                             <span class="add-on">作者</span>                        
-                            <input type="text" class="span4" id="author" name="author" placeholder="Band/Artist" value=""/>
+                            <input type="text" class="span4" id="author" name="author" placeholder="Band/Artist" value="<%= data.author || '' %>"/>
                         </div>                                    
                         <div class="input-prepend">
                             <span class="add-on">歌名</span>                                        
-                            <input type="text" class="span4" id="title" name="title" placeholder="Song Name" value=""/> 
+                            <input type="text" class="span4" id="title" name="title" placeholder="Song Name" value="<%= data.title || '' %>"/> 
                         </div>
                         <div class="tabbable">
                           <ul class="nav nav-tabs">
@@ -143,13 +143,12 @@
                         <div id="sourceCodeDialog">
                             <div class="sourceCodeDialogOverlay">
                                 <div class="content">
-                                    <h4>原始碼</h4>
+                                    <div class="title">原始碼</div>
                                     <span class="btnGroup">
                                         <a id="saveSourceCodeButton" class="btn btn-info">保存</a>
                                         <a id="abortSourceCodeButton" class="btn btn-danger">放棄</a>
                                     </span>
-                                    <textarea id="sourceCode" row="2" name="lyric">
-                                    </textarea>
+                                    <textarea id="sourceCode" row="2" name="lyric"><%= data.lyric || '' %></textarea>
                                 </div>
                             </div>
                         </div>

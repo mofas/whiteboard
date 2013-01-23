@@ -38,7 +38,7 @@ var editOperation = (function(o){
 
 	var sourCode , isSourceCodeChange = false , arrangeMode = false,
 		ChordSynTimer , chordScrollHeight = 0,
-		YBasicOffset = 3 , YDenominator = 45 , XBasicOffset = 120 , Xenominator = 10;
+		YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 120 , Xenominator = 10;
 
 
 	var createChordObj_Root = "" , createChordObj_Chord = "";
@@ -72,11 +72,11 @@ var editOperation = (function(o){
 				}
 				o.updatePreview();				
 			}
-
 			$tabbable.find("li").removeClass("active");
 			$(this).addClass("active");
 			$tabbable.find(".tab-pane").removeClass("active")
 			$tabbable.find(targetId).addClass("active");			
+			return false;
 		});
 		
 		$chordCollectionList.on("mousedown" , ".chordItem" , function(e){							
@@ -259,8 +259,7 @@ var editOperation = (function(o){
 			fragHtml = "",
 			chordObj;
 		for(var i = 0; i< chordObjArrayLength ;i++){
-			chordObj = chordObjArray[i];
-			//fragHtml += "<span class='chord' style='left:"+ (XBasicOffset+chordObj.chordPosition*Xenominator) +"px; top:"+ (YBasicOffset+chordObj.chordLine*YDenominator) + "px;' >" + chordObj.chordName + "x" + chordObj.chordDuration + "</span>";
+			chordObj = chordObjArray[i];			
 			fragHtml += "<span class='chord' style='left:"+ (XBasicOffset+chordObj.chordPosition*Xenominator) +"px; top:"+ (YBasicOffset+chordObj.chordLine*YDenominator) + "px;' >" + chordObj.chordName + "</span>";
 		}		
 		return fragHtml;
@@ -341,15 +340,13 @@ var editOperation = (function(o){
 			chordDuration = chordInfo[1];
 			**/
 			chordName = text;
-			chordDuration = 1;			
+			chordDuration = 1;
 			top = position.top;
-			left = position.left;			
-			console.log(top , left);
-			line = Math.floor((top-YBasicOffset)/YDenominator);
+			left = position.left;						
+			line = Math.round((top-YBasicOffset)/YDenominator);
 			line = (line < 0 ) ? 0 : line;
-			position = Math.floor((left-XBasicOffset)/Xenominator);
-			position = (position < 0 ) ? 0 : position;
-			console.log(line , position);
+			position = Math.round((left-XBasicOffset)/Xenominator);
+			position = (position < 0 ) ? 0 : position;			
 
 			chordObj.chordName = chordName;
 			chordObj.chordDuration = chordDuration;
@@ -374,10 +371,10 @@ var editOperation = (function(o){
 			line = updateChordObj[i];
 			line.sort(SortByPosition);
 		}		
-
-		console.log(updateChordObj);
+		
 		songFormatCompiler.updateChord(updateChordObj);
 		closeArrangeMode();
+		$tabbable.find("li").eq(-1).click();
 	}
 
 	o.abortArrange = function(){		
