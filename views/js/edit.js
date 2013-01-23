@@ -40,6 +40,7 @@ var editOperation = (function(o){
 		ChordSynTimer , chordScrollHeight = 0,
 		YBasicOffset = 3 , YDenominator = 50 , XBasicOffset = 120 , Xenominator = 10;
 
+	var usedChordCollections = [];
 
 	var createChordObj_Root = "" , createChordObj_Chord = "";
 
@@ -54,8 +55,7 @@ var editOperation = (function(o){
 		$("#arrangeModeButton").on("click" , o.openArrangeMode);
 		$("#sourceCodeModeButton").on("click" , o.openSourceCodeDialog);
 		$("#updateArrangeButton").on("click" , o.updateArrange);
-		$("#abortArrangeButton").on("click" , o.abortArrange);
-		$("#genegrateChordButton").on("click" , o.genegrateChord);
+		$("#abortArrangeButton").on("click" , o.abortArrange);		
 
 		$("#saveSourceCodeButton").on("click" , o.updateSourceCode);
 		$("#abortSourceCodeButton").on("click" , o.abortSourceCodeDialog);
@@ -111,7 +111,10 @@ var editOperation = (function(o){
 
 		//remove chord
 		$chordCollectionList.on("click" , ".close" , function(){
-			$(this).parent().remove();
+			var $parent = $(this).parent();
+			var index = $parent.index();						
+			usedChordCollections.splice(index-1,1);			
+			$parent.remove();
 		});
 
 
@@ -320,7 +323,21 @@ var editOperation = (function(o){
 
 
 	o.genegrateChord = function(root, chord){				
-		$deleteArea.after("<div class='chordUnit'><i class='close'>&times;</i><div class='btn chordItem'>" + root + chord + "</div></div>");
+		var chordName = root + chord;
+		//check usedChordCollections
+		var count = usedChordCollections.length;		
+		while(count--){
+			if(usedChordCollections[count] === chordName){
+				var $obj = $chordCollectionList.find(".chordItem").eq(count);
+				$obj.addClass("btn-danger");
+				setTimeout(function(){
+					$obj.removeClass("btn-danger");
+				} , 1000);				
+				return;
+			}
+		}
+		$deleteArea.after("<div class='chordUnit'><i class='close'>&times;</i><div class='btn chordItem'>" + chordName + "</div></div>");
+		usedChordCollections.unshift(chordName);		
 	}
 
 	o.updateArrange = function(){
@@ -332,15 +349,7 @@ var editOperation = (function(o){
 			chordObj = {};			
 			position = $(this).position();
 			text = $(this).text();
-			/**
-			chordInfo = text.split("x");
 
-			if(chordInfo.length < 1)
-				return false;
-
-			chordName = chordInfo[0];
-			chordDuration = chordInfo[1];
-			**/
 			chordName = text;
 			chordDuration = 1;
 			top = position.top;

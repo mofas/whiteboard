@@ -179,6 +179,9 @@
 	width: 40px;	
 	width: 60px;	
 	padding: 4px 4px;
+	transition: all 1s;
+	-webkit-transition: all 1s;
+	-moz-transition: all 1s;
 }
 
 #deleteArea{

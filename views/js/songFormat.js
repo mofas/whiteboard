@@ -68,8 +68,7 @@ var songFormatCompiler = (function(o){
 				lineText = textArray[i];
 				lineText = lineText.replace(/\]\s*\[/g , "] [");				
 				lineOrigin = lineText.split(/\[([#ba-zA-z0-9:]+?)\]/gi);				
-				lineArray = [];
-				console.log(lineText , lineOrigin);
+				lineArray = [];				
 				if(lineOrigin.length > 1){	
 					//if the first lineOrigin is lyric
 					if(lineOrigin[0].length > 0){
