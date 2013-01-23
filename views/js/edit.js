@@ -151,7 +151,7 @@ var editOperation = (function(o){
 	}
 
 	var initSongFormat = function(){
-		sourceCode = $sourceCodeText.val();
+		sourceCode = $sourceCodeText.val();		
 		songFormatCompiler.setObjBySourceCode(sourceCode);
 		$lyric.val(songFormatCompiler.getPlainLyric());
 	}
@@ -207,15 +207,17 @@ var editOperation = (function(o){
 
 	o.delete = function(id){		
 		if(id != null){
-			$.post("/delete/" + id , function(data){				
-				if(data.errCode == 0 ){
-					alert("刪除成功");
-					window.location.href = "/list";
-				}
-				else{
-					alert(data.msg);
-				}
-			});
+			if(confirm("確定要刪除此歌譜?")){
+				$.post("/delete/" + id , function(data){				
+					if(data.errCode == 0 ){
+						alert("刪除成功");
+						window.location.href = "/list";
+					}
+					else{
+						alert(data.msg);
+					}
+				});	
+			}			
 		}	
 	}
 

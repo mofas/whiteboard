@@ -465,10 +465,13 @@ describe("Real Case", function() {
 		expect(songFormatCompiler.getSourceCode()).toBe('[Am:1]讓我將妳心兒摘下讓[Cm:1]我將妳心兒摘下讓我[Em:1]將妳心兒摘下[B:1]');
 	});	
 
+	it("complex case" , function(){
+		var sourceCode = "[Am:1]不管愛幾回 都流淚\n[#Dm7b9:1]不想要拒絕 讓我飛\n[#Faug7:1]心變成了軟綿綿 可以壓碎\n[#Faug7:1]就算我全身都化成[Am:1]了煙灰我不後悔\n\n[#Faug7:1]相愛算簡單 離去難\n[Am:1]一直到很久 會心酸\n[#Faug7:1]情我潑灑了太[#Dm7b9:1]多 怎麼償還\n[#Faug7:1]剩下一個空洞[Am:1]的我用妳將我填滿\n";
+		songFormatCompiler.setObjBySourceCode(sourceCode);
+		expect(songFormatCompiler.getPlainLyric()).toBe('不管愛幾回 都流淚\n不想要拒絕 讓我飛\n心變成了軟綿綿 可以壓碎\n就算我全身都化成了煙灰我不後悔\n\n相愛算簡單 離去難\n一直到很久 會心酸\n情我潑灑了太多 怎麼償還\n剩下一個空洞的我用妳將我填滿');
+	});
+	
+
 
 });
-
-
-
-
 
