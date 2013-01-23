@@ -134,9 +134,17 @@
 
 #chordGenegator{
 	position: absolute;
-	left: 60px;
+	width: 640px;
+	left: 75px;
 	top: -10px;
-	display: none;
+	display: none;		
+}
+#chordGenegator .rootNoteBtnGroup .btn-group , #chordGenegator  .chordTypeGroup .btn-group{
+	display:none;
+}
+
+#chordGenegator .rootNoteBtnGroup .btn-group.selected , #chordGenegator  .chordTypeGroup .btn-group.selected{
+	display: inline-block;
 }
 
 #chordGenegator .hidden{
@@ -147,8 +155,11 @@
 	margin-left: 0;
 }
 
-#chordGenegator .changeRootDisplay{
+#chordGenegator .functionSwitchBtn{
 	margin: 10px 10px 0 0;
+}
+#chordGenegator .functionSwitchBtn2{
+	margin: 0 10px 0 0;
 }
 
 #chordCollectionList{

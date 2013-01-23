@@ -147,9 +147,21 @@ var editOperation = (function(o){
 
 
 		$("#changeRootDisplay").on("click" , function(){			
-			$chordGenegator.find(".rootNoteBtnGroup").find(".hidden").removeClass("hidden").siblings().addClass("hidden");
+			$chordGenegator.find(".rootNoteBtnGroup .btn-group.selected").removeClass("selected").siblings().addClass("selected");
 			return false;
 		});
+
+		$("#changeChordDisplay").on("click" , function(){			
+			var $btnGroup = $chordGenegator.find(".chordTypeGroup .btn-group");			
+			var index = $btnGroup.filter(".selected").index();
+
+			console.log($btnGroup.length);
+			index = (index < $btnGroup.length -1) ? ++index : 0;
+			console.log(index);
+			$btnGroup.removeClass("selected").eq(index).addClass("selected");
+			return false;
+		});
+		
 		
 	}
 
