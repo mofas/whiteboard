@@ -6,8 +6,8 @@
 }
 
 .songFormat .line{
-	margin-top: 50px;
-	font-size: 16px;
+	margin-top: 30px;
+	font-size: 18px;
 	letter-spacing: 1px;
 	min-height: 20px;
 }
@@ -19,8 +19,8 @@
 
 .songFormat .line .chord{
 	position: absolute;
-	top: -24px;
-	font-size: 20px;
+	top: -20px;
+	font-size: 14px;
 	font-weight: bold;
 	color: #333;
 }
