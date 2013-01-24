@@ -480,3 +480,36 @@ var songFormatCompiler = (function(o){
 
 })( songFormatCompiler || {} );
 
+
+
+
+//handle importsheet 
+var songFormatCompiler = (function(o){
+
+
+	o.setObjBySongSheet = function(dataArray){
+		var songModel = [];
+		var line , bar , rawChords , chord;
+		for(var i = 0 , length = dataArray.length ; i < length ; i+=2){
+			line = [];
+			rawChords = dataArray[i];
+			lyric = dataArray[i+1];
+			//need to refine rawChords
+			bar = {"chord" : rawChords , "lyric" : lyric};
+			line.push(bar);
+			songModel.push(line);
+		}
+		console.log(songModel);
+	}
+
+	return o;
+
+})( songFormatCompiler || {} );
+
+/**
+SongModel = [ line , line , line , ...];
+line = [bar , bar , bar , ...]
+bar = { chord , lyric }
+chord = { chordName , chordDuration }
+lyric = "String"
+**/

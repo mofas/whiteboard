@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="en-US">
+<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- CSS lib -->    
+        <link rel="stylesheet"  href="../css/lib/bootstrap.min.css" />
+        <!-- CSS -->        
+        <link rel="stylesheet"  href="../css/songFormat.css" />
+        <style> 
+            .container{            	
+            	position: relative;
+            	width: 720px;
+            	height: 440px;
+            	overflow: hidden;
+            }
+
+            #colorHints{
+            	position: absolute;
+            	top: 60px;
+            	left: 20px;
+            	width: 720px;
+            	height: 400px;            	
+            	overflow: hidden;
+            }
+
+            #colorHints .colorHintsWrap{
+            	position: relative;
+            	width: 100%;
+            	height: 400px;
+            	top: 0;
+            	left: 0;
+            }
+
+            #colorHints .placeholder{
+            	height: 23px;
+            	border-bottom: 1px solid #666;
+            	padding: 0 40px 0 0;
+            	text-align: right;
+            	letter-spacing: 10px;
+            	color: #888;
+            }
+
+            #colorHints .placeholder.chord{
+            	background: #ee9;
+            }
+
+            #colorHints .placeholder.lyric{
+            	background: #9e9;
+            }
+
+        	#songSheetTextArea{        		
+        		padding: 0;
+        		margin: 0;
+        		position: absolute;
+        		top: 60px;
+        		left: 20px;
+        		width: 720px;
+        		height: 400px;
+        		font-size: 16px;
+        		line-height: 24px;
+        		background: rgba(255,255,255,0.5);
+        		resize:none;
+        	}
+        </style>
+
+    </head>
+    <body>
+        
+    	<div class="container well">
+    		<a id="submitButton" class="btn btn-danger btn-block" href="#">送出</a>
+    		<div id="colorHints">
+    			<div class="colorHintsWrap">
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    			<div class="chord placeholder">和絃</div>
+	    			<div class="lyric placeholder">歌詞</div>
+	    		</div>
+	    	</div>
+    		<textarea id="songSheetTextArea">D
+Once upon a time a few mistakes ago
+Amaj
+I was in your sights, you got me alone
+Bm                                                    Gmaj
+You found me  You found me  You found me-e-e-e-e
+
+
+D
+I guess you didn't care, and I guess I liked that
+           Amaj
+And when I fell hard you took a step back
+      Bm                                 Gmaj                  D
+Without me, without me, without me-e-e-e-e
+
+
+                        Amaj                               Bm
+And he's long gone when he's next to me
+                 Gmaj
+And I realize the blame is on me
+            Bm                       Gmaj                                 Amaj
+Cause I knew you were trouble when you walked in
+      D              Amaj       Bm
+So shame on me now-ow
+                        Gmaj                            Amaj
+You flew me to places I've never been
+            D           Amaj
+'Till you put me down, oh
+Bm                     Gmaj                                   Amaj
+I knew you were trouble when you walked in		
+    		</textarea>	
+    	</div>
+    	
+
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/lib/jquery-1.9.0.min.js"><\/script>')</script>
+        <script type="text/javascript" src="../js/songFormat.js"></script>
+
+
+        <script>
+	      	$(document).ready(function() {
+	      		importSongSheet.init();	
+	      	});
+
+	      	var importSongSheet = (function(o){
+	      	
+	      		var $textarea , $colorHintsWrap , $submitButton;
+
+
+	      		var bindEvent = function(){
+	      			$textarea.on("scroll" , function(){	      				
+	      				$colorHintsWrap.css({"top" : -(this.scrollTop%48) });
+	      			});
+
+	      			$submitButton.on("click" , function(){
+	      				var importSongSheetData = $textarea.val();
+	      				var dataArray = importSongSheetData.split("\n");	      				
+	      				if(dataArray.length%2 == 1){
+	      					dataArray.push("");
+	      				}
+
+	      				songFormatCompiler.setObjBySongSheet(dataArray);
+	      			});
+	      		}
+
+	      		o.init = function(){
+	      			$textarea = $("#songSheetTextArea");
+	      			$colorHintsWrap = $("#colorHints .colorHintsWrap");
+	      			$submitButton = $("#submitButton");
+	      			bindEvent();			
+	      		}
+	      	
+	      		return o;
+	      	})( importSongSheet || {} );
+        </script>
+
+    </body>
+</html>

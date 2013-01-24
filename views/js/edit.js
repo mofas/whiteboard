@@ -334,8 +334,14 @@ var editOperation = (function(o){
 	}
 
 
-	o.genegrateChord = function(root, chord){				
-		var chordName = root + chord;
+	o.genegrateChord = function(root, chord){
+		var chordName;			
+		if(chord === "maj"){
+			chordName = root;
+		}
+		else{
+			chordName = root + chord;	
+		}		
 		//check usedChordCollections
 		var count = usedChordCollections.length;		
 		while(count--){
