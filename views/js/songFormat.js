@@ -475,7 +475,6 @@ var songFormatCompiler = (function(o){
 		return _songModel;
 	}
 
-
 	//handle importsheet 
 	o.setObjBySongSheet = function(dataArray){
 		var songModel = [];

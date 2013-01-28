@@ -2,7 +2,7 @@
 <!doctype html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>編輯:<%= data.title %></title>    
+        <title>編輯:<%= data.title || "" %></title>    
 
         <!-- CSS lib -->    
         <link rel="stylesheet"  href="/css/lib/bootstrap.min.css" />
@@ -28,6 +28,7 @@
             <div class="container well well-large">            
                 <% if(data._id == undefined ){ %>
                     <a id="submitButton" class="btn btn-success" href="javascript:void(0);">新增</a>
+                    <a id="importButton" class="btn btn-warning" href="javascript:void(0);">匯入</a>
                 <%} else {%>    
                     <a id="submitButton" class="btn btn-success" data-id="<%= data._id %>" href="javascript:void(0);">儲存</a> 
                     <a id="deleteButton" class="btn btn-danger" data-id="<%= data._id %>" href="javascript:void(0);">刪除</a> 
@@ -174,7 +175,7 @@
                           </div>
                         </div>
                         <div id="sourceCodeDialog">
-                            <div class="sourceCodeDialogOverlay">
+                            <div class="dialogOverlay">
                                 <div class="content">
                                     <div class="title">原始碼</div>
                                     <span class="btnGroup">
@@ -183,6 +184,39 @@
                                     </span>
                                     <textarea id="sourceCode" row="2" name="lyric"><%= data.lyric || '' %></textarea>
                                 </div>
+                            </div>
+                        </div>
+                        <div id="importSongSheetDialog">
+                            <div class="dialogOverlay">
+                                <a id="importSubmit" class="btn btn-success span2" href="#">匯入</a>
+                                <a id="importAbort" class="btn btn-danger span2" href="#">放棄</a>
+                                <div class="colorHints">
+                                    <div class="colorHintsWrap">
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                        <div class="chord placeholder">和絃</div>
+                                        <div class="lyric placeholder">歌詞</div>
+                                    </div>
+                                </div>
+                                <textarea id="songSheetTextArea"></textarea>
                             </div>
                         </div>
                     </form>

@@ -34,7 +34,9 @@ var editOperation = (function(o){
 		$deleteArea,
 
 		$preview,
-		$loadingOverlay;
+		$loadingOverlay,
+		$importSongSheetDialog,
+		$colorHintsWrap;
 
 	var sourCode , isSourceCodeChange = false , arrangeMode = false,
 		ChordSynTimer , chordScrollHeight = 0,
@@ -45,6 +47,7 @@ var editOperation = (function(o){
 	var createChordObj_Root = "" , createChordObj_Chord = "";
 
 	var bindEvent = function(){		
+
 		$("#submitButton").on("click" , function(){			
 			o.submit($(this).attr("data-id"));
 		});
@@ -52,6 +55,10 @@ var editOperation = (function(o){
 			o.delete($(this).attr("data-id"));
 		});
 
+		$("#importButton").on("click" , o.openImportDialog);		
+		$("#importSubmit").on("click" , o.importSongSheet);
+		$("#importAbort").on("click" , o.abortImportDialog);
+		
 		$("#arrangeModeButton").on("click" , o.openArrangeMode);
 		$("#sourceCodeModeButton").on("click" , o.openSourceCodeDialog);
 		$("#updateArrangeButton").on("click" , o.updateArrange);
@@ -60,8 +67,11 @@ var editOperation = (function(o){
 		$("#saveSourceCodeButton").on("click" , o.updateSourceCode);
 		$("#abortSourceCodeButton").on("click" , o.abortSourceCodeDialog);
 		
-
-		$tabbable.on("click" , "li" , function(){
+		$("#songSheetTextArea").on("scroll" , function(){	      				
+			$colorHintsWrap.css({"top" : -(this.scrollTop%48) });
+		});
+		
+		var switchTab = function(){
 			var targetId = $(this).find("a").attr("href");
 			if(targetId === '#previewView'){
 				if(arrangeMode){
@@ -77,8 +87,15 @@ var editOperation = (function(o){
 			$tabbable.find(".tab-pane").removeClass("active")
 			$tabbable.find(targetId).addClass("active");			
 			return false;
-		});
+		}
 		
+		$tabbable.on("click" , "li" , switchTab);
+
+		chordRelatedEvent();
+	}
+
+
+	var chordRelatedEvent = function(){
 		$chordCollectionList.on("mousedown" , ".chordItem" , function(e){							
 			var text = $(this).text();
 			var parentOffset = $chordCollection.offset(); 
@@ -103,8 +120,7 @@ var editOperation = (function(o){
 			drop: function( event, ui ) {				
 				ui.draggable.remove();
 			}
-	    });
-		
+	    });		
 			
 
 		$chordWrap.on("dblclick" , ".chord" , chordEditEvent);
@@ -161,8 +177,6 @@ var editOperation = (function(o){
 			$btnGroup.removeClass("selected").eq(index).addClass("selected");
 			return false;
 		});
-		
-		
 	}
 
 	var initSongFormat = function(){
@@ -184,6 +198,8 @@ var editOperation = (function(o){
 		$chordCollection = $chordWrap.find(".chordCollection");
 		$chordCollectionList = $editForm.find("#chordCollectionList");		
 		$sourceCodeDialog = $("#sourceCodeDialog");
+		$importSongSheetDialog = $("#importSongSheetDialog");
+		$colorHintsWrap = $importSongSheetDialog.find(".colorHints .colorHintsWrap");
 		$sourceCodeText = $("#sourceCode");		
 		$preview = $("#preview");
 		$loadingOverlay = $("#loadingOverlay");
@@ -423,6 +439,24 @@ var editOperation = (function(o){
 		arrangeMode = false;	
 	}
 
+	o.openImportDialog = function(){
+		$importSongSheetDialog.show();
+	}
+	o.abortImportDialog = function(){
+		$importSongSheetDialog.hide();
+	}
+
+	o.importSongSheet = function(){
+		var importSongSheetData = $("#songSheetTextArea").val();
+		var dataArray = importSongSheetData.split("\n");
+		if(dataArray.length%2 == 1){
+			dataArray.push("");
+		}
+		songFormatCompiler.setObjBySongSheet(dataArray);		
+		$lyric.val(songFormatCompiler.getPlainLyric());	
+		$importSongSheetDialog.hide();
+	}
+
 	o.openSourceCodeDialog = function(){		
 		updatePlainLyric();		
 		$sourceCodeDialog.show();
@@ -430,7 +464,7 @@ var editOperation = (function(o){
 
 
 	o.updateSourceCode = function(){
-		sourceCode = $sourceCodeText.val();
+		var sourceCode = $sourceCodeText.val();
 		songFormatCompiler.setObjBySourceCode(sourceCode);		
 		$lyric.val(songFormatCompiler.getPlainLyric());	
 		$sourceCodeDialog.hide();
