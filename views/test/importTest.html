@@ -107,14 +107,14 @@ Amaj
 I was in your sights, you got me alone
 Bm                                                    Gmaj
 You found me  You found me  You found me-e-e-e-e
+      Bm                                 Gmaj                  D
+Without me, without me, without me-e-e-e-e
 
 
 D
 I guess you didn't care, and I guess I liked that
            Amaj
 And when I fell hard you took a step back
-      Bm                                 Gmaj                  D
-Without me, without me, without me-e-e-e-e
 
 
                         Amaj                               Bm
@@ -130,10 +130,12 @@ You flew me to places I've never been
             D           Amaj
 'Till you put me down, oh
 Bm                     Gmaj                                   Amaj
-I knew you were trouble when you walked in		
-    		</textarea>	
+I knew you were trouble when you walked in      
+</textarea>
+
+    		        
     	</div>
-    	
+            	
 
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -164,6 +166,8 @@ I knew you were trouble when you walked in
 	      				}
 
 	      				songFormatCompiler.setObjBySongSheet(dataArray);
+                        console.log(songFormatCompiler.getSourceCode());
+                        $("body").append(songFormatCompiler.getoutputFormat());
 	      			});
 	      		}
 

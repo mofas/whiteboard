@@ -98,7 +98,7 @@ var songFormatCompiler = (function(o){
 		trimSongModel();
 	}
 
-	o.getSourceCode = function(){
+	o.getSourceCode = function(){		
 		if(modelIsChange){
 			o.refreshSourceCodeByModel();
 		}
@@ -474,6 +474,78 @@ var songFormatCompiler = (function(o){
 	o.getSongModel = function(){
 		return _songModel;
 	}
+
+
+	//handle importsheet 
+	o.setObjBySongSheet = function(dataArray){
+		var songModel = [];
+		var lineArray,
+		 	bar,
+		 	rawChords,
+		 	chords,
+		 	chordPositionArray,
+		 	chordPosition,
+		 	chordObj,		 	
+		 	lyricString,
+		 	lyricPosition;
+
+
+		for(var i = 0 , length = dataArray.length ; i < length ; i+=2){
+			lineArray = [];
+			rawChords = dataArray[i];
+			lyricString = dataArray[i+1];
+			//need to refine rawChords
+
+			chords = rawChords.split(/\s+/gi);			
+			chordPositionArray = rawChords.split(/\S+/gi);
+			//console.log(chords , chordPositionArray);
+
+			if(chords.length == 0 || chordPositionArray.length == 0){
+				//pure lyricString
+				bar = { "chord" : null , "lyric" : lyricString }
+				lineArray.push(bar);
+			}
+			else{
+				var firstChordObjLength = chords[0].length;
+				for(var j=0 , chordNum = chords.length ; j < chordNum ; j++){
+					if(chords[j].length == 0)
+						continue;
+
+					if(firstChordObjLength > 0){	
+						chordPosition = chordPositionArray[j].length;
+						if(j < chordNum-1)
+							lyricPosition = chordPositionArray[j+1].length;
+					}
+					else{						
+						chordPosition = chordPositionArray[j-1].length;
+						lyricPosition = chordPositionArray[j].length;
+					}
+
+					//tackle with lyric
+					if(j == chordNum-1){
+						lyric = lyricString;
+					}						
+					else if(j < chordNum-1){
+						lyric = lyricString.substring(0, lyricPosition);
+						lyricString = lyricString.substr(lyricPosition);
+					}
+					else{
+						lyric = lyricString.substring(0, lyricPosition);
+						lyricString = lyricString.substr(lyricPosition);
+					}					
+
+
+					chordObj = {"chordName" : chords[j] , "chordDuration" : 1+"" };
+					bar = { "chord" : chordObj , "lyric" :  lyric}
+					lineArray.push(bar);					
+				}
+			}
+			songModel.push(lineArray);			
+		}		
+		_songModel = songModel;
+		modelIsChange = true;
+	}
+	
 	
 
 	return o;
@@ -481,35 +553,3 @@ var songFormatCompiler = (function(o){
 })( songFormatCompiler || {} );
 
 
-
-
-//handle importsheet 
-var songFormatCompiler = (function(o){
-
-
-	o.setObjBySongSheet = function(dataArray){
-		var songModel = [];
-		var line , bar , rawChords , chord;
-		for(var i = 0 , length = dataArray.length ; i < length ; i+=2){
-			line = [];
-			rawChords = dataArray[i];
-			lyric = dataArray[i+1];
-			//need to refine rawChords
-			bar = {"chord" : rawChords , "lyric" : lyric};
-			line.push(bar);
-			songModel.push(line);
-		}
-		console.log(songModel);
-	}
-
-	return o;
-
-})( songFormatCompiler || {} );
-
-/**
-SongModel = [ line , line , line , ...];
-line = [bar , bar , bar , ...]
-bar = { chord , lyric }
-chord = { chordName , chordDuration }
-lyric = "String"
-**/
