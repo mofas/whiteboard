@@ -1,11 +1,21 @@
-
-describe("Set by plain Lyric with empty source code test", function() {
+describe("OutputFormat test By source code and plainLyric", function() {
 
 	it("Init with 1 line", function() {
 		songFormatCompiler.setObjByPlainLyric("123abc");
 	    expect(songFormatCompiler.getSourceCode()).toBe("123abc");
 	    expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'>123abc</span></div>');
 	});
+
+	it("Init with pure lyric source code", function() {
+		songFormatCompiler.setObjBySourceCode("[Am:1]  [B7:1]   "); 
+	   	expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am</span>&nbsp;&nbsp;</span><span class=\'bar\'><span class=\'chord\'>B7</span>&nbsp;&nbsp;&nbsp;</span></div>'); 
+	});
+
+	it("Init with pure lyric source code with leading empty", function() {
+		songFormatCompiler.setObjBySourceCode("   [Am:1]   [B7:1]   "); 		
+	   	expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'>&nbsp;&nbsp;&nbsp;</span><span class=\'bar\'><span class=\'chord\'>Am</span>&nbsp;&nbsp;&nbsp;</span><span class=\'bar\'><span class=\'chord\'>B7</span>&nbsp;&nbsp;&nbsp;</span></div>'); 
+	});
+
 
 	it("Multi line", function() {
   		songFormatCompiler.setObjByPlainLyric("123\nabc\n");
@@ -24,12 +34,8 @@ describe("Set by plain Lyric with empty source code test", function() {
 		songFormatCompiler.updateLyric("123\n456\n\n\n789");
 		expect(songFormatCompiler.getSourceCode()).toBe("123\n456\n\n\n789");
   	});
-	
 });
-
-
-
-describe("Not empty sourceCode test", function() {
+describe("Update lyric With Not empty sourceCode", function() {
 
 	it("Init", function() {
 		songFormatCompiler.setObjBySourceCode("[Am:3]123[Bm:1]456\n[C:2]789[D:1]000");
@@ -60,14 +66,7 @@ describe("Not empty sourceCode test", function() {
 		songFormatCompiler.updateLyric("123456");
 		expect(songFormatCompiler.getoutputFormat()).toBe('<div class="line"><span class=\'bar\'><span class=\'chord\'>Am<span class=\'chordDuration\'>X3</span></span>123</span><span class=\'bar\'><span class=\'chord\'>Bm</span>456</span></div><div class="line"><span class=\'bar\'><span class=\'chord\'>C<span class=\'chordDuration\'>X2</span></span></span><span class=\'bar\'><span class=\'chord\'>D</span></span></div>');
 	});
-
 });
-
-
-
-
-
-
 describe("Update chord with empty model", function() {
 
 	it("Init", function() {
@@ -107,10 +106,7 @@ describe("Update chord with empty model", function() {
 		songFormatCompiler.updateChord(mockObj);		
 		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2][G:2]\n[Cm:1][B:3]');
 	});
-
 });
-
-
 describe("Update chord with plain lyric", function() {
 
 	it("init" , function() {
@@ -252,13 +248,7 @@ describe("Update chord with plain lyric", function() {
 		songFormatCompiler.updateChord(mockObj);		
 		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2]This is [G:2]the end\n[D:1]Hold your br[Cm:2]eath and count to ten\n[#F:1]');
 	});
-
 });
-
-
-
-
-
 describe("Update chord with structured model", function() {
 
 	it("1 line lyric with 1 chord , change to 0 chord" , function() {
@@ -408,10 +398,88 @@ describe("Update chord with structured model", function() {
 		songFormatCompiler.updateChord(mockObj);
 		expect(songFormatCompiler.getSourceCode()).toBe('\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]');
 	});
+});
 
 	
 
+describe("Import by songSheet", function() {
+// D
+// Once upon a time a few mistakes ago
+// Amaj
+// I was in your sights, you got me alone
+// Bm                                                    Gmaj
+// You found me  You found me  You found me-e-e-e-e
+
+
+// D
+// I guess you didn't care, and I guess I liked that
+//            Amaj
+// And when I fell hard you took a step back
+//       Bm                                 Gmaj                  D
+// Without me, without me, without me-e-e-e-e
+
+
+//                         Amaj                               Bm
+// And he's long gone when he's next to me
+//                  Gmaj
+// And I realize the blame is on me
+//             Bm                       Gmaj                                 Amaj
+// Cause I knew you were trouble when you walked in
+//       D              Amaj       Bm
+// So shame on me now-ow
+//                         Gmaj                            Amaj
+// You flew me to places I've never been
+//             D           Amaj
+// 'Till you put me down, oh
+// Bm                     Gmaj                                   Amaj
+// I knew you were trouble when you walked in	
+
+	it("empty Test" , function(){
+		var dataArray = ["",""];
+		songFormatCompiler.setObjBySongSheet(dataArray);		
+		expect(songFormatCompiler.getSourceCode()).toBe("");
+	});
+
+	it("1 line plain lyric" , function(){
+		var dataArray = ["","Once upon a time a few mistakes ago"];
+		songFormatCompiler.setObjBySongSheet(dataArray);		
+		expect(songFormatCompiler.getSourceCode()).toBe("Once upon a time a few mistakes ago");
+	});
+
+	it("2 line plain lyric" , function(){
+		var dataArray = ["","Once upon a time a few mistakes ago","","I was in your sights, you got me alone"];
+		songFormatCompiler.setObjBySongSheet(dataArray);		
+		expect(songFormatCompiler.getSourceCode()).toBe("Once upon a time a few mistakes ago\nI was in your sights, you got me alone");
+	});
+
+	it("2 line plain lyric with 1 empty line" , function(){
+		var dataArray = ["","Once upon a time a few mistakes ago","","","","I was in your sights, you got me alone"];
+		songFormatCompiler.setObjBySongSheet(dataArray);		
+		expect(songFormatCompiler.getSourceCode()).toBe("Once upon a time a few mistakes ago\n\nI was in your sights, you got me alone");
+	});
+
+	it("1 line chord without lyric" , function(){
+		var dataArray = ["Am                  B7              Cadd9",""];
+		songFormatCompiler.setObjBySongSheet(dataArray);		
+		expect(songFormatCompiler.getSourceCode()).toBe("[Am:1]                  [B7:1]              [Cadd9:1]");
+	});
+
+	it("2 line chord without lyric" , function(){
+		var dataArray = ["Am                  B7              Cadd9","","Bm                                 Gmaj                  D",""];
+		songFormatCompiler.setObjBySongSheet(dataArray);		
+		expect(songFormatCompiler.getSourceCode()).toBe("[Am:1]                  [B7:1]              [Cadd9:1]\n[Bm:1]                                 [Gmaj:1]                  [D:1]");
+	});
+
+	it("1 line chord without lyric with leading empty" , function(){
+		var dataArray = ["   Am                  B7              ",""];		
+		songFormatCompiler.setObjBySongSheet(dataArray);
+		expect(songFormatCompiler.getSourceCode()).toBe("   [Am:1]                  [B7:1]              ");
+		console.log(songFormatCompiler.getoutputFormat());
+	});
+
+
 });
+
 
 
 describe("Real Case", function() {

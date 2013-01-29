@@ -66,9 +66,9 @@ var songFormatCompiler = (function(o){
 			}
 			else{
 				lineText = textArray[i];
-				lineText = lineText.replace(/\]\s*\[/g , "] [");				
+				//lineText = lineText.replace(/\]\s*\[/g , "] [");				
 				lineOrigin = lineText.split(/\[([#ba-zA-z0-9:]+?)\]/gi);				
-				lineArray = [];				
+				lineArray = [];									
 				if(lineOrigin.length > 1){	
 					//if the first lineOrigin is lyric
 					if(lineOrigin[0].length > 0){
@@ -84,16 +84,16 @@ var songFormatCompiler = (function(o){
 						chordObj = {"chordName" : chordName , "chordDuration" : chordDuration};
 						bar = { "chord" : chordObj , "lyric" : lyricString }
 						lineArray.push(bar);
+
 					}
 				}
 				else{
 					bar = { "chord" : null , "lyric" : lineOrigin[0] };
 					lineArray.push(bar);
-				}
+				}				
 				songModel.push(lineArray);
 			}			
-		}
-
+		}		
 		_songModel = songModel;		
 		trimSongModel();
 	}
@@ -442,7 +442,7 @@ var songFormatCompiler = (function(o){
 			lineLength = (songModel[i] === null ) ? 0 : songModel[i].length;
 
 			line = songModel[i];
-			lineOutput = [];
+			lineOutput = [];			
 			if(line === null){
 				outputArray.push('<div class="line">&nbsp;</div>');
 			}
@@ -450,7 +450,8 @@ var songFormatCompiler = (function(o){
 				for(var j = 0; j < lineLength ; j++){					
 					bar = line[j];					
 					chord = bar.chord;
-					lyric = bar.lyric;					
+					lyric = bar.lyric;	
+					lyric = lyric.replace(/\s/g , "&nbsp;");
 					if(chord == null || chord.chordName == null){
 						lineOutput.push("<span class='bar'>" + lyric + "</span>");
 					}
@@ -497,50 +498,69 @@ var songFormatCompiler = (function(o){
 
 			chords = rawChords.split(/\s+/gi);			
 			chordPositionArray = rawChords.split(/\S+/gi);
-			//console.log(chords , chordPositionArray);
+			//console.log(chords , chordPositionArray , lyricString);
 
-			if(chords.length == 0 || chordPositionArray.length == 0){
-				//pure lyricString
+			if(chords.length == 1 && chords[0].length == 0){
+				//pure lyricString				
 				bar = { "chord" : null , "lyric" : lyricString }
 				lineArray.push(bar);
 			}
 			else{
-				var firstChordObjLength = chords[0].length;
+				var firstChordObjLength = chordPositionArray[0].length;
 				for(var j=0 , chordNum = chords.length ; j < chordNum ; j++){
-					if(chords[j].length == 0)
-						continue;
+					if(j == chordPositionArray.length)
+						break;
 
+					if(chords[j].length == 0 && chordPositionArray[j].length == 0)
+						continue;
+					
 					if(firstChordObjLength > 0){	
 						chordPosition = chordPositionArray[j].length;
 						if(j < chordNum-1)
-							lyricPosition = chordPositionArray[j+1].length;
+							lyricPosition = chordPositionArray[j].length;
 					}
 					else{						
-						chordPosition = chordPositionArray[j-1].length;
-						lyricPosition = chordPositionArray[j].length;
-					}
+						chordPosition = chordPositionArray[j].length;
+						lyricPosition = chordPositionArray[j+1].length;
+					}										
 
 					//tackle with lyric
-					if(j == chordNum-1){
-						lyric = lyricString;
-					}						
-					else if(j < chordNum-1){
-						lyric = lyricString.substring(0, lyricPosition);
-						lyricString = lyricString.substr(lyricPosition);
+					if(lyricPosition > lyricString.length){
+						if(j == chordNum-1){
+							lyric = "";
+						}
+						else{
+							var empty = new Array(lyricPosition+1);						
+							lyric = empty.join(" ");	
+						}						
 					}
 					else{
-						lyric = lyricString.substring(0, lyricPosition);
-						lyricString = lyricString.substr(lyricPosition);
+						if(j == chordNum-1){
+							lyric = lyricString;
+						}						
+						else if(j < chordNum-1){
+							lyric = lyricString.substring(0, lyricPosition);
+							lyricString = lyricString.substr(lyricPosition);
+						}
+						else{
+							lyric = lyricString.substring(0, lyricPosition);
+							lyricString = lyricString.substr(lyricPosition);
+						}	
+					}
+
+					if(chords[j].length == 0){
+						chordObj = null;
+					}
+					else{
+						chordObj = {"chordName" : chords[j] , "chordDuration" : 1+"" };	
 					}					
-
-
-					chordObj = {"chordName" : chords[j] , "chordDuration" : 1+"" };
 					bar = { "chord" : chordObj , "lyric" :  lyric}
 					lineArray.push(bar);					
 				}
 			}
 			songModel.push(lineArray);			
 		}		
+		//console.log(songModel);
 		_songModel = songModel;
 		modelIsChange = true;
 	}

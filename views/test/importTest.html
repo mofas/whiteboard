@@ -101,37 +101,7 @@
 	    			<div class="lyric placeholder">歌詞</div>
 	    		</div>
 	    	</div>
-    		<textarea id="songSheetTextArea">D
-Once upon a time a few mistakes ago
-Amaj
-I was in your sights, you got me alone
-Bm                                                    Gmaj
-You found me  You found me  You found me-e-e-e-e
-
-
-D
-I guess you didn't care, and I guess I liked that
-           Amaj
-And when I fell hard you took a step back
-      Bm                                 Gmaj                  D
-Without me, without me, without me-e-e-e-e
-
-
-                        Amaj                               Bm
-And he's long gone when he's next to me
-                 Gmaj
-And I realize the blame is on me
-            Bm                       Gmaj                                 Amaj
-Cause I knew you were trouble when you walked in
-      D              Amaj       Bm
-So shame on me now-ow
-                        Gmaj                            Amaj
-You flew me to places I've never been
-            D           Amaj
-'Till you put me down, oh
-Bm                     Gmaj                                   Amaj
-I knew you were trouble when you walked in		
-    		</textarea>        
+    		<textarea id="songSheetTextArea"></textarea>        
     	</div>
             	
 
@@ -162,7 +132,7 @@ I knew you were trouble when you walked in
 	      				if(dataArray.length%2 == 1){
 	      					dataArray.push("");
 	      				}
-
+                        console.log(dataArray);
 	      				songFormatCompiler.setObjBySongSheet(dataArray);
                         console.log(songFormatCompiler.getSourceCode());
 	      			});
