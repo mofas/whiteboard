@@ -68,6 +68,11 @@
         		background: rgba(255,255,255,0.5);
         		resize:none;
         	}
+
+            .container2{             
+                margin: 20px auto;
+                width: 720px;                
+            }
         </style>
 
     </head>
@@ -101,9 +106,32 @@
 	    			<div class="lyric placeholder">歌詞</div>
 	    		</div>
 	    	</div>
-    		<textarea id="songSheetTextArea"></textarea>        
+    		<textarea id="songSheetTextArea">
+Dm7             Gm7        C7                  Fmaj7 
+Fly me to the moon, let me play amounst the stars,
+F7             Bm7/B5            E7/B9         Am7
+Let me see what spring is like on jupiter and mars,
+A7/B9 Dm7          G9       G7/B9   Cm9    Am7
+In   other words,    hold  my    hand!
+Dm9  Gm7          C7         A#dim7  Fmaj7   Em7  A7 
+In   other words,    darling kiss   me!
+Dm7                Gm7              C7           Fmaj7 
+Fill my heart with song, and let me sing forever more
+F7           Bm7/B5         E7/B9      Am7
+you are all I long for all I worship & adore
+A7/B9       Dm7          G9        G7  Em7/B5
+     In    other words,    please be  true!
+D7/B9       Gm7         Gm7/F  C7/B9   F6     Em7  A7 
+     In    other words   I    love  you
+A7/B9    Dm7         G7    G7/B9   C6      Bb6  B6  C6/9
+     In other words     I love  You!
+            </textarea>            
     	</div>
-            	
+
+        <div class="container2">
+            <div id="preview"></div>    
+        </div>
+        
 
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -112,41 +140,45 @@
 
 
         <script>
-	      	$(document).ready(function() {
-	      		importSongSheet.init();	
-	      	});
 
-	      	var importSongSheet = (function(o){
-	      	
-	      		var $textarea , $colorHintsWrap , $submitButton;
+  	$(document).ready(function() {
+  		importSongSheet.init();	
+  	});
+
+  	var importSongSheet = (function(o){
+  	
+  		var $preview , $textarea , $colorHintsWrap , $submitButton;
 
 
-	      		var bindEvent = function(){
-	      			$textarea.on("scroll" , function(){	      				
-	      				$colorHintsWrap.css({"top" : -(this.scrollTop%48) });
-	      			});
+  		var bindEvent = function(){
+  			$textarea.on("scroll" , function(){	      				
+  				$colorHintsWrap.css({"top" : -(this.scrollTop%48) });
+  			});
 
-	      			$submitButton.on("click" , function(){
-	      				var importSongSheetData = $textarea.val();
-	      				var dataArray = importSongSheetData.split("\n");	      				
-	      				if(dataArray.length%2 == 1){
-	      					dataArray.push("");
-	      				}
-                        console.log(dataArray);
-	      				songFormatCompiler.setObjBySongSheet(dataArray);
-                        console.log(songFormatCompiler.getSourceCode());
-	      			});
-	      		}
+  			$submitButton.on("click" , function(){
+  				var importSongSheetData = $textarea.val();
+  				var dataArray = importSongSheetData.split("\n");	      				
+  				if(dataArray.length%2 == 1){
+  					dataArray.push("");
+  				}
+                console.log(dataArray);
+  				songFormatCompiler.setObjBySongSheet(dataArray);
+                console.log(songFormatCompiler.getSourceCode());
+                $preview.addClass("songFormat").html(songFormatCompiler.getoutputFormat());
+  			});
+  		}
 
-	      		o.init = function(){
-	      			$textarea = $("#songSheetTextArea");
-	      			$colorHintsWrap = $("#colorHints .colorHintsWrap");
-	      			$submitButton = $("#submitButton");
-	      			bindEvent();			
-	      		}
-	      	
-	      		return o;
-	      	})( importSongSheet || {} );
+  		o.init = function(){
+            $preview = $("#preview");
+  			$textarea = $("#songSheetTextArea");
+  			$colorHintsWrap = $("#colorHints .colorHintsWrap");
+  			$submitButton = $("#submitButton");
+  			bindEvent();			
+  		}
+  	
+  		return o;
+  	})( importSongSheet || {} );
+
         </script>
 
     </body>

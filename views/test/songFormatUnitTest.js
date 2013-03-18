@@ -403,36 +403,6 @@ describe("Update chord with structured model", function() {
 	
 
 describe("Import by songSheet", function() {
-// D
-// Once upon a time a few mistakes ago
-// Amaj
-// I was in your sights, you got me alone
-// Bm                                                    Gmaj
-// You found me  You found me  You found me-e-e-e-e
-
-
-// D
-// I guess you didn't care, and I guess I liked that
-//            Amaj
-// And when I fell hard you took a step back
-//       Bm                                 Gmaj                  D
-// Without me, without me, without me-e-e-e-e
-
-
-//                         Amaj                               Bm
-// And he's long gone when he's next to me
-//                  Gmaj
-// And I realize the blame is on me
-//             Bm                       Gmaj                                 Amaj
-// Cause I knew you were trouble when you walked in
-//       D              Amaj       Bm
-// So shame on me now-ow
-//                         Gmaj                            Amaj
-// You flew me to places I've never been
-//             D           Amaj
-// 'Till you put me down, oh
-// Bm                     Gmaj                                   Amaj
-// I knew you were trouble when you walked in	
 
 	it("empty Test" , function(){
 		var dataArray = ["",""];
@@ -473,9 +443,37 @@ describe("Import by songSheet", function() {
 	it("1 line chord without lyric with leading empty" , function(){
 		var dataArray = ["   Am                  B7              ",""];		
 		songFormatCompiler.setObjBySongSheet(dataArray);
-		expect(songFormatCompiler.getSourceCode()).toBe("   [Am:1]                  [B7:1]              ");
-		console.log(songFormatCompiler.getoutputFormat());
+		expect(songFormatCompiler.getSourceCode()).toBe("   [Am:1]                  [B7:1]");		
 	});
+
+	it("real case 1" , function(){
+		var dataArray = 
+		[
+			"                 C                      F          ", 
+			"I remember the times we spent together, on those drives                          "
+		];
+		songFormatCompiler.setObjBySongSheet(dataArray);
+		expect(songFormatCompiler.getSourceCode()).toBe("I remember the ti[C:1]mes we spent together,[F:1] on those drives                          ");
+	});
+
+	it("real case 2" , function(){
+		var dataArray = 
+		[
+			"                 C                      F          ",
+			"I remember the times we spent together,on those drives",
+			"           C                      F",
+			"We had a million questions,all about our lives",
+			"             Am                 F",
+			"And when we got to New York,everything felt right       ",
+			"      Am                  F      C       ",
+			"I wish you were here with me, Tonight                 ",
+			"            ",
+			""
+		];
+		songFormatCompiler.setObjBySongSheet(dataArray);
+		expect(songFormatCompiler.getSourceCode()).toBe("I remember the ti[C:1]mes we spent together,[F:1]on those drives\nWe had a mi[C:1]llion questions,all ab[F:1]out our lives\nAnd when we g[Am:1]ot to New York,ev[F:1]erything felt right       \nI wish[Am:1] you were here wit[F:1]h me, [C:1]Tonight                 \n");
+});
+	
 
 
 });

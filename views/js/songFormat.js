@@ -496,9 +496,19 @@ var songFormatCompiler = (function(o){
 			lyricString = dataArray[i+1];
 			//need to refine rawChords
 
+
+
 			chords = rawChords.split(/\s+/gi);			
 			chordPositionArray = rawChords.split(/\S+/gi);
 			//console.log(chords , chordPositionArray , lyricString);
+			//chords array should have format ("    ","F","     ","D#");
+			//notice: the last ele of chords array must be a 'chord' instead of empty content.
+
+			//if last chords is empty content remove it.
+			if(chords.length > 1 && chords[chords.length-1].length == 0){
+				chords.splice(chords.length-1,chords.length);
+			}			
+
 
 			if(chords.length == 1 && chords[0].length == 0){
 				//pure lyricString				
@@ -524,17 +534,18 @@ var songFormatCompiler = (function(o){
 						lyricPosition = chordPositionArray[j+1].length;
 					}										
 
-					//tackle with lyric
-					if(lyricPosition > lyricString.length){
+					//process lyric					
+					if(lyricPosition > lyricString.length){						
 						if(j == chordNum-1){
-							lyric = "";
+							lyric = lyricString;
 						}
 						else{
 							var empty = new Array(lyricPosition+1);						
 							lyric = empty.join(" ");	
-						}						
+						}
+						// console.log("lyricPosition > lyricString.length:" + lyric);
 					}
-					else{
+					else{						
 						if(j == chordNum-1){
 							lyric = lyricString;
 						}						
@@ -545,9 +556,11 @@ var songFormatCompiler = (function(o){
 						else{
 							lyric = lyricString.substring(0, lyricPosition);
 							lyricString = lyricString.substr(lyricPosition);
-						}	
+						}
+						// console.log("lyricPosition <= lyricString.length:" + lyric);
 					}
 
+					//process chord
 					if(chords[j].length == 0){
 						chordObj = null;
 					}
