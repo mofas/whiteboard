@@ -472,7 +472,25 @@ describe("Import by songSheet", function() {
 		];
 		songFormatCompiler.setObjBySongSheet(dataArray);
 		expect(songFormatCompiler.getSourceCode()).toBe("I remember the ti[C:1]mes we spent together,[F:1]on those drives\nWe had a mi[C:1]llion questions,all ab[F:1]out our lives\nAnd when we g[Am:1]ot to New York,ev[F:1]erything felt right       \nI wish[Am:1] you were here wit[F:1]h me, [C:1]Tonight                 \n");
-});
+	});
+
+	it("the chord is very dense" , function(){
+		var dataArray = 
+			["A7/B9 Dm7          G9       G7/B9   Cm9    Am7",
+			 "In   other words, hold  my    hand!",
+			 "Dm9  Gm7          C7         A#dim7  Fmaj7   Em7  A7 ",
+			 "In   other words, darling kiss   me!",
+			 "D7/B9       Gm7         Gm7/F  C7/B9   F6     Em7  A7 ",
+			 "     In    other words   I    love  you",
+			 "A7/B9    Dm7         G7    G7/B9   C6      Bb6  B6  C6/9",
+			 "     In other words     I love  You!",
+			 "            ",
+			 ""];
+		songFormatCompiler.setObjBySongSheet(dataArray);
+		expect(songFormatCompiler.getSourceCode()).toBe("[A7/B9:1]In   [Dm7:1]other word[G9:1]s, hold[G7/B9:1]  my [Cm9:1]   h[Am7:1]and!\n[Dm9:1]In [Gm7:1]  other wo[C7:1]rds, darl[A#dim7:1]ing ki[Fmaj7:1]ss   [Em7:1]me![A7:1]\n[D7/B9:1]     In[Gm7:1]    other[Gm7/F:1] word[C7/B9:1]s   I[F6:1]    l[Em7:1]ove[A7:1]  you\n[A7/B9:1]     [Dm7:1]In other [G7:1]word[G7/B9:1]s    [C6:1] I lov[Bb6:1]e  [B6:1]Yo[C6/9:1]u!\n");
+	});
+
+	
 	
 
 

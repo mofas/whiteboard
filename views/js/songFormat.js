@@ -33,12 +33,12 @@ var songFormatCompiler = (function(o){
 	}
 
 	var isFullWidthChar = function(c) {
-		        var tmp = escape(c);
-		        if (tmp.length == 1) {
-		                return false;
-		        }
-		        return (tmp.charAt(1) == 'u');
-			}
+        var tmp = escape(c);
+        if (tmp.length == 1) {
+                return false;
+        }
+        return (tmp.charAt(1) == 'u');
+	}
 
 	o.setObjByPlainLyric = function(plainLyric){
 		o.setObjBySourceCode(plainLyric);
@@ -483,8 +483,7 @@ var songFormatCompiler = (function(o){
 		 	bar,
 		 	rawChords,
 		 	chords,
-		 	chordPositionArray,
-		 	chordPosition,
+		 	chordPositionArray,		 	
 		 	chordObj,		 	
 		 	lyricString,
 		 	lyricPosition;
@@ -511,7 +510,7 @@ var songFormatCompiler = (function(o){
 
 
 			if(chords.length == 1 && chords[0].length == 0){
-				//pure lyricString				
+				//only lyricString				
 				bar = { "chord" : null , "lyric" : lyricString }
 				lineArray.push(bar);
 			}
@@ -524,15 +523,18 @@ var songFormatCompiler = (function(o){
 					if(chords[j].length == 0 && chordPositionArray[j].length == 0)
 						continue;
 					
-					if(firstChordObjLength > 0){	
-						chordPosition = chordPositionArray[j].length;
+					if(firstChordObjLength > 0){							
 						if(j < chordNum-1)
 							lyricPosition = chordPositionArray[j].length;
 					}
-					else{						
-						chordPosition = chordPositionArray[j].length;
+					else{												
 						lyricPosition = chordPositionArray[j+1].length;
-					}										
+						// if name of chord is too long , we prolong the distance between two chord						
+						if(lyricPosition < chords[j].length ){							
+							lyricPosition += chords[j].length - lyricPosition;
+						}
+					}
+
 
 					//process lyric					
 					if(lyricPosition > lyricString.length){						
@@ -540,24 +542,40 @@ var songFormatCompiler = (function(o){
 							lyric = lyricString;
 						}
 						else{
-							var empty = new Array(lyricPosition+1);						
-							lyric = empty.join(" ");	
+							if(lyricString.length == 0){
+								var empty = new Array(lyricPosition+1);						
+								lyric = empty.join(" ");	
+							}
+							else{
+								lyric = lyricString;
+								lyricString = "";
+							}							
 						}
-						// console.log("lyricPosition > lyricString.length:" + lyric);
+						//console.log("lyricPosition > lyricString.length:" + lyric);
 					}
 					else{						
 						if(j == chordNum-1){
 							lyric = lyricString;
-						}						
-						else if(j < chordNum-1){
-							lyric = lyricString.substring(0, lyricPosition);
-							lyricString = lyricString.substr(lyricPosition);
-						}
+						}												
 						else{
-							lyric = lyricString.substring(0, lyricPosition);
-							lyricString = lyricString.substr(lyricPosition);
+							//handle full width char							
+							var char , realCharNo = 0;							
+							for(var k = 0 ; k < lyricPosition ;k++){
+								char = lyricString.charAt(k);
+								if(isFullWidthChar(char)){									
+									realCharNo += 1;
+								}
+								else{
+									realCharNo += 2;	
+								}
+							}
+							realCharNo = Math.floor(realCharNo/2);
+
+
+							lyric = lyricString.substring(0, realCharNo);
+							lyricString = lyricString.substr(realCharNo);
 						}
-						// console.log("lyricPosition <= lyricString.length:" + lyric);
+						//console.log("lyricPosition <= lyricString.length:" + lyric);
 					}
 
 					//process chord
@@ -572,9 +590,8 @@ var songFormatCompiler = (function(o){
 				}
 			}
 			songModel.push(lineArray);			
-		}		
-		//console.log(songModel);
-		_songModel = songModel;
+		}				
+		_songModel = songModel;		
 		modelIsChange = true;
 	}
 	
