@@ -249,6 +249,7 @@ describe("Update chord with plain lyric", function() {
 		expect(songFormatCompiler.getSourceCode()).toBe('[Am:2]This is [G:2]the end\n[D:1]Hold your br[Cm:2]eath and count to ten\n[#F:1]');
 	});
 });
+
 describe("Update chord with structured model", function() {
 
 	it("1 line lyric with 1 chord , change to 0 chord" , function() {
@@ -398,6 +399,21 @@ describe("Update chord with structured model", function() {
 		songFormatCompiler.updateChord(mockObj);
 		expect(songFormatCompiler.getSourceCode()).toBe('\n心[B:1]變成了軟綿綿 可以壓碎[Em:1]');
 	});
+
+	it("chord is very dense" , function() {
+		songFormatCompiler.setObjBySourceCode("Just like the arctic circle");
+		var mockObj = [			
+			[
+				{chordName: "#Dadd9" , chordDuration: 1 , chordPosition : 1 },
+				{chordName: "Bsus4" , chordDuration: 1 , chordPosition : 5 },
+				{chordName: "G7" , chordDuration: 1 , chordPosition : 7 }
+			]
+		]		
+		songFormatCompiler.updateChord(mockObj);
+		expect(songFormatCompiler.getSourceCode()).toBe('J[#Dadd9:1]ust lik[Bsus4:1]e the [G7:1]arctic circle');
+	});
+
+
 });
 
 	
