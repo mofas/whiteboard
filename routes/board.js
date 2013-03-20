@@ -82,14 +82,6 @@ var getEditorName = function(id , callback){
 }
 
 
-
-exports.index = function(req, res , next){                              
-  	var requestPath = req.params[0].substring(1);
-    extensionName = requestPath.substring(requestPath.lastIndexOf(".")+1 , requestPath.length);        	
-  	next();     
-}
-
-
 //check the user at middleWare
 exports.edit = function(req, res){	
 

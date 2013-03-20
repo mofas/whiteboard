@@ -14,6 +14,7 @@ window.requestAnimFrame = (function() {
 
 $(document).ready(function() {
 	editOperation.init();
+	//the related function about chordNote be separated to chordNoteMediator
 });
 
 var editOperation = (function(o){
@@ -36,7 +37,8 @@ var editOperation = (function(o){
 		$preview,
 		$loadingOverlay,
 		$importSongSheetDialog,
-		$colorHintsWrap;
+		$colorHintsWrap,
+		$chordNoteDialog;
 
 	var sourCode , isSourceCodeChange = false , arrangeMode = false,
 		ChordSynTimer , chordScrollHeight = 0,
@@ -67,8 +69,18 @@ var editOperation = (function(o){
 		$("#saveSourceCodeButton").on("click" , o.updateSourceCode);
 		$("#abortSourceCodeButton").on("click" , o.abortSourceCodeDialog);
 		
+
+
 		$("#songSheetTextArea").on("scroll" , function(){	      				
 			$colorHintsWrap.css({"top" : -(this.scrollTop%48) });
+		});
+
+		$("#editChordNoteButton").on("click" , function(){
+			$chordNoteDialog.fadeIn();
+		});
+
+		$chordNoteDialog.find(".close").on("click" , function(){
+			$chordNoteDialog.fadeOut();
 		});
 		
 		var switchTab = function(){
@@ -96,6 +108,7 @@ var editOperation = (function(o){
 
 
 	var chordRelatedEvent = function(){
+
 		$chordCollectionList.on("mousedown" , ".chordItem" , function(e){							
 			var text = $(this).text();
 			var parentOffset = $chordCollection.offset(); 
@@ -110,17 +123,18 @@ var editOperation = (function(o){
 		//touch event (testing)				
 		$chordWrap.on("mouseover touchstart" , ".chord" , function(){
 			$(this).draggable({ 
-				containment: ".chordCollection"				
+				containment: ".chordCollection"
 			});
 		});
 
 		//delete chord obj		
 		$deleteArea.droppable({
 			accept: ".chord",
+			hoverClass: "hilit-bin",
 			drop: function( event, ui ) {				
 				ui.draggable.remove();
 			}
-	    });		
+	    });
 			
 
 		$chordWrap.on("dblclick" , ".chord" , chordEditEvent);
@@ -171,9 +185,9 @@ var editOperation = (function(o){
 			var $btnGroup = $chordGenegator.find(".chordTypeGroup .btn-group");			
 			var index = $btnGroup.filter(".selected").index();
 
-			console.log($btnGroup.length);
+			//console.log($btnGroup.length);
 			index = (index < $btnGroup.length -1) ? ++index : 0;
-			console.log(index);
+			//console.log(index);
 			$btnGroup.removeClass("selected").eq(index).addClass("selected");
 			return false;
 		});
@@ -203,6 +217,7 @@ var editOperation = (function(o){
 		$sourceCodeText = $("#sourceCode");		
 		$preview = $("#preview");
 		$loadingOverlay = $("#loadingOverlay");
+		$chordNoteDialog = $("#chordNoteDialog");
 		bindEvent();
 		initSongFormat();
 	}
