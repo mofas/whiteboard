@@ -16,45 +16,39 @@
 }(jQuery));
 
 
-$(function(){			
-	chordNote.init();
-});
-
 
 var chordNote = (function(o){
 
 	var fingerIndexMap = ["-","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o"];
-	var $chordDiagram,
-	 	// $chordList,
-	 	// $outputLinkWrap,
-	 	// $outputLink,
+	var $chordDiagram,	 	
 	 	$chordTitleInput,
 	 	$chordNoteData,
 	 	// $suggestChordNameCollection,
-		// inputMode = 0,		
+		inputMode = 0,
 		$addChordNoteButton,
 		$updateChordNoteButton,
+		$cancelChordNoteButton,
 		$chordList,
-		editMode = false,
-		editTargetId = null;
+		movedObjIndex,
+		editTargetId = null,
+		isInit = false;
 
 	var queryChordNameTimer = null;
 
 
 	var DOMCache = function(){
+		$chordDiagram = $('.chord_diagramWrap');
 		$chordNoteName = $("#chordNoteName");
 		$addChordNoteButton = $("#addChordNoteButton");
 		$updateChordNoteButton = $("#updateChordNoteButton");
+		$cancelChordNoteButton = $("#cancelChordNoteButton");
 		$chordNoteList = $("#chordNoteList");
 		$chordTitleInput = $("#chordTitle");
 		$chordNoteData = $("#chordNoteData");
 	}
 
 	var bindEvent = function(){
-
-		// $chordList = $("#chordList");
-		$chordDiagram = $('.chord_diagramWrap');
-		// $outputLink = $("#outputLink");
+		
 		// $suggestChordNameCollection = $("#suggestChordName");
 
 		// $suggestChordNameCollection.on("click" , "a" , function(){
@@ -71,52 +65,53 @@ var chordNote = (function(o){
 		// $chordList.on("click", ".chordItem" , function(){
 		// 	$(this).siblings().removeClass("selected").end().addClass("selected");
 		// });
-		
-		// $("#addButton").on("click" , o.add);
-		// $("#updateButton").on("click" , o.update);
-		// $("#cancelButton").on("click" , o.cancel);
+				
 		// $("#saveImageButton").on("click" , o.saveAsImage);
-		// $("#outputURLButton").on("click" , o.output);			
-		// $("#shorturl").on("mousedown" , o.shortUrlEvent);		
-		// $outputLinkWrap.find(".close").on("click" , hidenOutputEvent);
 		$addChordNoteButton.on("click" , o.add);
 		$updateChordNoteButton.on("click" , o.update);
-	}	
+		$cancelChordNoteButton.on("click" , o.cancel);
+		bindDragAndSortEvent();
+	}
 
-	// var editMode = function(){
-	// 	inputMode = 1;
-	// 	$("#addButton").hide();
-	// 	$("#updateButton").show();
-	// 	$("#cancelButton").show();
-	// }
 
-	// var addMode = function(){
-	// 	inputMode = 0;
-	// 	$("#addButton").show();
-	// 	$("#updateButton").hide();
-	// 	$("#cancelButton").hide();
-	// }
+	var bindDragAndSortEvent = function(){
+		$chordNoteList.disableSelection();
+		$chordNoteList.sortable({
+			start: function( event, ui ) {
+				var $obj = $(ui.item[0]);
+				movedObjIndex = $obj.index();
+			},
+			update: function( event, ui ) {
+				var $obj = $(ui.item[0]);
+				var newIndex = $obj.index();				
+				chord_collection.changeOrder(movedObjIndex , newIndex);
+			}
+		});
+		//temparory disable
+		$chordNoteList.sortable("disable");
+		$chordNoteList.on("mousedown" , ".listOrderControler" , function(){			
+			$chordNoteList.sortable("enable");
+		});
+		$chordNoteList.on("mouseup" , ".listOrderControler" , function(){			
+			$chordNoteList.sortable("disable");
+		});
+		
+	}
 
-	// var bindHideOutputEvent = function(){
-	// 	$chordDiagram.add($chordList).one("click" , hidenOutputEvent);
-	// }
+	var editMode = function(){
+		inputMode = 1;
+		$addChordNoteButton.hide();
+		$updateChordNoteButton.show();
+		$cancelChordNoteButton.show();
+	}
 
-	// var hidenOutputEvent = function(){
-	// 	$chordList.off("click" , hidenOutputEvent);
-	// 	$chordDiagram.off("click" , hidenOutputEvent);		
-	// 	$outputLinkWrap.css({visibility: 'hidden'});
-	// 	$("#shorturl").attr('checked', false);
-	// }
-
-	// o.shortUrlEvent = function(){		
-	// 	if (!$(this).is(':checked')) {
-	//         $(this).trigger("change");	        
-	//         urlHandler.shortUrl();	        
-	//     }
-	//     else{	    	
-	//     	urlHandler.resetUrl();	    	
-	//     }	    
-	// }	
+	var addMode = function(){
+		inputMode = 0;
+		$addChordNoteButton.show();
+		$updateChordNoteButton.hide();
+		$cancelChordNoteButton.hide();
+	}
+	
 	var initByChordNoteInputData = function(){
 		var param = $chordNoteData.val(), 
 			chordName,
@@ -139,43 +134,43 @@ var chordNote = (function(o){
 			o.addByArray(chordName , intArray);
 		}
 	}
+	
 
 	o.init	=	function(){
+
+		if(isInit)
+			return;
+
+		isInit = true;
 		// $outputLinkWrap = $(".outputLinkWrap");
 		// $outputLink = $("#outputLink");
 		DOMCache();
 		
 		var $strings = $(".string"),
 			$muteButtonWrap = $(".mutebuttonWrap");
-			// $loadingMsg = $outputLinkWrap.find(".loadingMsg");
+			// $loadingMsg = $outputLinkWrap.find(".loadingMsg");		
 				
 		chord_diagram.init($strings , $muteButtonWrap);
 		$.subscribe("chordDiagramModel/change" , chordDiagramChangeEvent);
-		$.subscribe("chordCollections/change" , chordCollectionsChangeEvent);			
-		// urlHandler.init($outputLink , $loadingMsg);
-		// urlHandler.parseNoteByURL();
+		$.subscribe("chordCollections/change" , chordCollectionsChangeEvent);
 		initByChordNoteInputData();
 		chord_diagram.setoutputArray([0,0,0,0,0,0]);
 		chord_diagram.parseNote();
 		bindEvent();
+
+		o.outputImage();
 	}	
 
-	o.saveAsImage = function(){
+	o.outputImage = function(){
+		var outputCanvas = chord_collection.outputCollectionImage();
+		$("#chordNote").html(outputCanvas);
+		console.log(outputCanvas);
 		// var strData = chord_collection.outputCollectionImage();
 		// var fragHtml = "<a class='downloadLink' href='" + strData + "' download='和絃.png'>下載</a>";
 		// var $button = $(fragHtml);
 		// $("#mainPanel").find(".downloadLink").remove();
 		// $("#saveImageButton").after($button);			
-	}
-	
-	// o.output = function(){		
-	// 	if($outputLinkWrap.css('visibility') == 'visible')
-	// 		return;		
-	// 	var url = urlHandler.output();
-	// 	$outputLinkWrap.css({visibility: 'visible'});
-	// 	bindHideOutputEvent();
-	// 	$outputLink.val(url).focus().select();
-	// }	
+	}		
 
 	o.add = function(){				
 		var outputArray = chord_diagram.getOutputArray(),
@@ -202,8 +197,8 @@ var chordNote = (function(o){
 		var chordObj = chord_collection.get(id);
 		$chordTitleInput.val(chordObj.name);
 		chord_diagram.setoutputArray(chordObj.fingerIndex);
-		$("#chordList li.currentEdit").removeClass("currentEdit");
-		$(obj).parent("li").addClass("currentEdit");
+		$chordNoteList.find("li.currentEdit").removeClass("currentEdit");		
+		$(obj).parents("li").addClass("currentEdit");
 		editTargetId = id;
 		chord_diagram.parseNote();
 		editMode();
@@ -215,16 +210,17 @@ var chordNote = (function(o){
 			
 		canvas_chord_diagram.setFingerIndex(name , outputArray);
 		chord_collection.update(editTargetId , name , canvas_chord_diagram.getCanvas() , outputArray);
-		$("#chordList li.currentEdit").find("canvas").remove();
-		$("#chordList li.currentEdit").prepend(canvas_chord_diagram.getCanvas());
+		var $currentEditLi = $chordNoteList.find("li.currentEdit");
+		$currentEditLi.find("canvas").remove();
+		$currentEditLi.find(".listOrderControler").after(canvas_chord_diagram.getCanvas());		
 		editTargetId = null;
-		$("#chordList li").removeClass("currentEdit");
+		$chordNoteList.find("li").removeClass("currentEdit");
 		addMode();
 	}
 
 	o.delete = function(obj , id){
 		chord_collection.delete(id);		
-		$(obj).parent("li").detach();
+		$(obj).parents("li").detach();
 		if(inputMode == 1){
 			o.cancel();
 		}
@@ -241,12 +237,10 @@ var chordNote = (function(o){
 
 	var chordDiagramChangeEvent = function(){		
 		// clearTimeout(queryChordNameTimer);
-		// queryChordNameTimer = setTimeout(o.queryChordName , 1000);
-		//changeURL();		
+		// queryChordNameTimer = setTimeout(o.queryChordName , 1000);		
 	}
 
-	var chordCollectionsChangeEvent = function(){
-		//changeURL();
+	var chordCollectionsChangeEvent = function(){		
 		changeNoteInputData();
 	}
 
@@ -254,12 +248,7 @@ var chordNote = (function(o){
 	var changeNoteInputData = function(){
 		var data = chord_collection.outputCollectionURL();				
 		$chordNoteData.val(data);
-	}
-
-	// var changeURL = function(){
-	// 	var url = urlHandler.output();
-	// 	window.history.replaceState(null , "線上和絃編輯工具 | 吉他好朋友" , url);
-	// }
+	}	
 
 	// o.queryChordName = function(){
 	// 	var outputArray = chord_diagram.getOutputArray();		

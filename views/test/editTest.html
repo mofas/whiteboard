@@ -45,9 +45,8 @@
                             <li class=""><a href="#previewView" data-toggle="tab">預覽</a></li>
                           </ul>
                           <div class="tab-content">
-                            <div class="tab-pane active" id="editorView">                            
+                            <div class="tab-pane active" id="editorView">
                                 <div class="title">歌詞</div>
-
                                 <div id="chordGenegator">
                                     <div class="functionSwitchBtn btn-toolbar pull-left">
                                         <div class="btn-group">
@@ -172,6 +171,7 @@
                                     </a>
                                 </span>
                                 <div class="well">
+                                    <div id="chordNote"></div>
                                     <div id="preview"></div>
                                 </div>
                             </div>
@@ -198,16 +198,19 @@ J[#Dadd9:1]ust [Bsus4:1]like the arc[G7:1]tic circle
         </div>
 
         <div id="chordNoteDialog">
-            <input id="chordNoteData" type="hidden" value="&GOOD=303000&C%23add4=--3243&Gdim=--213-">
+            <input id="chordNoteData" type="hidden" value="&GOOD=303000&C%23add4=--3243&Gdim=--213-&bBadd13=-3132-&%23F7=-5545-">
             <div class="dialogOverlay">
                 <a class="close" href="javascript:void(0);">×</a>
-                <div id="chordNoteList">
+                <div id="chordNoteListWrap">
+                    <ul id="chordNoteList">
 
+                    </ul>
                 </div>
                 <div class="editPanel">
                     <input id="chordTitle" type="text" placeholder="和絃名稱"/>
                     <span id="addChordNoteButton" class="btn btn-success">新增</span>
                     <span id="updateChordNoteButton" class="btn btn-success">儲存</span>
+                    <span id="cancelChordNoteButton" class="btn btn-danger">取消</span>
                 </div>
                 <div class="fretIndexWrap clearfix">
                   <div class="fretIndex">1</div>
@@ -672,7 +675,7 @@ J[#Dadd9:1]ust [Bsus4:1]like the arc[G7:1]tic circle
         <script>window.jQuery || document.write('<script src="../js/lib/jquery-1.8.2.min.js"><\/script>')</script>
         <script type="text/javascript" src="../js/lib/jquery-ui-1.9.1.drag.min.js"></script>
         <script type="text/javascript" src="../js/lib/jquery.ui.touch-punch.min.js"></script>
-
+        
         <!-- JS -->          
         <script type="text/javascript" src="../js/songFormat.js"></script>        
         

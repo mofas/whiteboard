@@ -34,6 +34,7 @@ var editOperation = (function(o){
 		$chordCollectionList,
 		$deleteArea,
 
+		$chordNote,
 		$preview,
 		$loadingOverlay,
 		$importSongSheetDialog,
@@ -76,12 +77,23 @@ var editOperation = (function(o){
 		});
 
 		$("#editChordNoteButton").on("click" , function(){
+			chordNote.init();
+			$("html").css({"overflow" : "hidden"});			
 			$chordNoteDialog.fadeIn();
 		});
 
+		$("#showChordNoteButton").on("click" , function(){
+			chordNote.init();
+			$chordNote.fadeToggle();
+		});
+
 		$chordNoteDialog.find(".close").on("click" , function(){
+			$("html").css({"overflow" : "auto"});
 			$chordNoteDialog.fadeOut();
 		});
+
+
+
 		
 		var switchTab = function(){
 			var targetId = $(this).find("a").attr("href");
@@ -214,7 +226,8 @@ var editOperation = (function(o){
 		$sourceCodeDialog = $("#sourceCodeDialog");
 		$importSongSheetDialog = $("#importSongSheetDialog");
 		$colorHintsWrap = $importSongSheetDialog.find(".colorHints .colorHintsWrap");
-		$sourceCodeText = $("#sourceCode");		
+		$sourceCodeText = $("#sourceCode");	
+		$chordNote = $("#chordNote");
 		$preview = $("#preview");
 		$loadingOverlay = $("#loadingOverlay");
 		$chordNoteDialog = $("#chordNoteDialog");

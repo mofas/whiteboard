@@ -118,18 +118,18 @@ var canvas_chord_diagram = (function(o){
 			fretDiff = 4;
 		}
 
-		diagramW = W-190;
-		distanceBetweenString = (H-firstStringPadding*2)/5;
+		diagramW = W-120;
+		distanceBetweenString = Math.floor((H-firstStringPadding*1.6)/5);
 
 		fretW = (diagramW-20)/fretDiff;
 		drawBasicLayout();
-		drawChordName(270,70);
+		drawChordName(140,70);
 		drawChord();
 	}
 
 	function initCanvas(){
 		canvas = document.createElement('canvas');
-		canvas.width = 420; 
+		canvas.width = 250; 
 		canvas.height = 120;
 		//TEST CODE
 		//$('body').append(canvas);

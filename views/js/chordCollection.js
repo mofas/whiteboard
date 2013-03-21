@@ -14,6 +14,13 @@ var chord_collection = (function(o){
 	};
 
 
+	o.changeOrder = function(originalIndex , newIndex){
+		var moveObj = chordCollection[originalIndex];
+		chordCollection.splice(originalIndex , 1);
+		chordCollection.splice(newIndex , 0 , moveObj);		
+		$.publish("chordCollections/change");
+	}
+
 	o.reset = function(){
 		chordCollection = [];		
 	}
@@ -71,9 +78,9 @@ var chord_collection = (function(o){
 			document.location.href = strData;
 		}
 
-		canvasWidth = length*260 , canvasHeight = Math.ceil(length/3)*180 + 20;
-		if(canvasWidth > 1040 )
-			canvasWidth = 1040;
+		canvasWidth = length*250 , canvasHeight = Math.ceil(length/3)*120 + 10;
+		if(canvasWidth > 860 )
+			canvasWidth = 860;
 
 		canvasWidth += 40;
 		outputCanvas = document.createElement('canvas');		
@@ -84,14 +91,16 @@ var chord_collection = (function(o){
 		imageData;		
 		for(var i = 0 ; i < length ; i++){
 			imageData = chordCollection[i].canvas;
-			outputCanvasCtx.drawImage(imageData,(i%4)*260+30 ,Math.floor(i/4)*180+10);
+			outputCanvasCtx.drawImage(imageData,(i%3)*280+80 ,Math.floor(i/3)*120+5);
 		}
-		strDownloadMime = "image/octet-stream";
+
+		return outputCanvas;
+		// strDownloadMime = "image/octet-stream";
 		
-		strData = outputCanvas.toDataURL("image/png");
-		//saveFile(strData.replace("image/png", strDownloadMime));
-		return strData;
+		// strData = outputCanvas.toDataURL("image/png");		
+		// return strData;
 	}
+
 
 
 	o.outputCollectionURL = function(){

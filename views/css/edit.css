@@ -29,6 +29,12 @@
 	min-height: 400px;
 }
 
+#chordNote{
+	width: 98%;
+	overflow: hidden;
+	display:none;
+}
+
 #previewView .well{
 	margin-top: 80px;
 }
@@ -373,37 +379,50 @@
 	color: #666;
 }
 
-#updateChordNoteButton{
+#updateChordNoteButton , #cancelChordNoteButton{
 	display: none;
 }
-
-#chordNoteList{
-	margin: 20px 10px;	
+#chordNoteListWrap{
+	margin: 20px 10px;
 	height: 400px;	
 	border-bottom: 1px solid #dde;	
 	overflow: hidden;
+	overflow-y: scroll;
+}
+
+#chordNoteList{	
+	margin-right: 10px;
 }
 
 #chordNoteList .chordItem{	
 	list-style: none;	
 	border-top: 1px solid #dde;	
 }
+
+#chordNoteList .chordItem.currentEdit{
+	background: #ddd;
+}
+
 #chordNoteList .chordItem .listOrderControler{
 	float:left;
 	background: #eee;
 	border-right: 1px solid #ccc;
 	width: 10px;
-	height: 130px;	
-	cursor:pointer;
+	height: 120px;	
+	cursor: move;
+	visibility: hidden;
+}
+#chordNoteList .chordItem:hover .listOrderControler{
+	visibility: visible;
 }
 #chordNoteList .chordItem canvas{
 	float:left;
-	margin: 2px 30px;
+	margin: 2px 30px 0 150px;
 }
 
 #chordNoteList .listOperationGroup{
 	float:left;
-	margin: 0 60px;
+	margin: 0 0 0 90px;
 	padding: 0;
 	width: 100px;
 }
