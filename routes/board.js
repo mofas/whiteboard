@@ -164,7 +164,8 @@ exports.list = function(req, res){
 exports.add = function(req, res){                                 
     var author  = req.body.author,
         title   = req.body.title,
-        lyric   = req.body.lyric,            
+        lyric   = req.body.lyric,
+        chordNote = req.body.chordNote,
         createTime = new Date().getTime(),
         limit = 40,
         summary;          
@@ -190,6 +191,7 @@ exports.add = function(req, res){
             title : title , 
             summary : summary, 
             lyric : lyric,
+            chordNote : chordNote,
             createTime : createTime,
             modifyTime : createTime,
         }, 
@@ -208,6 +210,7 @@ exports.update = function(req, res){
         author  = req.body.author,
         title   = req.body.title,
         lyric   = req.body.lyric,
+        chordNote = req.body.chordNote,
         modifyTime = new Date().getTime(),
         limit = 40,
         summary,
@@ -241,6 +244,7 @@ exports.update = function(req, res){
                     title : title , 
                     lyric : lyric,
                     summary: summary,
+                    chordNote : chordNote,
                     modifyTime : modifyTime,
                   }
               }, 

@@ -238,7 +238,8 @@ var editOperation = (function(o){
 	o.submit = function(id){
 		$loadingOverlay.show();
 		updatePlainLyric();
-		var params = $editForm.serialize();					
+		var params = $editForm.serialize();
+		console.log(params);		
 		if(id != null){
 			$.post("/update/" + id, params , function(data){
 				if(data.errCode == 0 ){

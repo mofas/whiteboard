@@ -47,13 +47,14 @@
                         <div class="span12">
                             <textarea id="rawLyric"><%= data.lyric || '' %></textarea>
                             <div class="lyricWrap well">
+                                <div id="chordNote"></div>
                                 <div id="lyric">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                <input id="chordNoteData" name="chordNote" type="hidden" value="<%= data.chordNote || '' %>">
             </div>
         </div>
 
@@ -63,6 +64,13 @@
 
         <!-- JS -->                  
         <script src="/js/songFormat.js"></script>
+
+
+        <!-- chordNote Related model -->        
+        <script type="text/javascript" src="../js/canvas.js"></script>
+        <script type="text/javascript" src="../js/chordDiagram.js"></script>
+        <script type="text/javascript" src="../js/chordCollection.js"></script>
+
         <script src="/js/query.js"></script>
         
     </body>

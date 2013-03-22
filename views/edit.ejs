@@ -10,6 +10,7 @@
         <!-- CSS -->
         <link rel="stylesheet"  href="/css/edit.css" />
         <link rel="stylesheet"  href="/css/songFormat.css" />
+        <link rel="stylesheet"  href="../css/chordNote.css" />
 
     </head>
 
@@ -172,8 +173,13 @@
                                     <a id="editChordNoteButton" class="btn btn-info">
                                         加上和絃按法
                                     </a>
+                                    ||
+                                    <a id="showChordNoteButton" class="btn btn-success">
+                                        顯示和絃按法
+                                    </a>
                                 </span>
                                 <div class="well">
+                                    <div id="chordNote"></div>
                                     <div id="preview"></div>
                                 </div>
                             </div>
@@ -224,14 +230,483 @@
                                 <textarea id="songSheetTextArea"></textarea>
                             </div>
                         </div>
+                        <input id="chordNoteData" name="chordNote" type="hidden" value="<%= data.chordNote || '' %>">
                     </form>
                 </div>
             </div>
         </div>
 
-        <div id="loadingOverlay">
-            
+        <div id="chordNoteDialog">            
+            <div class="dialogOverlay">
+                <a class="close" href="javascript:void(0);">×</a>
+                <div id="chordNoteListWrap">
+                    <ul id="chordNoteList">
+
+                    </ul>
+                </div>
+                <div class="editPanel">
+                    <input id="chordTitle" type="text" placeholder="和絃名稱"/>
+                    <span id="addChordNoteButton" class="btn btn-success">新增</span>
+                    <span id="updateChordNoteButton" class="btn btn-success">儲存</span>
+                    <span id="cancelChordNoteButton" class="btn btn-danger">取消</span>
+                </div>
+                <div class="fretIndexWrap clearfix">
+                  <div class="fretIndex">1</div>
+                  <div class="fretIndex">2</div>
+                  <div class="fretIndex">3</div>
+                  <div class="fretIndex">4</div>
+                  <div class="fretIndex">5</div>
+                  <div class="fretIndex">6</div>
+                  <div class="fretIndex">7</div>
+                  <div class="fretIndex">8</div>
+                  <div class="fretIndex">9</div>
+                  <div class="fretIndex">10</div>
+                  <div class="fretIndex">11</div>
+                  <div class="fretIndex">12</div>
+                  <div class="fretIndex">13</div>
+                  <div class="fretIndex">14</div>
+                  <div class="fretIndex">15</div>
+                  <div class="clear"></div>
+                </div>
+                <div class="chord_diagramWrap">
+                  <div class="mutebuttonWrap">
+                    <div class="muteButton"></div>
+                    <div class="muteButton"></div>
+                    <div class="muteButton"></div>
+                    <div class="muteButton"></div>
+                    <div class="muteButton"></div>
+                    <div class="muteButton"></div>
+                  </div>    
+                  <div class="noteArea">
+                    <div class="note"></div>
+                    <div class="note"></div>
+                    <div class="note"></div>
+                    <div class="note"></div>
+                    <div class="note"></div>
+                    <div class="note"></div>
+                  </div>
+                  <div class="chord_diagram">
+                    <div class="nut"></div>
+                    <div class="inlay inlay-3"></div>
+                    <div class="inlay inlay-5"></div>
+                    <div class="inlay inlay-7"></div>
+                    <div class="inlay inlay-9"></div>
+                    <div class="inlay inlay-12-1"></div>
+                    <div class="inlay inlay-12-2"></div>
+                    <div class="inlay inlay-15"></div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>
+                    <div class="fret-bar">&nbsp;</div>  
+
+                    <div class="string string1">
+                      <div class="fretWrapOpen">                        
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">            
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">            
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>          
+                    </div>
+                    <div class="string string2">
+                      <div class="fretWrapOpen">                        
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">            
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>                    
+                    </div>
+                    <div class="string string3">
+                      <div class="fretWrapOpen">                        
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>                    
+                    </div>
+                    <div class="string string4">
+                      <div class="fretWrapOpen">                        
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>                    
+                    </div>
+                    <div class="string string5">
+                      <div class="fretWrapOpen">                        
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>                    
+                    </div>
+                    <div class="string string6">
+                      <div class="fretWrapOpen">                        
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>
+                      </div>
+                      <div class="fretWrap">
+                        <div class="finger"></div>
+                        <div class="fret"></div>        
+                      </div>          
+                    </div>        
+                  </div>      
+                </div>
+            </div>
         </div>
+
+        <div id="loadingOverlay"></div>
+
+
 
         <!-- JS lib -->       
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -241,6 +716,15 @@
 
         <!-- JS -->          
         <script type="text/javascript" src="/js/songFormat.js"></script>
+
+
+        <!-- chordNote Related model -->
+        <script type="text/javascript" src="../js/chordNote.js"></script>
+        <script type="text/javascript" src="../js/canvas.js"></script>
+        <script type="text/javascript" src="../js/chordDiagram.js"></script>
+        <script type="text/javascript" src="../js/chordCollection.js"></script>
+
+
         <script type="text/javascript" src="/js/edit.js"></script>
 
     </body>

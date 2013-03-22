@@ -78,7 +78,7 @@ var chord_collection = (function(o){
 			document.location.href = strData;
 		}
 
-		canvasWidth = length*250 , canvasHeight = Math.ceil(length/3)*120 + 10;
+		canvasWidth = length*250 , canvasHeight = Math.ceil(length/5)*140 + 20;
 		if(canvasWidth > 860 )
 			canvasWidth = 860;
 
@@ -91,7 +91,29 @@ var chord_collection = (function(o){
 		imageData;		
 		for(var i = 0 ; i < length ; i++){
 			imageData = chordCollection[i].canvas;
-			outputCanvasCtx.drawImage(imageData,(i%3)*280+80 ,Math.floor(i/3)*120+5);
+			outputCanvasCtx.drawImage(
+				imageData,
+				0,
+				0,
+				140,
+				120,
+				(i%5)*180+20,  //The x coordinate where to start clipping
+				Math.floor(i/5)*140 + 10, //The y coordinate where to start clipping
+				130, //The width of the clipped image
+				120 //The height of the clipped image
+			);
+
+			outputCanvasCtx.drawImage(
+				imageData,
+				140,
+				35,
+				110,
+				60,
+				(i%5)*180+50,  //The x coordinate where to start clipping
+				Math.floor(i/5)*140 - 15, //The y coordinate where to start clipping
+				110, //The width of the clipped image
+				60 //The height of the clipped image
+			);
 		}
 
 		return outputCanvas;
