@@ -16,3 +16,15 @@ body{
 .navbar .btn{
 	margin-top: 10px;
 }
+
+
+.footer{
+	background-color: #252525;
+	padding: 45px 0px;
+	min-width: 1100px;
+	color: #fff;
+}
+
+.footer .bootstrap{
+	text-align: right;
+}

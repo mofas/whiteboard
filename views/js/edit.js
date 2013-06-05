@@ -294,8 +294,7 @@ var editOperation = (function(o){
 		else{			
 			$lyric.css({
 				"line-height" : "50px",
-				"margin-left" : "120px",
-				"width" : "805px"
+				"padding-left" : "140px",
 			});
 			$chordWrap.show();
 			$chordGenegator.show();			
@@ -458,8 +457,7 @@ var editOperation = (function(o){
 	var closeArrangeMode = function(){
 		$lyric.css({
 			"line-height" : " 26px" , 						
-			"margin-left" : "0",
-			"width" : "920px"			
+			"padding-left" : "6px"			
 		});
 		$chordWrap.hide();
 		$chordGenegator.hide();

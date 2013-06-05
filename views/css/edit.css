@@ -18,12 +18,6 @@
 	padding: 4px 20px;
 }
 
-#lyric{
-	line-height: 26px;
-	padding-top: 15px;
-	font-family: Courier , 細明體;
-}
-
 #sourceCode , #preview{	
 	width: 98%;	
 	min-height: 400px;
@@ -173,21 +167,27 @@
 }
 
 #lyric{
+	line-height: 26px;
+	padding-top: 15px;
+	font-family: Courier , 細明體;
 	min-height: 520px;	
-	width: 920px;
+	width: 100%;	
 	font-size: 16px;
 	overflow-y: scroll;
-	margin: 0;
+	margin: 0 30px 0 0;
+	box-sizing: border-box;
 }
 
 #editorView .chordWrap{
 	position: absolute;
-	width: 920px;
+	width: 100%;
+	padding: 0 20px;
 	min-height: 520px;
 	top: 80px;
 	background: rgba(150,150,255,0.2);
 	display: none;
 	overflow: hidden;
+	box-sizing: border-box;
 }
 #editorView .chordWrap .chordCanvas{
 	position: relative;
@@ -255,7 +255,7 @@
 
 #chordCollectionList{
 	position: absolute;
-	left: 0;
+	left: -20px;
 	top: 0;
 	height: 520px;
 	padding: 10px 10px;
