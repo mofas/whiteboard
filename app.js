@@ -2,14 +2,15 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , gzippo = require('gzippo')
-  , routes = {}
-  , http = require('http')
-  , path = require('path')
-  , fs   = require('fs')
-  , passport = require('passport')
-  , mongodb = require('mongodb');
+var express = require('express'),
+    gzippo = require('gzippo'),
+    routes = {},
+    http = require('http'),
+    path = require('path'),
+    fs   = require('fs'),
+    passport = require('passport'),
+    mongodb = require('mongodb'),
+    utility = require('./utility');
 
 
 
@@ -17,19 +18,35 @@ var express = require('express')
 *   Utility && setting
 ***********************************************************/
 var dbHelper = require('./dbHelper');
-var setting = require('./setting');
+var setting = require('./setting/basic');
 
 /**********************************************************
 *   DB
 ***********************************************************/
-global.db = require('./db');
+global.db = require('./db')(setting);
 
 /**********************************************************
 *   Redis
 ***********************************************************/
-global.redisClient = require('./redis');
+global.redisClient = require('./redis')(setting);
 
+/**********************************************************
+*   AWS , using S3 currently.
+***********************************************************/
+global.AWS = require('aws-sdk');
+AWS.config.update({
+  accessKeyId: setting.AWS.accessKeyId ,
+  secretAccessKey: setting.AWS.secretAccessKey,
+  region: setting.AWS.region,
+});  
 
+// for localhost
+AWS.config.update({
+  httpOptions: {
+    proxy: 'http://localhost:3000'
+  }
+});
+//AWS.config.loadFromPath('./setting/aws-credentials.json');
 
 /**********************************************************
 *   Facebook Login
@@ -106,6 +123,9 @@ var routes = {};
 routes.board = require('./routes/board');
 routes.user = require('./routes/user');
 routes.admin = require('./routes/admin');
+routes.personalSpace = require('./routes/personalSpace');
+
+
 
 var accessCheck = require('./routes/accessCheck');
 var middleware = [accessCheck];
@@ -142,7 +162,10 @@ app.post( '/user/update', routes.user.update );
 
 app.post( '/admin/adjustUserRole', middleware , routes.admin.adjustUserRole );
 
-
+app.get('/personalSpace' , routes.personalSpace.index);
+app.post('/personalSpace/list', routes.personalSpace.list );
+app.post('/personalSpace/add', routes.personalSpace.add );
+app.post('/personalSpace/del', routes.personalSpace.del );
 
 
 

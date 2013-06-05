@@ -1,0 +1,85 @@
+
+
+<!doctype html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>吉他好朋友</title>    
+        <!-- CSS lib -->    
+        <link rel="stylesheet"  href="/css/lib/bootstrap.min.css" />
+        <!-- CSS -->
+        <link rel="stylesheet"  href="/css/main.css" />
+        <link rel="stylesheet"  href="/css/personalSpace.css" />
+    </head>
+
+    <body>      
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="brand" href="/list">個人空間</a>            
+            <% if(user === undefined ){ %>
+              <a id="FBloginButton" class="btn btn-primary"  href="/auth/facebook">FB登入</a>
+              <a id="demoLogin" class="btn btn-primary"  href="/demoLogin?username=1&password=0">測試帳號</a>
+            <%} else {%>              
+              <a class="btn btn-info" href="javascript: listOperation.openUserSetting();">設定</a>
+              <a class="btn btn-danger"  href="logout">登出</a>
+              <% if(user.role > 4){ %>
+                <a class="btn btn-success"  href="admin/userList">會員管理</a>
+              <% } %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      
+      <div id="fileList">
+        <div class="container">
+          <% if(user === undefined ){ %>
+              <div class="alert">尚未登入</div>
+          <% } else { %>        
+              <div class="alert alert-success">以使用者<%= user.displayName %>登入</div>              
+          <% } %>
+          <div class="hero-unit">
+            <a href="javascript:getList();" class="btn">GetList</a>
+            <a href="javascript:putObj();" class="btn">putObj</a>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="container">
+          <div class="span8">
+            Author: Mofas Lee
+          </div>
+          <div class="span3 bootstrap">
+            Power by Bootstrap.
+          </div>
+        </div>
+      </footer>
+
+      <!-- JS lib -->             
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+      <script>window.jQuery || document.write('<script src="js/lib/jquery-2.0.2.min.js"><\/script>')</script>
+
+
+      <script>
+        var getList = function(){
+          $.post("/personalSpace/list" , function(data){
+            console.log(data);
+          });
+        }
+        var putObj = function(){
+          $.post("/personalSpace/add" , function(data){
+            console.log(data);
+          });
+        }
+      </script>
+
+      <!-- JS 
+      <script type="text/javascript" src="/js/list.js"></script>
+      <script type="text/javascript" src="/js/userSetting.js"></script>
+      -->      
+    </body>
+</html>
+
+  
+
+

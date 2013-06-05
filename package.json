@@ -14,7 +14,8 @@
     "passport-facebook" : "*",
     "passport-local" : "*",
     "gzippo" : "*",
-    "redis" : "*"
+    "redis" : "*",
+    "aws-sdk" : "*"
   },
   "engines" : {
     "node": "0.8.x",
