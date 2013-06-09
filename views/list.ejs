@@ -13,38 +13,39 @@
         <link rel="stylesheet"  href="/css/userSetting.css" />
     </head>
 
-    <body>      
+    <body> 
       <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container">
-            <a class="brand" href="/list">吉他好朋友</a>            
-            <% if(user === undefined ){ %>
-              <a id="FBloginButton" class="btn btn-primary"  href="/auth/facebook">FB登入</a>
-              <a id="demoLogin" class="btn btn-primary"  href="/demoLogin?username=1&password=0">測試帳號</a>
-            <%} else {%>
-              <a id="newLyricButton" class="btn btn-primary"  href="edit">新增歌詞</a>
-              <a class="btn btn-info" href="javascript: listOperation.openUserSetting();">設定</a>
-              <a class="btn btn-danger"  href="logout">登出</a>
-              <% if(user.role > 4){ %>
-                <a class="btn btn-success"  href="admin/userList">會員管理</a>
-              <% } %>
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/list">吉他好朋友</a>            
+          <% if(user === undefined ){ %>
+            <a id="FBloginButton" class="btn btn-primary"  href="/auth/facebook">FB登入</a>
+            <a id="demoLogin" class="btn btn-primary"  href="/demoLogin?username=1&password=0">測試帳號</a>
+          <%} else {%>
+            <a id="newLyricButton" class="btn btn-primary"  href="edit">新增歌詞</a>
+            <a class="btn btn-info" href="javascript: listOperation.openUserSetting();">設定</a>
+            <a class="btn btn-danger"  href="logout">登出</a>
+            <% if(user.role > 4){ %>
+              <a class="btn btn-success"  href="admin/userList">會員管理</a>
             <% } %>
-            <div class="searchWrap">            
-              <input  id="searchInput" type="text" placeholder="輸入歌名或是作者" value="<%= keyword || '' %>">
-              <select id="searchType" class="input-small">
-                  <% if (type == 'byTitle'){ %>              
-                    <option value="byTitle" selected>歌名</option>
-                    <option value="byAuth">作者</option>
-                  <% } else { %>              
-                    <option value="byTitle">歌名</option>
-                    <option value="byAuth" selected>作者</option>
-                  <% } %>
-              </select>
-              <a id="searchButton" class="btn" href="javascript:listOperation.search();">搜尋</a>
-            </div>
+          <% } %>
+          <div class="searchWrap">            
+            <input  id="searchInput" type="text" placeholder="輸入歌名或是作者" value="<%= keyword || '' %>">
+            <select id="searchType" class="input-small">
+                <% if (type == 'byTitle'){ %>              
+                  <option value="byTitle" selected>歌名</option>
+                  <option value="byAuth">作者</option>
+                <% } else { %>              
+                  <option value="byTitle">歌名</option>
+                  <option value="byAuth" selected>作者</option>
+                <% } %>
+            </select>
+            <a id="searchButton" class="btn" href="javascript:listOperation.search();">搜尋</a>
           </div>
         </div>
       </div>
+      </div>
+      
       <div id="songList">
         <div class="container">
           <div class="page-header">          
@@ -85,16 +86,7 @@
         </div>
       </div>
 
-      <footer class="footer">
-        <div class="container">
-          <div class="span8">
-            Author: Mofas Lee
-          </div>
-          <div class="span3 bootstrap">
-            Power by Bootstrap.
-          </div>
-        </div>
-      </footer>
+      <% include footer %>
 
       <!-- JS lib -->             
       <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>

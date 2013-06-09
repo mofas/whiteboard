@@ -18,17 +18,7 @@
 
     <body>
 
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="brand" href="/list">吉他好朋友</a>                
-                    <a class="btn btn-primary" href="javascript:window.history.back()">上一頁</a>      
-                    <%if(user !== undefined && data.editor == user.FB_id ) { %>
-                      <a class="editButton btn btn-danger" href="/edit/<%= data._id%>">編輯</a>
-                    <% } %>
-                </div>
-            </div>
-        </div>
+        <% include navbar %>
 
         
         <div id="query" class="hero-unit">
@@ -57,6 +47,8 @@
                 <input id="chordNoteData" name="chordNote" type="hidden" value="<%= data.chordNote || '' %>">
             </div>
         </div>
+
+        <% include footer %>
 
         <!-- JS lib -->       
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
